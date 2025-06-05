@@ -70,7 +70,7 @@
                                                             <li><a href="#">C</a></li>
                                                         </ul>
                                                     </li>
-                                                    <li><a href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">Medicine</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a></li>
                                                     <li><a href="#">Doctor</a></li>
                                                     <li><a href="#">Booking</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>

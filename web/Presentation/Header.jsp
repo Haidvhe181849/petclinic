@@ -24,7 +24,7 @@
                                         <div class="main-menu f-right d-none d-lg-block">
                                             <nav>
                                                 <ul id="navigation">
-                                                    <li><a href="Presentation/Home.jsp">Home</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/Home.jsp">Home</a></li>
                                                     <li><a href="#">Services</a>
                                                         <ul class="submenu">
                                                             <li><a href="#">A</a></li>

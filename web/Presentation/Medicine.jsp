@@ -255,8 +255,8 @@ if (medicineList == null && request.getParameter("service") == null) {
     </div>
     <!-- Medicine Management End -->
 
-    <c:if test="${not empty sessionScope.message}">
-        <div id="popup-message">${sessionScope.message}</div>
+    <c:if test="${not empty message}">
+        <div id="popup-message">${message}</div>
 
         <script>
             setTimeout(function () {
@@ -265,9 +265,8 @@ if (medicineList == null && request.getParameter("service") == null) {
                     popup.style.display = "none";
             }, 3000);
         </script>
-
-        <c:remove var="message" scope="session"/>
     </c:if>
+
 
 
     <!-- Add Medicine Modal -->
