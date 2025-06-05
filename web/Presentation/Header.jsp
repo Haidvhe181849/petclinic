@@ -34,7 +34,7 @@
                                                     </li>
                                                     <li><a href="#">Doctor</a></li>
                                                     <li><a href="#">Booking</a></li>
-                                                    <li><a href="#">News</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a></li>
                                                     <li><a href="#">Managerment</a>
                                                         <ul class="submenu">
                                                             <li><a href="#">Service</a></li>
