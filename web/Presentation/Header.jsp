@@ -33,13 +33,14 @@
                                                         </ul>
                                                     </li>
                                                     <li><a href="#">Doctor</a></li>
-                                                    <li><a href="#">Booking</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/ViewAboutUs.jsp">About Us</a></li>
                                                     <li><a href="#">Managerment</a>
                                                         <ul class="submenu">
                                                             <li><a href="#">Service</a></li>
                                                             <li><a href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">Medicine</a></li>
                                                             <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
+                                                            <li><a href="${pageContext.request.contextPath}/Presentation/ManageAboutUsAdmin.jsp">About Us</a></li>
                                                         </ul>
                                                     </li>
                                                 </ul>

@@ -142,6 +142,7 @@
     </style>
 </head>
 <body>
+    
     <h2>Quản lý thông tin About Us</h2>
 
     <% if ("admin".equals(role)) {

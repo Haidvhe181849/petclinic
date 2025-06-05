@@ -88,15 +88,15 @@ public class NewsDAO extends DBContext {
         String sql = "SELECT TOP 1 news_id FROM News ORDER BY news_id DESC";
         try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
             if (rs.next()) {
-                String lastId = rs.getString("news_id"); // ví dụ "N012"
-                int num = Integer.parseInt(lastId.substring(1)); // bỏ chữ 'N', lấy số
+                String lastId = rs.getString("news_id"); 
+                int num = Integer.parseInt(lastId.substring(1)); 
                 num++; // tăng lên
-                return String.format("N%03d", num); // ví dụ N013
+                return String.format("N%03d", num); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "N001"; // Nếu chưa có gì trong DB
+        return "N001"; 
     }
 
     public void updateNews(News n) {

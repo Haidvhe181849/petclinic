@@ -82,10 +82,10 @@ public class NewsBL extends HttpServlet {
                 String description = request.getParameter("description");
                 Boolean isActive = Boolean.valueOf(request.getParameter("isActive"));
 
-                // Lấy thời gian hiện tại
+                
                 Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
 
-                // Xử lý upload ảnh
+                
                 Part filePart = request.getPart("imageFile");
                 String imageUrl = "";
 
@@ -100,15 +100,14 @@ public class NewsBL extends HttpServlet {
                     filePart.write(uploadPath + File.separator + fileName);
                     imageUrl = "img/news/" + fileName;
                 } else {
-                    // Nếu không có ảnh, có thể set ảnh mặc định hoặc báo lỗi tùy logic bạn muốn
-                    imageUrl = "img/news/default.jpg"; // hoặc để trống nếu không bắt buộc
+                    imageUrl = "img/news/default.jpg"; 
                 }
 
-                // Tạo News object và lưu DB
+                
                 News n = new News(newsId, imageUrl, nameNews, timestampNow, description, isActive);
                 nDAO.insertNews(n);
 
-                // Chuyển hướng
+                
                 request.getSession().setAttribute("message", "Added successful!");
                 response.sendRedirect("News?service=listNews");
             }
@@ -133,12 +132,12 @@ public class NewsBL extends HttpServlet {
                 String description = request.getParameter("description");
                 Boolean isActive = "1".equals(request.getParameter("isActive"));
 
-                // Upload ảnh
+               
                 Part filePart = request.getPart("imageFile");
                 String imageUrl;
 
                 if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-                    // Có ảnh mới: upload
+                   
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                     String uploadPath = getServletContext().getRealPath("/") + "img/news";
                     File uploadDir = new File(uploadPath);
@@ -149,7 +148,7 @@ public class NewsBL extends HttpServlet {
                     filePart.write(uploadPath + File.separator + fileName);
                     imageUrl = "img/news/" + fileName;
                 } else {
-                    // Không có ảnh mới: dùng ảnh cũ
+                   
                     imageUrl = request.getParameter("oldImage");
                 }
 
