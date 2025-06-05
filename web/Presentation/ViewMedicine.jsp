@@ -23,7 +23,7 @@ if (medicineList == null && request.getParameter("service") == null) {
 
     <head>
         <meta charset="UTF-8" />
-        <title>Manager Product</title>
+        <title>View Medicine</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -123,7 +123,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                             <div class="d-flex flex-wrap align-items-center gap-2" style="flex-grow: 1;">
 
                                 <!-- Search -->
-                                <form action="${pageContext.request.contextPath}/Medicine" method="post" class="d-flex align-items-center gap-2" style="margin: 0;">
+                                <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" class="d-flex align-items-center gap-2" style="margin: 0;">
                                 <input type="search" name="keyword" class="form-control" placeholder="Search by Name, Supplier"
                                        style="font-size: 14px; height: 40px; min-width: 250px;">
                                 <input type="hidden" name="service" value="searchMedicine">
@@ -134,7 +134,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                             </form>
 
                             <!-- Filter -->
-                            <form action="${pageContext.request.contextPath}/Medicine" method="post" style="margin: 0;">
+                            <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" style="margin: 0;">
                                 <input type="hidden" name="service" value="filterByType" />
                                 <select name="medicineType" class="form-select"
                                         onchange="this.form.submit()"
@@ -148,7 +148,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                             </form>
 
                             <!-- Sort by Name -->
-                            <form action="${pageContext.request.contextPath}/Medicine" method="post" style="margin: 0;">
+                            <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" style="margin: 0;">
                                 <input type="hidden" name="service" value="sortByName" />
                                 <button type="submit" class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
                                         style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap;">
@@ -157,7 +157,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                             </form>
 
                             <!-- Sort by Supplier -->
-                            <form action="${pageContext.request.contextPath}/Medicine" method="post" style="margin: 0;">
+                            <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" style="margin: 0;">
                                 <input type="hidden" name="service" value="sortBySupplier" />
                                 <button type="submit" class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
                                         style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap;">

@@ -23,7 +23,7 @@ if (medicineList == null && request.getParameter("service") == null) {
 
     <head>
         <meta charset="UTF-8" />
-        <title>Manager Product</title>
+        <title>Manager Medicine</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
