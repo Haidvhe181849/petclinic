@@ -151,7 +151,7 @@
                        class="btn text-white fw-bold px-4 shadow-sm d-flex align-items-center justify-content-center w-100"
                        data-bs-toggle="modal"
                        style="background-color: #FF3B3B; height: 56px; border-radius: 30px;">
-                        <i class="fa fa-plus me-2"></i> Add User
+                        <i class="fa fa-plus me-2"></i> Add News
                     </a>
                 </div>
             </div>

@@ -30,6 +30,66 @@
                 <link rel="stylesheet" href="css/style.css">
                 <link rel="stylesheet"
                     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+                
+                <style>
+                .header-btn.custom-auth-btn {
+                    font-size: 15px;
+                    padding: 6px 22px;
+                    border-radius: 22px;
+                    background: #ff3d3d;
+                    color: #fff;
+                    border: none;
+                    margin: 0;
+                    box-shadow: none;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: background 0.2s;
+                }
+
+                .header-btn.custom-auth-btn:hover {
+                    background: #e62e2e;
+                    color: #fff;
+                    text-decoration: none;
+
+                }
+
+
+                .header-user-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-left: 20px;
+                    white-space: nowrap;
+                }
+
+                .header-user-info span {
+                    font-size: 13px;
+                    color: #000;
+                    font-weight: 500;
+                    max-width: 200px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .header-btn.custom-auth-btn {
+                    font-size: 12px;
+                    padding: 4px 12px;
+                    border-radius: 16px;
+                    background-color: #ff4d4d;
+                    color: white;
+                    border: none;
+                    font-weight: 500;
+                    text-decoration: none;
+                    transition: background-color 0.3s ease;
+                }
+
+                .header-btn.custom-auth-btn:hover {
+                    background-color: #e63e3e;
+                }
+            </style>
+                
             </head>
 
             <body>
@@ -54,7 +114,7 @@
                                     <!-- Logo -->
                                     <div class="col-xl-2 col-lg-2 col-md-2 d-flex align-items-center">
                                         <div class="logo">
-                                            <a href="index.html"><img src="img/logo/logo.png" alt=""></a>
+                                            <a href="Home.jsp"><img src="img/logo/logo.png" alt=""></a>
                                         </div>
                                     </div>
                                     <!-- Menu -->
@@ -72,7 +132,7 @@
                                                     </li>
                                                     <li><a href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a></li>
                                                     <li><a href="#">Doctor</a></li>
-                                                    <li><a href="#">Booking</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/BookingSchedule.jsp">Booking</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
                                                 </ul>
                                             </nav>
@@ -84,7 +144,7 @@
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.user}">
                                                 <div class="header-user-info">
-                                                    <span>Xin chào, ${sessionScope.user.email}</span>
+                                                    <span>Hi, ${sessionScope.user.name}</span>
                                                     <a href="${pageContext.request.contextPath}/logout"
                                                         class="header-btn custom-auth-btn">Đăng xuất</a>
                                                     <div class="dropdown">
@@ -105,7 +165,7 @@
                                             </c:when>
                                             <c:when test="${not empty sessionScope.userName}">
                                                 <div class="header-user-info">
-                                                    <span>Xin chào, ${sessionScope.userEmail}</span>
+                                                    <span>Hi, ${sessionScope.userName}</span>
                                                     <a href="${pageContext.request.contextPath}/logout"
                                                         class="header-btn custom-auth-btn">Đăng xuất</a>
                                                     <div class="dropdown">
@@ -135,9 +195,7 @@
                                         </c:choose>
                                     </div>
                                 </div>
-                                <div class="header-right-btn f-right d-none d-lg-block ml-30">
-                                    <a href="#" class="header-btn">01654.066.456</a>
-                                </div>
+                               
                             </div>
                         </div>
                         <!-- Mobile Menu -->
@@ -721,65 +779,6 @@
             </body>
 
             </html>
-
-            <style>
-                .header-btn.custom-auth-btn {
-                    font-size: 15px;
-                    padding: 6px 22px;
-                    border-radius: 22px;
-                    background: #ff3d3d;
-                    color: #fff;
-                    border: none;
-                    margin: 0;
-                    box-shadow: none;
-                    font-weight: 500;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: background 0.2s;
-                }
-
-                .header-btn.custom-auth-btn:hover {
-                    background: #e62e2e;
-                    color: #fff;
-                    text-decoration: none;
-
-                }
-
-
-                .header-user-info {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin-left: 20px;
-                    white-space: nowrap;
-                }
-
-                .header-user-info span {
-                    font-size: 13px;
-                    color: #000;
-                    font-weight: 500;
-                    max-width: 200px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                .header-btn.custom-auth-btn {
-                    font-size: 12px;
-                    padding: 4px 12px;
-                    border-radius: 16px;
-                    background-color: #ff4d4d;
-                    color: white;
-                    border: none;
-                    font-weight: 500;
-                    text-decoration: none;
-                    transition: background-color 0.3s ease;
-                }
-
-                .header-btn.custom-auth-btn:hover {
-                    background-color: #e63e3e;
-                }
-            </style>
 
             <% String changeSuccess=(String) session.getAttribute("changeSuccess"); if (changeSuccess !=null) {
                 session.removeAttribute("changeSuccess"); } %>

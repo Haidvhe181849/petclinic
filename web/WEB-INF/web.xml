@@ -13,15 +13,4 @@
         <session-timeout>30</session-timeout>
     </session-config>
 
-    <!-- Servlet cấu hình xử lý thuốc -->
-    <servlet>
-        <servlet-name>MedicineServlet</servlet-name>
-        <servlet-class>Controller.MedicineServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>MedicineServlet</servlet-name>
-        <url-pattern>/Medicine</url-pattern>
-    </servlet-mapping>
-
 </web-app>

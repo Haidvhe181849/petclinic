@@ -66,9 +66,27 @@ public class MedicineServlet extends HttpServlet {
         try {
             String service = request.getParameter("service");
             MedicineDAO medicineDAO = new MedicineDAO();
+
             if (service == null || "getAllMedicines".equals(service)) {
-                List<Medicine> list = medicineDAO.getAllMedicines();
+                int page = 1;
+                int pageSize = 10;
+
+                String pageParam = request.getParameter("page");
+                if (pageParam != null) {
+                    try {
+                        page = Integer.parseInt(pageParam);
+                    } catch (NumberFormatException e) {
+                        page = 1;
+                    }
+                }
+
+                int totalMedicines = medicineDAO.countAllMedicines();
+                int totalPages = (int) Math.ceil((double) totalMedicines / pageSize);
+
+                List<Medicine> list = medicineDAO.getMedicinesByPage(page, pageSize);
                 request.setAttribute("medicineList", list);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
 
                 // Lấy message từ session và xóa nó đi
                 String message = (String) request.getSession().getAttribute("message");
@@ -79,8 +97,8 @@ public class MedicineServlet extends HttpServlet {
 
                 request.getRequestDispatcher("/Presentation/Medicine.jsp").forward(request, response);
                 return;
-
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);
@@ -111,23 +129,37 @@ public class MedicineServlet extends HttpServlet {
                     request.getRequestDispatcher("/Presentation/Medicine.jsp").forward(request, response);
                 } else {
                     String medicineId = medicineDAO.generateNextMedicineId();
-                    String medicineName = request.getParameter("medicineName");
+                    String medicineName = request.getParameter("medicineName").trim();
                     String supplier = request.getParameter("supplier");
                     String type = request.getParameter("type");
                     String dosage = request.getParameter("dosage");
 
+                    if (medicineDAO.isMedicineNameExists(medicineName)) {
+                        request.getSession().setAttribute("message", "Error! Madicine Name Exist.");
+                        List<Medicine> list = medicineDAO.getAllMedicines();
+                        request.setAttribute("medicineList", list);
+                        response.sendRedirect("Medicine?service=getAllMedicines");
+                        return;
+                    }
+
                     Part filePart = request.getPart("imageFile");
                     String image = "";
 
-                    if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-                        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                        String uploadPath = getServletContext().getRealPath("/Presentation/img/medicine");
-                        File uploadDir = new File(uploadPath);
-                        if (!uploadDir.exists()) {
-                            uploadDir.mkdirs();
+                    if (filePart != null && filePart.getSize() > 0) {
+                        String ext = filePart.getSubmittedFileName().substring(filePart.getSubmittedFileName().lastIndexOf("."));
+
+                        String nameSlug = medicineName.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+                        if (nameSlug.length() > 10) {
+                            nameSlug = nameSlug.substring(0, 10);
                         }
+                        String fileName = "med_" + nameSlug + "_" + medicineId + ext;
+
+                        String folder = "/Presentation/img/medicine";
+                        String uploadPath = getServletContext().getRealPath(folder);
+                        new File(uploadPath).mkdirs();
+
                         filePart.write(uploadPath + File.separator + fileName);
-                        image = "Presentation/img/medicine/" + fileName;
+                        image = folder + "/" + fileName;
                     }
 
                     Medicine m = new Medicine(medicineId, medicineName, image, supplier, type, dosage);
@@ -136,8 +168,10 @@ public class MedicineServlet extends HttpServlet {
                     request.getSession().setAttribute("message", "Add medicine successful!");
                     List<Medicine> list = medicineDAO.getAllMedicines();
                     request.setAttribute("medicineList", list);
-                    String contextPath = request.getContextPath();
-                    response.sendRedirect(contextPath + "/Medicine?service=getAllMedicines");
+                    int totalMedicines = medicineDAO.countAllMedicines();
+                    int lastPage = (int) Math.ceil((double) totalMedicines / 10.0);
+
+                    response.sendRedirect("Medicine?service=getAllMedicines&page=" + lastPage);
                     return;
                 }
 
@@ -173,49 +207,71 @@ public class MedicineServlet extends HttpServlet {
                     request.getSession().setAttribute("message", "Update successful!");
                     List<Medicine> list = medicineDAO.getAllMedicines();
                     request.setAttribute("medicineList", list);
-                    String contextPath = request.getContextPath();
-                    response.sendRedirect(contextPath + "/Medicine?service=getAllMedicines");
+                    int page = 1;
+                    try {
+                        page = Integer.parseInt(request.getParameter("page"));
+                    } catch (NumberFormatException e) {
+                        page = 1;
+                    }
+                    response.sendRedirect("Medicine?service=getAllMedicines&page=" + page);
                     return;
                 }
             } else if ("deleteMedicine".equals(service)) {
+                int page = 1;
+                try {
+                    page = Integer.parseInt(request.getParameter("page"));
+                } catch (NumberFormatException e) {
+                    page = 1;
+                }
                 String medicineId = request.getParameter("medicineId");
                 medicineDAO.deleteMedicine(medicineId);
-
                 request.getSession().setAttribute("message", "Delete medicine successful!");
                 List<Medicine> list = medicineDAO.getAllMedicines();
                 request.setAttribute("medicineList", list);
-                String contextPath = request.getContextPath();
-                    response.sendRedirect(contextPath + "/Medicine?service=getAllMedicines");
-                    return;
+                int totalMedicines = medicineDAO.countAllMedicines();
+                int totalPages = (int) Math.ceil((double) totalMedicines / 10.0);
+                if (page > totalPages && totalPages > 0) {
+                    page = totalPages;
+                }
+                response.sendRedirect("Medicine?service=getAllMedicines&page=" + page);
+                return;
 
-            } else if ("searchMedicine".equals(service)) {
+            } else if ("manageQuery".equals(service)) {
                 String keyword = request.getParameter("keyword");
-                List<Medicine> list = medicineDAO.searchMedicineByNameOrSupplier(keyword);
-                request.setAttribute("medicineList", list);
-                request.setAttribute("searchKeyword", keyword);  // giữ lại từ khóa cho form
-
-                request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
-            } else if ("sortByName".equals(service)) {
-                List<Medicine> list = medicineDAO.getAllMedicinesSortedByName();
-                request.setAttribute("medicineList", list);
-                request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
-            } else if ("sortBySupplier".equals(service)) {
-                List<Medicine> list = medicineDAO.getMedicinesByExactSupplierSorted();
-                request.setAttribute("medicineList", list);
-                request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
-            } else if ("filterByType".equals(service)) {
                 String type = request.getParameter("medicineType");
+                String sortBy = request.getParameter("sortBy");
 
-                List<Medicine> list;
-                if (type == null || type.isEmpty()) {
-                    list = medicineDAO.getAllMedicines(); // Không lọc gì
-                } else {
-                    list = medicineDAO.getMedicinesByType(type);
+                int page = 1;
+                int pageSize = 10;
+
+                
+                String pageParam = request.getParameter("page");
+                if (pageParam != null) {
+                    try {
+                        page = Integer.parseInt(pageParam);
+                    } catch (NumberFormatException e) {
+                        page = 1;
+                    }
                 }
 
+               
+                int totalFiltered = medicineDAO.countFilteredMedicines(keyword, type);
+                int totalPages = (int) Math.ceil((double) totalFiltered / pageSize);
+                int offset = (page - 1) * pageSize;
+
+            
+                List<Medicine> list = medicineDAO.getFilteredMedicinesPaged(keyword, type, sortBy, offset, pageSize);
+
+               
                 request.setAttribute("medicineList", list);
-                request.setAttribute("selectedType", type); // để giữ lại filter đã chọn
+                request.setAttribute("searchKeyword", keyword);
+                request.setAttribute("selectedType", type);
+                request.setAttribute("selectedSort", sortBy);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
+
                 request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
+                return;
             }
 
         } catch (Exception e) {

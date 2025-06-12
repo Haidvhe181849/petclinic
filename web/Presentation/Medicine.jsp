@@ -5,19 +5,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@page import="Entity.Medicine"%>
 <%@page import="DAO.MedicineDAO"%>
-<%
-List<Medicine> medicineList = (List<Medicine>) request.getAttribute("medicineList");
-if (medicineList == null && request.getParameter("service") == null) {
-    MedicineDAO dao = new MedicineDAO();
-    try {
-        medicineList = dao.getAllMedicines();  
-    } catch (Exception e) {
-        medicineList = new ArrayList<>();
-        e.printStackTrace();
-    }
-    request.setAttribute("medicineList", medicineList);
-}
-%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,7 +93,46 @@ if (medicineList == null && request.getParameter("service") == null) {
                 }
             }
 
+            /*Thanh dấu trang */
+            .modern-pagination {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 40px 0;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
 
+            .page-btn {
+                width: 42px;
+                height: 42px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                background: #f9d9d6;
+                color: #6b4e4e;
+                font-weight: 500;
+                text-decoration: none;
+                border: none;
+                box-shadow: 4px 4px 8px rgba(0,0,0,0.05), -4px -4px 8px rgba(255,255,255,0.5);
+                transition: all 0.2s ease-in-out;
+            }
+
+            .page-btn:hover {
+                background: #f7c5c0;
+                box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.5);
+                color: #5b3a3a;
+                font-weight: 600;
+            }
+
+            .page-btn.active {
+                background: linear-gradient(145deg, #f7bcb6, #f9d9d6);
+                color: #fff;
+                font-weight: bold;
+                box-shadow: inset 2px 2px 6px rgba(0,0,0,0.15), inset -2px -2px 6px rgba(255,255,255,0.3);
+                pointer-events: none;
+            }
         </style>
 
     </head>
@@ -136,57 +163,49 @@ if (medicineList == null && request.getParameter("service") == null) {
                     <div class="col-12">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
                             <!-- Bên trái: Search, Filter, Sort -->
-                            <div class="d-flex flex-wrap align-items-center gap-2" style="flex-grow: 1;">
+                            <!-- Left: Form -->
+                            <form action="${pageContext.request.contextPath}/Medicine" method="post"
+                              class="d-flex align-items-center gap-2 flex-wrap" style="margin: 0;">
 
-                                <!-- Search -->
-                                <form action="${pageContext.request.contextPath}/Medicine" method="post" class="d-flex align-items-center gap-2" style="margin: 0;">
-                                <input type="search" name="keyword" class="form-control" placeholder="Search by Name, Supplier"
-                                       style="font-size: 14px; height: 40px; min-width: 250px;">
-                                <input type="hidden" name="service" value="searchMedicine">
-                                <button type="submit" class="btn text-white"
-                                        style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap; min-width: 100px;">
-                                    <i class="fa fa-search me-1"></i> Search
-                                </button>
-                            </form>
+                            <input type="hidden" name="service" value="manageQuery" />
+                            <input type="hidden" name="page" value="1" />
+                            <!-- Search input -->
+                            <input type="search" name="keyword" value="${searchKeyword}" class="form-control"
+                                   placeholder="Search by Name, Supplier"
+                                   style="font-size: 14px; height: 40px; width: 280px;">
 
                             <!-- Filter -->
-                            <form action="${pageContext.request.contextPath}/Medicine" method="post" style="margin: 0;">
-                                <input type="hidden" name="service" value="filterByType" />
-                                <select name="medicineType" class="form-select"
-                                        onchange="this.form.submit()"
-                                        style="font-size: 14px; height: 40px; min-width: 100px;">
-                                    <option value="">All Types</option>
-                                    <option value="Topical" ${param.medicineType == 'Topical' ? 'selected' : ''}>Topical</option>
-                                    <option value="Spray" ${param.medicineType == 'Spray' ? 'selected' : ''}>Spray</option>
-                                    <option value="Oral Drug" ${param.medicineType == 'Oral Drug' ? 'selected' : ''}>Oral Drug</option>
-                                    <option value="Vaccine" ${param.medicineType == 'Vaccine' ? 'selected' : ''}>Vaccine</option>
-                                </select>
-                            </form>
+                            <select name="medicineType" class="form-select"
+                                    style="font-size: 14px; height: 40px; width: 130px;">
+                                <option value="">All Types</option>
+                                <option value="Topical" ${selectedType == 'Topical' ? 'selected' : ''}>Topical</option>
+                                <option value="Spray" ${selectedType == 'Spray' ? 'selected' : ''}>Spray</option>
+                                <option value="Oral Drug" ${selectedType == 'Oral Drug' ? 'selected' : ''}>Oral Drug</option>
+                                <option value="Vaccine" ${selectedType == 'Vaccine' ? 'selected' : ''}>Vaccine</option>
+                            </select>
 
-                            <!-- Sort by Name -->
-                            <form action="${pageContext.request.contextPath}/Medicine" method="post" style="margin: 0;">
-                                <input type="hidden" name="service" value="sortByName" />
-                                <button type="submit" class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
-                                        style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap;">
-                                    Sort Medicine
-                                </button>
-                            </form>
+                            <!-- Sort -->
+                            <select name="sortBy" class="form-select"
+                                    style="font-size: 14px; height: 40px; width: 120px;">
+                                <option value="">Sort</option>
+                                <option value="name" ${selectedSort == 'name' ? 'selected' : ''}>By Name</option>
+                                <option value="supplier" ${selectedSort == 'supplier' ? 'selected' : ''}>By Supplier</option>
+                            </select>
 
-                            <!-- Sort by Supplier -->
-                            <form action="${pageContext.request.contextPath}/Medicine" method="post" style="margin: 0;">
-                                <input type="hidden" name="service" value="sortBySupplier" />
-                                <button type="submit" class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
-                                        style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap;">
-                                    Sort Supplier
-                                </button>
-                            </form>
-                        </div>
+                            <!-- Submit -->
+                            <button type="submit" class="btn text-white"
+                                    style="background-color: #FF3B3B; height: 40px; font-size: 14px; min-width: 100px;">
+                                <i class="fa fa-search me-1"></i> Search
+                            </button>
+                        </form>
+
 
                         <!-- Bên phải: Add Medicine -->
                         <a href="#addMedicine"
                            class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
                            data-bs-toggle="modal"
                            style="background-color: #FF3B3B; height: 40px; border-radius: 30px; font-size: 14px; padding: 0 20px;">
+
                             <i class="fa fa-plus me-2"></i> Add Medicine
                         </a>
                     </div>
@@ -197,7 +216,6 @@ if (medicineList == null && request.getParameter("service") == null) {
             <table class="table table-bordered table-hover align-middle ">
                 <thead class="table-primary" style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
                     <tr>
-                        <th style="width: 50px;">ID</th>
                         <th style="width: 150px;">Image</th>
                         <th style="width: 120px;">Name</th>
                         <th style="width: 80px;">Supplier</th>
@@ -209,7 +227,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                 <tbody>
                     <c:forEach var="medicine" items="${medicineList}">
                         <tr>
-                            <td><c:out value="${medicine.medicineId}"/></td>
+
                             <td>
                                 <img src="${pageContext.request.contextPath}/${medicine.image}" alt="Medicine Image" 
                                      style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px;">
@@ -236,16 +254,21 @@ if (medicineList == null && request.getParameter("service") == null) {
                                    title="Update Medicine">
                                     <i class="fa fa-edit"></i> 
                                 </a>
-                                <a href="#"
-                                   class="btn btn-sm btn-outline-primary me-2 delete-btn"
-                                   style="background: #FF3B3B;"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#deleteMedicine"
-                                   data-medicine-id="${medicine.medicineId}"
-                                   data-name="${medicine.medicineName}"
-                                   title="Delete Medicine">
-                                    <i class="fa fa-trash"></i> 
-                                </a>
+                                <form method="post" 
+                                      action="${pageContext.request.contextPath}/Medicine" 
+                                      onsubmit="return confirm('Are you sure to delete this medicine?');"
+                                      style="display: inline;">
+                                    <input type="hidden" name="service" value="deleteMedicine">
+                                    <input type="hidden" name="medicineId" value="${medicine.medicineId}">
+                                    <input type="hidden" name="page" value="${currentPage}">
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-outline-danger" 
+                                            style="background: #FF3B3B;" 
+                                            title="Delete Medicine">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+
                             </td>
                         </tr>
                     </c:forEach>
@@ -310,6 +333,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <input type="submit" name="submit" class="btn btn-success" value="Add">
                         <input type="hidden" name="service" value="addMedicine">
+                        <input type="hidden" name="page" value="${currentPage}">
                     </div>
                 </form>
             </div>
@@ -328,8 +352,8 @@ if (medicineList == null && request.getParameter("service") == null) {
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label>Old Image URL</label>
-                            <input type="text" name="oldImage" readonly class="form-control">
+
+                            <input type="hidden" name="oldImage" readonly class="form-control">
                         </div>
                         <div class="mb-3">
                             <label>Change Image</label>
@@ -355,7 +379,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                         </div>
                         <div class="mb-3">
                             <label>Dosage</label>
-                            <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required></textarea>
+                            <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required>
                         </div>
                     </div>
                     <input type="hidden" name="medicineId">
@@ -363,40 +387,39 @@ if (medicineList == null && request.getParameter("service") == null) {
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <input type="submit" name="submit" class="btn btn-info" value="Save">
                         <input type="hidden" name="service" value="updateMedicine">
+                        <input type="hidden" name="page" id="update-page" value="${currentPage}">
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <c:if test="${totalPages > 1}">
+        <div class="modern-pagination">
+            <c:if test="${currentPage > 1}">
+                <a href="Medicine?service=getAllMedicines&page=${currentPage - 1}" class="page-btn">&laquo;</a>
+            </c:if>
 
-    <!-- Delete-->
-    <div id="deleteMedicine" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="${pageContext.request.contextPath}/Medicine" method="post" enctype="multipart/form-data">
-                    <div class="modal-header">						
-                        <h4 class="modal-title">Delete Medicine</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label>Medicine Name</label>
-                            <input type="text" id="deleteMedicineName" name="medicineName" class="form-control" required>
-                        </div>
-                    </div>
-                    <input type="hidden" id="deleteMedicineId" name="medicineId">
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <input type="submit" name="submit" class="btn btn-info" value="Save">
-                        <input type="hidden" name="service" value="deleteMedicine">
-                    </div>
-                </form>
-            </div>
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <a href="Medicine?service=getAllMedicines&page=${i}"
+                   class="page-btn ${i == currentPage ? 'active' : ''}">${i}</a>
+            </c:forEach>
+
+            <c:if test="${currentPage < totalPages}">
+                <a href="Medicine?service=getAllMedicines&page=${currentPage + 1}" class="page-btn">&raquo;</a>
+            </c:if>
         </div>
-    </div>
+    </c:if>
 
 
+    <c:forEach var="i" begin="1" end="${totalPages}">
+        <a href="Medicine?service=manageQuery
+           &keyword=${searchKeyword}
+           &medicineType=${selectedType}
+           &sortBy=${selectedSort}
+           &page=${i}"
+           class="${i == currentPage ? 'active' : ''}">${i}</a>
+    </c:forEach>                
 
 
 
@@ -427,26 +450,14 @@ if (medicineList == null && request.getParameter("service") == null) {
                     $("#updateMedicine input[name='oldImage']").val(imageUrl);
                     $("#updateMedicine input[name='medicineName']").val(medicineName);
                     $("#updateMedicine input[name='supplier']").val(supplier);
-                    $("#updateMedicine input[name='type']").val(type);
+                    $("#updateMedicine select[name='type']").val(type);
                     $("#updateMedicine input[name='dosage']").val(dosage);
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const currentPage = urlParams.get('page') || 1;
+                    $("#updateMedicine input[name='page']").val(currentPage);
                 });
             });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $(".delete-btn").click(function () {
-                var medicineId = $(this).data("medicine-id");
-
-                var medicineName = $(this).data("name");
-
-
-                $("#deleteMedicine input[name='medicineId']").val(medicineId);
-
-                $("#deleteMedicine input[name='medicineName']").val(medicineName);
-
-            });
-        });
     </script>
 
 </body>

@@ -16,6 +16,194 @@ import java.util.List;
  */
 public class MedicineDAO extends DBContext {
 
+    public boolean isMedicineNameExists(String name) throws Exception {
+
+        String sql = "SELECT COUNT(*) FROM Medicine WHERE medicine_name = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        return false;
+    }
+
+    public List<Medicine> getFilteredMedicines(String keyword, String type, String sortBy) {
+        List<Medicine> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM Medicine WHERE 1=1";
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql += " AND (medicine_name LIKE ? OR supplier LIKE ?)";
+        }
+
+        if (type != null && !type.trim().isEmpty()) {
+            sql += " AND type = ?";
+        }
+
+        if ("name".equals(sortBy)) {
+            sql += " ORDER BY medicine_name";
+        } else if ("supplier".equals(sortBy)) {
+            sql += " ORDER BY supplier";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                ps.setString(index++, "%" + keyword + "%");
+                ps.setString(index++, "%" + keyword + "%");
+            }
+            if (type != null && !type.trim().isEmpty()) {
+                ps.setString(index++, type);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Medicine m = new Medicine(
+                            rs.getString("medicine_id"),
+                            rs.getString("medicine_name"),
+                            rs.getString("image"),
+                            rs.getString("supplier"),
+                            rs.getString("type"),
+                            rs.getString("dosage")
+                    );
+                    list.add(m);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public int countFilteredMedicines(String keyword, String type) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM Medicine WHERE 1=1";
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql += " AND (medicine_name LIKE ? OR supplier LIKE ?)";
+        }
+
+        if (type != null && !type.trim().isEmpty()) {
+            sql += " AND type = ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                ps.setString(index++, "%" + keyword + "%");
+                ps.setString(index++, "%" + keyword + "%");
+            }
+            if (type != null && !type.trim().isEmpty()) {
+                ps.setString(index++, type);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+    
+    public List<Medicine> getFilteredMedicinesPaged(String keyword, String type, String sortBy, int offset, int limit) {
+    List<Medicine> list = new ArrayList<>();
+    String sql = "SELECT * FROM Medicine WHERE 1=1";
+
+    if (keyword != null && !keyword.trim().isEmpty()) {
+        sql += " AND (medicine_name LIKE ? OR supplier LIKE ?)";
+    }
+
+    if (type != null && !type.trim().isEmpty()) {
+        sql += " AND type = ?";
+    }
+
+    if ("name".equals(sortBy)) {
+        sql += " ORDER BY medicine_name";
+    } else if ("supplier".equals(sortBy)) {
+        sql += " ORDER BY supplier";
+    } else {
+        sql += " ORDER BY medicine_id";
+    }
+
+    sql += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        int index = 1;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            ps.setString(index++, "%" + keyword + "%");
+            ps.setString(index++, "%" + keyword + "%");
+        }
+        if (type != null && !type.trim().isEmpty()) {
+            ps.setString(index++, type);
+        }
+
+        ps.setInt(index++, offset);
+        ps.setInt(index, limit);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Medicine m = new Medicine(
+                        rs.getString("medicine_id"),
+                        rs.getString("medicine_name"),
+                        rs.getString("image"),
+                        rs.getString("supplier"),
+                        rs.getString("type"),
+                        rs.getString("dosage")
+                );
+                list.add(m);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+    public int countAllMedicines() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Medicine";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public List<Medicine> getMedicinesByPage(int page, int pageSize) throws SQLException {
+        List<Medicine> list = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+
+        String sql = "SELECT * FROM Medicine ORDER BY medicine_id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);) {
+            ps.setInt(1, offset);
+            ps.setInt(2, pageSize);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Medicine(
+                        rs.getString("medicine_id"),
+                        rs.getString("medicine_name"),
+                        rs.getString("image"),
+                        rs.getString("supplier"),
+                        rs.getString("type"),
+                        rs.getString("dosage")
+                ));
+            }
+        }
+
+        return list;
+    }
+
     public void addMedicine(Medicine medicine) throws SQLException {
         String sql = "INSERT INTO Medicine (medicine_id, medicine_name, image, supplier, type, dosage) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -71,102 +259,6 @@ public class MedicineDAO extends DBContext {
         ps.setString(1, id);
         ps.executeUpdate();
         ps.close();
-    }
-
-    public List<Medicine> searchMedicineByNameOrSupplier(String keyword) throws SQLException {
-        List<Medicine> list = new ArrayList<>();
-        String sql = "SELECT * FROM Medicine WHERE medicine_name LIKE ? OR supplier LIKE ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        String searchPattern = "%" + keyword + "%";
-        ps.setString(1, searchPattern);
-        ps.setString(2, searchPattern);
-
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Medicine medicine = new Medicine(
-                    rs.getString("medicine_id"),
-                    rs.getString("medicine_name"),
-                    rs.getString("image"),
-                    rs.getString("supplier"),
-                    rs.getString("type"),
-                    rs.getString("dosage")
-            );
-            list.add(medicine);
-        }
-
-        rs.close();
-        ps.close();
-        return list;
-    }
-
-    public List<Medicine> getAllMedicinesSortedByName() throws SQLException {
-        List<Medicine> list = new ArrayList<>();
-        String sql = "SELECT * FROM Medicine ORDER BY medicine_name ASC";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Medicine medicine = new Medicine(
-                    rs.getString("medicine_id"),
-                    rs.getString("medicine_name"),
-                    rs.getString("image"),
-                    rs.getString("supplier"),
-                    rs.getString("type"),
-                    rs.getString("dosage")
-            );
-            list.add(medicine);
-        }
-
-        rs.close();
-        ps.close();
-        return list;
-    }
-
-    public List<Medicine> getMedicinesByExactSupplierSorted() throws SQLException {
-        List<Medicine> list = new ArrayList<>();
-        String sql = "SELECT * FROM Medicine ORDER BY supplier ASC";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Medicine medicine = new Medicine(
-                    rs.getString("medicine_id"),
-                    rs.getString("medicine_name"),
-                    rs.getString("image"),
-                    rs.getString("supplier"),
-                    rs.getString("type"),
-                    rs.getString("dosage")
-            );
-            list.add(medicine);
-        }
-
-        rs.close();
-        ps.close();
-        return list;
-    }
-
-    public List<Medicine> getMedicinesByType(String type) throws SQLException {
-        List<Medicine> list = new ArrayList<>();
-        String sql = "SELECT * FROM Medicine WHERE type = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, type);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Medicine m = new Medicine(
-                    rs.getString("medicine_id"),
-                    rs.getString("medicine_name"),
-                    rs.getString("image"),
-                    rs.getString("supplier"),
-                    rs.getString("type"),
-                    rs.getString("dosage")
-            );
-            list.add(m);
-        }
-
-        rs.close();
-        ps.close();
-        return list;
     }
 
     public String generateNextMedicineId() {

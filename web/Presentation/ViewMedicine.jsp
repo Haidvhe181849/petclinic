@@ -5,19 +5,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@page import="Entity.Medicine"%>
 <%@page import="DAO.MedicineDAO"%>
-<%
-List<Medicine> medicineList = (List<Medicine>) request.getAttribute("medicineList");
-if (medicineList == null && request.getParameter("service") == null) {
-    MedicineDAO dao = new MedicineDAO();
-    try {
-        medicineList = dao.getAllMedicines();  
-    } catch (Exception e) {
-        medicineList = new ArrayList<>();
-        e.printStackTrace();
-    }
-    request.setAttribute("medicineList", medicineList);
-}
-%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,8 +62,62 @@ if (medicineList == null && request.getParameter("service") == null) {
                 border-radius: 0;
             }
 
+            .header-btn.custom-auth-btn {
+                font-size: 15px;
+                padding: 6px 22px;
+                border-radius: 22px;
+                background: #ff3d3d;
+                color: #fff;
+                border: none;
+                margin: 0;
+                box-shadow: none;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s;
+            }
+
+            .header-btn.custom-auth-btn:hover {
+                background: #e62e2e;
+                color: #fff;
+                text-decoration: none;
+
+            }
 
 
+            .header-user-info {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-left: 20px;
+                white-space: nowrap;
+            }
+
+            .header-user-info span {
+                font-size: 13px;
+                color: #000;
+                font-weight: 500;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .header-btn.custom-auth-btn {
+                font-size: 12px;
+                padding: 4px 12px;
+                border-radius: 16px;
+                background-color: #ff4d4d;
+                color: white;
+                border: none;
+                font-weight: 500;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .header-btn.custom-auth-btn:hover {
+                background-color: #e63e3e;
+            }
 
 
             @keyframes fadeIn {
@@ -95,160 +137,252 @@ if (medicineList == null && request.getParameter("service") == null) {
     </head>
 
     <body>
-        <jsp:include page="Header.jsp"></jsp:include>
-            <!-- Hero Area Start -->
-            <div class="slider-area2 slider-height2 d-flex align-items-center">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="hero-cap text-center pt-50">
-                                <h2>Medicine</h2>
+        <header>
+            <!--? Header Start -->
+            <div class="header-area header-transparent">
+                <div class="main-header header-sticky">
+                    <div class="container-fluid">
+                        <div class="row align-items-center" style="min-height: 80px;">
+                            <!-- Logo -->
+                            <div class="col-xl-2 col-lg-2 col-md-2 d-flex align-items-center">
+                                <div class="logo">
+                                    <a href="Home.jsp"><img src="img/logo/logo.png" alt=""></a>
+                                </div>
+                            </div>
+                            <!-- Menu -->
+                            <div class="col-xl-7 col-lg-7 col-md-7">
+                                <div class="main-menu f-right d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a href="${pageContext.request.contextPath}/Presentation/Home.jsp">Home</a></li>
+                                            <li><a href="#">Services</a>
+                                                <ul class="submenu">
+                                                    <li><a href="#">A</a></li>
+                                                    <li><a href="#">B</a></li>
+                                                    <li><a href="#">C</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a></li>
+                                            <li><a href="#">Doctor</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/Presentation/BookingSchedule.jsp">Booking</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- User info -->
+                            <div
+                                class="col-xl-3 col-lg-3 col-md-3 d-flex align-items-center justify-content-end">
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.user}">
+                                        <div class="header-user-info">
+                                            <span>Hi, ${sessionScope.user.name}</span>
+                                            <a href="${pageContext.request.contextPath}/logout"
+                                               class="header-btn custom-auth-btn">Đăng xuất</a>
+                                            <div class="dropdown">
+                                                <a href="#"
+                                                   class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
+                                                   id="userDropdown" data-bs-toggle="dropdown"
+                                                   aria-expanded="false">
+                                                    <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end"
+                                                    aria-labelledby="userDropdown">
+                                                    <li><a class="dropdown-item"
+                                                           href="${pageContext.request.contextPath}/change-password">Đổi
+                                                            mật khẩu</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${not empty sessionScope.userName}">
+                                        <div class="header-user-info">
+                                            <span>Hi, ${sessionScope.userName}</span>
+                                            <a href="${pageContext.request.contextPath}/logout"
+                                               class="header-btn custom-auth-btn">Đăng xuất</a>
+                                            <div class="dropdown">
+                                                <a href="#"
+                                                   class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
+                                                   id="userDropdown" data-bs-toggle="dropdown"
+                                                   aria-expanded="false">
+                                                    <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end"
+                                                    aria-labelledby="userDropdown">
+                                                    <li><a class="dropdown-item"
+                                                           href="${pageContext.request.contextPath}/change-password">Đổi
+                                                            mật khẩu</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="header-user-info">
+                                            <a href="${pageContext.request.contextPath}/login"
+                                               class="header-btn custom-auth-btn">Đăng nhập</a>
+                                            <a href="${pageContext.request.contextPath}/register"
+                                               class="header-btn custom-auth-btn">Đăng ký</a>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-
-            <div class="container py-5">
-                <h1 class="mb-4">All Medicine In Hospital</h1>
-                <div class="row align-items-center mb-4">
-                    <div class="col-12">
-                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                            <!-- Bên trái: Search, Filter, Sort -->
-                            <div class="d-flex flex-wrap align-items-center gap-2" style="flex-grow: 1;">
-
-                                <!-- Search -->
-                                <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" class="d-flex align-items-center gap-2" style="margin: 0;">
-                                <input type="search" name="keyword" class="form-control" placeholder="Search by Name, Supplier"
-                                       style="font-size: 14px; height: 40px; min-width: 250px;">
-                                <input type="hidden" name="service" value="searchMedicine">
-                                <button type="submit" class="btn text-white"
-                                        style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap; min-width: 100px;">
-                                    <i class="fa fa-search me-1"></i> Search
-                                </button>
-                            </form>
-
-                            <!-- Filter -->
-                            <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" style="margin: 0;">
-                                <input type="hidden" name="service" value="filterByType" />
-                                <select name="medicineType" class="form-select"
-                                        onchange="this.form.submit()"
-                                        style="font-size: 14px; height: 40px; min-width: 100px;">
-                                    <option value="">All Types</option>
-                                    <option value="Topical" ${param.medicineType == 'Topical' ? 'selected' : ''}>Topical</option>
-                                    <option value="Spray" ${param.medicineType == 'Spray' ? 'selected' : ''}>Spray</option>
-                                    <option value="Oral Drug" ${param.medicineType == 'Oral Drug' ? 'selected' : ''}>Oral Drug</option>
-                                    <option value="Vaccine" ${param.medicineType == 'Vaccine' ? 'selected' : ''}>Vaccine</option>
-                                </select>
-                            </form>
-
-                            <!-- Sort by Name -->
-                            <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" style="margin: 0;">
-                                <input type="hidden" name="service" value="sortByName" />
-                                <button type="submit" class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
-                                        style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap;">
-                                    Sort Medicine
-                                </button>
-                            </form>
-
-                            <!-- Sort by Supplier -->
-                            <form action="${pageContext.request.contextPath}/ViewMedicine" method="post" style="margin: 0;">
-                                <input type="hidden" name="service" value="sortBySupplier" />
-                                <button type="submit" class="btn text-white fw-bold shadow-sm d-flex align-items-center justify-content-center"
-                                        style="background-color: #FF3B3B; height: 40px; font-size: 14px; white-space: nowrap;">
-                                    Sort Supplier
-                                </button>
-                            </form>
+                        <div class="header-right-btn f-right d-none d-lg-block ml-30">
+                            <a href="#" class="header-btn">01654.066.456</a>
                         </div>
-
-
                     </div>
                 </div>
-            </div>
-
-
-            <table class="table table-bordered table-hover align-middle ">
-                <thead class="table-primary" style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                    <tr>
-                        <th style="width: 50px;">ID</th>
-                        <th style="width: 150px;">Image</th>
-                        <th style="width: 120px;">Name</th>
-                        <th style="width: 80px;">Supplier</th>
-                        <th style="width: 50px;">Medicine Type</th>
-                        <th style="width: 125px;">Dosage</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="medicine" items="${medicineList}">
-                        <tr>
-                            <td><c:out value="${medicine.medicineId}"/></td>
-                            <td>
-                                <img src="${pageContext.request.contextPath}/${medicine.image}" 
-                                     alt="Medicine Image"
-                                     class="img-thumbnail"
-                                     style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer;"
-                                     onclick="showImageModal('${pageContext.request.contextPath}/${medicine.image}')">
-                            </td>
-
-                            <td><c:out value="${medicine.medicineName}"/></td>
-                            <td><c:out value="${medicine.supplier}"/></td>
-                            <td><c:out value="${medicine.type}"/></td>
-                            <td style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <c:out value="${medicine.dosage}"/>
-                            </td>
-
-
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- Medicine Management End -->
-
-    <!-- Image Modal -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="" alt="Medicine Image" style="width: 100%; height: auto; border-radius: 8px;">
+                <!-- Mobile Menu -->
+                <div class="col-12">
+                    <div class="mobile_menu d-block d-lg-none"></div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        function showImageModal(imageUrl) {
-            const modalImage = document.getElementById("modalImage");
-            modalImage.src = imageUrl;
-            const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-            imageModal.show();
-        }
-    </script>
-
-
-    <jsp:include page="Footer.jsp"></jsp:include>
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <!-- Bootstrap CSS -->
-   
+</div>
+<!-- Header End -->
+</header>
+<!-- Hero Area Start -->
+<div class="slider-area2 slider-height2 d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="hero-cap text-center pt-50">
+                    <h2>Medicine</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+
+
+
+
+<div class="container py-5">
+    <h1 class="mb-4">Manage Medicine</h1>
+    <div class="row align-items-center mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <!-- Bên trái: Search, Filter, Sort -->
+                <!-- Left: Form -->
+                <form action="${pageContext.request.contextPath}/Medicine" method="post"
+                      class="d-flex align-items-center gap-2 flex-wrap" style="margin: 0;">
+
+                    <input type="hidden" name="service" value="manageQuery" />
+
+                    <!-- Search input -->
+                    <input type="search" name="keyword" value="${searchKeyword}" class="form-control"
+                           placeholder="Search by Name, Supplier"
+                           style="font-size: 14px; height: 40px; width: 280px;">
+
+                    <!-- Filter -->
+                    <select name="medicineType" class="form-select"
+                            style="font-size: 14px; height: 40px; width: 130px;">
+                        <option value="">All Types</option>
+                        <option value="Topical" ${selectedType == 'Topical' ? 'selected' : ''}>Topical</option>
+                        <option value="Spray" ${selectedType == 'Spray' ? 'selected' : ''}>Spray</option>
+                        <option value="Oral Drug" ${selectedType == 'Oral Drug' ? 'selected' : ''}>Oral Drug</option>
+                        <option value="Vaccine" ${selectedType == 'Vaccine' ? 'selected' : ''}>Vaccine</option>
+                    </select>
+
+                    <!-- Sort -->
+                    <select name="sortBy" class="form-select"
+                            style="font-size: 14px; height: 40px; width: 120px;">
+                        <option value="">Sort</option>
+                        <option value="name" ${selectedSort == 'name' ? 'selected' : ''}>By Name</option>
+                        <option value="supplier" ${selectedSort == 'supplier' ? 'selected' : ''}>By Supplier</option>
+                    </select>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn text-white"
+                            style="background-color: #FF3B3B; height: 40px; font-size: 14px; min-width: 100px;">
+                        <i class="fa fa-search me-1"></i> Search
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>    
+
+
+
+    <table class="table table-bordered table-hover align-middle ">
+        <thead class="table-primary" style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+            <tr>
+                <th style="width: 150px;">Image</th>
+                <th style="width: 120px;">Name</th>
+                <th style="width: 80px;">Supplier</th>
+                <th style="width: 50px;">Medicine Type</th>
+                <th style="width: 125px;">Dosage</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="medicine" items="${medicineList}">
+                <tr>
+
+                    <td>
+                        <img src="${pageContext.request.contextPath}/${medicine.image}" 
+                             alt="Medicine Image"
+                             class="img-thumbnail"
+                             style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer;"
+                             onclick="showImageModal('${pageContext.request.contextPath}/${medicine.image}')">
+                    </td>
+
+                    <td><c:out value="${medicine.medicineName}"/></td>
+                    <td><c:out value="${medicine.supplier}"/></td>
+                    <td><c:out value="${medicine.type}"/></td>
+                    <td style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <c:out value="${medicine.dosage}"/>
+                    </td>
+
+
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
+</div>
+<!-- Medicine Management End -->
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Medicine Image" style="width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showImageModal(imageUrl) {
+        const modalImage = document.getElementById("modalImage");
+        modalImage.src = imageUrl;
+        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+        imageModal.show();
+    }
+</script>
+
+
+<jsp:include page="Footer.jsp"></jsp:include>
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+<!-- JavaScript Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/lightbox/js/lightbox.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<!-- Bootstrap CSS -->
+
+
+
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
 
 
 </body>

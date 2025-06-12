@@ -81,36 +81,20 @@ public class ViewMedicineServlet extends HttpServlet {
 
         try {
             MedicineDAO medicineDAO = new MedicineDAO();
-            if ("searchMedicine".equals(service)) {
+            if ("manageQuery".equals(service)) {
                 String keyword = request.getParameter("keyword");
-                List<Medicine> list = medicineDAO.searchMedicineByNameOrSupplier(keyword);
-                request.setAttribute("medicineList", list);
-                request.setAttribute("searchKeyword", keyword);  // giữ lại từ khóa cho form
-
-                request.getRequestDispatcher("Presentation/ViewMedicine.jsp").forward(request, response);
-            } else if ("sortByName".equals(service)) {
-                List<Medicine> list = medicineDAO.getAllMedicinesSortedByName();
-                request.setAttribute("medicineList", list);
-                request.getRequestDispatcher("Presentation/ViewMedicine.jsp").forward(request, response);
-            } else if ("sortBySupplier".equals(service)) {
-                List<Medicine> list = medicineDAO.getMedicinesByExactSupplierSorted();
-                request.setAttribute("medicineList", list);
-                request.getRequestDispatcher("Presentation/ViewMedicine.jsp").forward(request, response);
-            } else if ("filterByType".equals(service)) {
                 String type = request.getParameter("medicineType");
+                String sortBy = request.getParameter("sortBy");
 
-                List<Medicine> list;
-                if (type == null || type.isEmpty()) {
-                    list = medicineDAO.getAllMedicines(); // Không lọc gì
-                } else {
-                    list = medicineDAO.getMedicinesByType(type);
-                }
+                List<Medicine> list = medicineDAO.getFilteredMedicines(keyword, type, sortBy);
 
                 request.setAttribute("medicineList", list);
-                request.setAttribute("selectedType", type); // để giữ lại filter đã chọn
-                request.getRequestDispatcher("Presentation/ViewMedicine.jsp").forward(request, response);
-            }
+                request.setAttribute("searchKeyword", keyword);
+                request.setAttribute("selectedType", type);
+                request.setAttribute("selectedSort", sortBy);
 
+                request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);
