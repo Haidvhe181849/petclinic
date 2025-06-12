@@ -55,21 +55,28 @@ public class NewsBL extends HttpServlet {
         String service = request.getParameter("service");
         if (service == null || service.equals("listNews") || service.equals("nlist")) {
             String submit = request.getParameter("submit");
+            String order = request.getParameter("order"); 
+            if (order == null || (!order.equalsIgnoreCase("asc") && !order.equalsIgnoreCase("desc"))) {
+                order = "desc"; // mặc định giảm dần
+            }
             Vector<News> nlist;
             Vector<News> lastNews = nDAO.getLatestNews();
 
             if (submit != null) {
                 String name = request.getParameter("name");
+                name = name.trim().replaceAll("\\s+", "%");
                 nlist = nDAO.searchNews("Select*from News\n"
                         + "Where nameNews like N'%" + name + "%'");
                 request.setAttribute("nameNews", name);
             } else {
-                nlist = nDAO.getAllNews("SELECT * FROM News");
+                String sql = "SELECT * FROM News ORDER BY post_time " + order;
+                nlist = nDAO.getAllNews(sql);
             }
 
             request.setAttribute("nlist", nlist);
             request.setAttribute("top5News", lastNews);
-            request.getRequestDispatcher("Presentation/News.jsp").forward(request, response);
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("Presentation/NewsManagerment.jsp").forward(request, response);
         }
 
         if ("addNews".equals(service)) {
@@ -82,10 +89,8 @@ public class NewsBL extends HttpServlet {
                 String description = request.getParameter("description");
                 Boolean isActive = Boolean.valueOf(request.getParameter("isActive"));
 
-                
                 Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
 
-                
                 Part filePart = request.getPart("imageFile");
                 String imageUrl = "";
 
@@ -100,14 +105,12 @@ public class NewsBL extends HttpServlet {
                     filePart.write(uploadPath + File.separator + fileName);
                     imageUrl = "img/news/" + fileName;
                 } else {
-                    imageUrl = "img/news/default.jpg"; 
+                    imageUrl = "img/news/default.jpg";
                 }
 
-                
                 News n = new News(newsId, imageUrl, nameNews, timestampNow, description, isActive);
                 nDAO.insertNews(n);
 
-                
                 request.getSession().setAttribute("message", "Added successful!");
                 response.sendRedirect("News?service=listNews");
             }
@@ -118,7 +121,7 @@ public class NewsBL extends HttpServlet {
             int n = nDAO.deleteNews(nID);
             request.getSession().setAttribute("message", "Deleted successful!");
             response.sendRedirect("News?service=listNews");
-            
+
         }
 
         if ("updateNews".equals(service)) {
@@ -132,12 +135,11 @@ public class NewsBL extends HttpServlet {
                 String description = request.getParameter("description");
                 Boolean isActive = "1".equals(request.getParameter("isActive"));
 
-               
                 Part filePart = request.getPart("imageFile");
                 String imageUrl;
 
                 if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-                   
+
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                     String uploadPath = getServletContext().getRealPath("/") + "img/news";
                     File uploadDir = new File(uploadPath);
@@ -148,7 +150,7 @@ public class NewsBL extends HttpServlet {
                     filePart.write(uploadPath + File.separator + fileName);
                     imageUrl = "img/news/" + fileName;
                 } else {
-                   
+
                     imageUrl = request.getParameter("oldImage");
                 }
 
