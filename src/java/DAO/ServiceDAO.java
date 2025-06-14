@@ -17,7 +17,8 @@ import java.util.logging.Logger;
  *
  * @author LENOVO
  */
-public class ServiceDAO extends DBContext{
+public class ServiceDAO extends DBContext {
+
     public Vector<Service> getAllService(String sql) {
         Vector<Service> listService = new Vector<>();
 
@@ -38,7 +39,7 @@ public class ServiceDAO extends DBContext{
         }
         return listService;
     }
-    
+
     public Vector<Service> searchService(String sql) {
         Vector<Service> listService = new Vector<>();
 
@@ -69,7 +70,7 @@ public class ServiceDAO extends DBContext{
             ptm.setString(2, s.getService_name());
             ptm.setDouble(3, s.getPrice());
             ptm.setString(4, s.getDescription());
-           
+
             i = ptm.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -81,15 +82,15 @@ public class ServiceDAO extends DBContext{
         String sql = "SELECT TOP 1 service_id FROM Service ORDER BY service_id DESC";
         try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
             if (rs.next()) {
-                String lastId = rs.getString("service_id"); 
-                int num = Integer.parseInt(lastId.substring(1)); 
+                String lastId = rs.getString("service_id");
+                int num = Integer.parseInt(lastId.substring(1));
                 num++; // tăng lên
-                return String.format("S%03d", num); 
+                return String.format("S%03d", num);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "S001"; 
+        return "S001";
     }
 
     public void updateService(Service s) {
@@ -98,13 +99,12 @@ public class ServiceDAO extends DBContext{
             ptm.setString(1, s.getService_name());
             ptm.setDouble(2, s.getPrice());
             ptm.setString(3, s.getDescription());
-            ptm.setString(4, s.getService_id());           
+            ptm.setString(4, s.getService_id());
             ptm.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
-   
 
     public int deleteService(String service_id) {
         String sql = "DELETE FROM [dbo].[Service]\n"
@@ -119,5 +119,13 @@ public class ServiceDAO extends DBContext{
         }
         return i;
     }
-    
+
+    public static void main(String[] args) {
+        String sql = "SELECT * FROM Service";
+        ServiceDAO sDAO = new ServiceDAO();
+        Vector<Service> slist = sDAO.getAllService(sql);
+            System.out.println(slist);
+        
+    }
+
 }

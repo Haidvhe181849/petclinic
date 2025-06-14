@@ -44,37 +44,35 @@ public class ServiceServlet extends HttpServlet {
         if (service == null || service.equals("listService") || service.equals("slist")) {
             String submit = request.getParameter("submit");
             String order = request.getParameter("order");
-            if (order == null || (!order.equalsIgnoreCase("asc") && !order.equalsIgnoreCase("desc"))) {
-                order = "desc";
-            }
+
             Vector<Service> slist;
             if (submit != null) {
                 String name = request.getParameter("name");
                 name = name.trim().replaceAll("\\s+", "%");
-                slist = sDAO.searchService("Select*from Service\n"
-                        + "Where service_name like N'%" + name + "%'");
+                slist = sDAO.searchService("SELECT * FROM Service WHERE service_name LIKE N'%" + name + "%'");
                 request.setAttribute("service_name", name);
-            } else {
+            } else if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
                 String sql = "SELECT * FROM Service ORDER BY price " + order;
                 slist = sDAO.getAllService(sql);
+                request.setAttribute("order", order);
+            } else {
+                slist = sDAO.getAllService("SELECT * FROM Service");
             }
-
             request.setAttribute("slist", slist);
-            request.setAttribute("order", order);
-            request.getRequestDispatcher("Presentation/NewsManagerment.jsp").forward(request, response);
+            request.getRequestDispatcher("Presentation/ServiceManagerment.jsp").forward(request, response);
         }
 
         if ("addService".equals(service)) {
             String submit = request.getParameter("submit");
             if (submit == null) {
-                response.sendRedirect("News.jsp");
+                response.sendRedirect("ServiceManagerment.jsp");
             } else {
-                String service_id = sDAO.generateNextServiceId(); // tự sinh ID
+                String service_id = sDAO.generateNextServiceId();
                 String service_name = request.getParameter("service_name");
                 Double price = Double.valueOf(request.getParameter("price"));
                 String description = request.getParameter("description");
 
-                Service s = new Service(service_name, price, description);
+                Service s = new Service(service_id, service_name, price, description);
                 sDAO.insertService(s);
 
                 request.getSession().setAttribute("message", "Added successful!");
@@ -93,13 +91,13 @@ public class ServiceServlet extends HttpServlet {
         if ("updateService".equals(service)) {
             String submit = request.getParameter("submit");
             if (submit == null) {
-                response.sendRedirect("Service.jsp");
+                response.sendRedirect("ServiceManagerment.jsp");
             } else {
                 String service_id = request.getParameter("service_id");
                 String service_name = request.getParameter("service_name");
                 Double price = Double.valueOf(request.getParameter("price"));
                 String description = request.getParameter("description");
-                
+
                 Service s = new Service(service_id, service_name, price, description);
                 sDAO.updateService(s);
                 request.getSession().setAttribute("message", "Update successful!");

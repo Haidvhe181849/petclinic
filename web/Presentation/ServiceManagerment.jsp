@@ -1,5 +1,5 @@
 <%-- 
-    Document   : NewsManagerment
+    Document   : ServiceManagerment
     Created on : Jun 11, 2025, 11:19:47 PM
     Author     : LENOVO
 --%>
@@ -16,13 +16,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="apple-touch-icon" sizes="76x76" href="${pageContext.request.contextPath}/Presentation/img/apple-icon.png" />
         <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/Presentation/img/favicon.png" />
-        <title>News Managerment</title>
+        <title>Service Managerment</title>
 
         <!--     Fonts and icons     -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
         <script src="${pageContext.request.contextPath}/Presentation/js/argon-dashboard-tailwind.js"></script>
 
 
@@ -151,7 +150,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors " href="${pageContext.request.contextPath}/News?service=listNews">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors " href="${pageContext.request.contextPath}/News?service=listNews">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
                             </div>
@@ -160,7 +159,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
+                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/Service?service=listService">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
                             </div>
@@ -264,8 +263,8 @@
                     </nav>
 
                     <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-                        <form action="${pageContext.request.contextPath}/News" method="get" class="flex items-center md:ml-auto md:pr-4">
-                            <input type="hidden" name="service" value="nlist">
+                        <form action="${pageContext.request.contextPath}/Service" method="get" class="flex items-center md:ml-auto md:pr-4">
+                            <input type="hidden" name="service" value="slist">
                             <input type="hidden" name="submit" value="search">
                             <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease">
                                 <button type="submit" class="text-sm ease leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
@@ -274,10 +273,10 @@
                                 <input 
                                     type="text" 
                                     name="name"
-                                    value="${nameNews}"
+                                    value="${service_name}"
                                     class="pl-9 text-sm focus:shadow-primary-outline ease w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 dark:bg-slate-850 dark:text-white bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:transition-shadow" 
-                                    placeholder="Search news by title..." 
-                                    value="${param.name != null ? param.name : ''}"
+                                    placeholder="Search service by name..." 
+                                    value="${param.service_name != null ? param.service_name : ''}"
                                     />
 
                             </div>
@@ -393,31 +392,32 @@
                         <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                             <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                                 <div class="flex items-center justify-between">
-                                    <h6 class="dark:text-white text-lg font-semibold">News Management</h6>
+                                    <h6 class="dark:text-white text-lg font-semibold">Service Management</h6>
                                     <div class="flex gap-2 items-center">
                                         <!-- Nút Sort -->
-                                        <form action="${pageContext.request.contextPath}/News" method="get" class="flex items-center ml-2">
-                                            <input type="hidden" name="service" value="nlist" />
+                                        <form action="${pageContext.request.contextPath}/Service" method="get" class="flex items-center ml-2">
+                                            <input type="hidden" name="service" value="slist" />
                                             <select name="order" class="..." onchange="this.form.submit()" type="submit">
-                                                <option value="desc" <c:if test="${order eq 'desc'}">selected</c:if>>Newest</option>
-                                                <option value="asc" <c:if test="${order eq 'asc'}">selected</c:if>>Oldest</option>
+                                                <option value="">Sort by price</option>
+                                                <option value="desc" <c:if test="${order eq 'desc'}">selected</c:if>>High to Low</option>
+                                                <option value="asc" <c:if test="${order eq 'asc'}">selected</c:if>>Low to High</option>
                                                 </select>
                                             </form>
 
 
                                             <!-- Nút All -->
-                                            <form action="${pageContext.request.contextPath}/News" method="get">
-                                            <input type="hidden" name="service" value="nlist" />
+                                            <form action="${pageContext.request.contextPath}/Service" method="get">
+                                            <input type="hidden" name="service" value="slist" />
                                             <button type="submit" class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-blue-600 transition-all">
                                                 All
                                             </button>
                                         </form>
 
-                                        <!-- Nút Add News -->
+                                        <!-- Nút Add Service -->
                                         <button class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-green-600 transition-all"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#addNewsModal">
-                                            Add News
+                                                data-bs-target="#addServiceModal">
+                                            Add Service
                                         </button>
                                     </div>
                                 </div>
@@ -431,74 +431,52 @@
                                         <thead class="align-bottom">
                                             <tr>
                                                 <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">ID</th>
-                                                <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Image</th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Title</th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Date</th>
+                                                <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Name</th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Price</th>
                                                 <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Description</th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status</th>
                                                 <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="news" items="${nlist}">
+                                            <c:forEach var="sv" items="${slist}">
                                                 <tr>
                                                     <!-- ID -->
-                                                    <td><c:out value="${news.newsId}"/></td>
+                                                    <td><c:out value="${sv.service_id}"/></td>
 
-                                                    <!-- IMAGE -->
+                                                    <!-- Name -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
-                                                        <img src="${news.imageUrl}" alt="news image" style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px;" />
+                                                        <c:out value="${sv.service_name}"/>
                                                     </td>
 
-                                                    <!-- TITLE -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
-                                                        <c:out value="${news.nameNews}"/>
-                                                    </td>
-
-                                                    <!-- DATE -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black whitespace-nowrap">
-                                                        <fmt:formatDate value="${news.postTime}" pattern="dd/MM/yyyy"/>
+                                                    <!-- Price -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${sv.price}"/>$
                                                     </td> 
 
                                                     <!-- DESCRIPTION -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
                                                         <div class="line-clamp-2">
-                                                            <c:out value="${news.description}" />
+                                                            <c:out value="${sv.description}" />
                                                         </div>
-                                                    </td>
-
-                                                    <!-- ACTIVE -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:choose>
-                                                            <c:when test="${news.isActive == true}">
-                                                                <span class="bg-green-500 text-blue-500 text-xs font-bold px-2 py-1 rounded">Active</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="bg-red-500 text-red-600 text-xs font-bold px-2 py-1 rounded">Inactive</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
                                                     </td>
 
                                                     <td class="text-center">
                                                         <a href="#"
                                                            class="btn btn-sm btn-outline-primary me-2 update-btn"
-                                                           style="background: #0000"
+                                                           style="background: #0000;"
                                                            data-bs-toggle="modal"
-                                                           data-bs-target="#editEmployeeModal"
-                                                           data-id="${news.newsId}"
-                                                           data-image="${news.imageUrl}"
-                                                           data-name="${news.nameNews}"
-                                                           data-date="${fn:escapeXml(news.postTime)}"
-                                                           data-describe="${fn:escapeXml(news.description)}"
-                                                           data-active="${news.isActive ? 1 : 0}"
-                                                           data-oldimage="${news.imageUrl}"
-                                                           title="Edit News">
-                                                            <i class="fas fa-edit"></i>
+                                                           data-bs-target="#editServiceModal"
+                                                           data-id="${sv.service_id}"
+                                                           data-name="${sv.service_name}"
+                                                           data-price="${sv.price}"
+                                                           data-describe="${fn:escapeXml(sv.description)}"
+                                                           title="Edit Service">
+                                                            <i class="fa fa-edit" ></i> 
                                                         </a>
-                                                        <a href="News?service=deleteNews&nID=<c:out value='${news.newsId}'/>" 
-                                                           onclick="return confirm('Are you sure to delete this news?');" 
-                                                           class="btn btn-sm btn-outline-danger" style="background: #0000;" title="Delete News">
-                                                            <i class="fas fa-trash"></i>
+                                                        <a href="Service?service=deleteService&sID=<c:out value='${sv.service_id}'/>" 
+                                                           onclick="return confirm('Are you sure to delete this Service?');" 
+                                                           class="btn btn-sm btn-outline-danger" style="background: #0000;" title="Delete Service">
+                                                            <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -512,39 +490,33 @@
                 </div>
             </div>
 
-            <!-- Add News Modal -->
-            <div id="addNewsModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <!-- Add Service Modal -->
+            <div id="addServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/News" method="post" enctype="multipart/form-data">
+                        <form action="${pageContext.request.contextPath}/Service" method="post">
                             <div class="modal-header">						
-                                <h4 class="modal-title">Add News</h4>
+                                <h4 class="modal-title">Add Service</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">	
+                            <div class="modal-body">
                                 <div class="mb-3">
-                                    <label>Image URL</label>
-                                    <input type="file" name="imageFile" class="form-control" accept="image/*" required>
+                                    <label>Name</label>
+                                    <input type="text" name="service_name" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label>Title</label>
-                                    <input type="text" name="nameNews" class="form-control" required>
+                                    <label>Price</label>
+                                    <input type="text" name="price" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label>Description</label>
                                     <textarea name="description" class="form-control" rows="10" required></textarea>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label>Active</label><br>
-                                    <input type="radio" name="isActive" value="true" checked/> Active
-                                    <input type="radio" name="isActive" value="false" /> Deactive
-                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <input type="submit" name="submit" class="btn btn-success" value="Add">
-                                <input type="hidden" name="service" value="addNews">
+                                <input type="hidden" name="service" value="addService">
                             </div>
                         </form>
                     </div>
@@ -565,49 +537,37 @@
                 <c:remove var="message" scope="session"/>
             </c:if>
 
-            <!-- Update News Modal -->
-            <div id="editEmployeeModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <!-- Update Service Modal -->
+            <div id="editServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/News" method="post" enctype="multipart/form-data">
+                        <form action="${pageContext.request.contextPath}/Service" method="post">
                             <div class="modal-header">						
-                                <h4 class="modal-title">Update News</h4>
+                                <h4 class="modal-title">Update Service</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label>ID</label>
-                                    <input name="newsId" type="text" class="form-control" readonly required>
-                                </div>
-                                <div class="mb-3">
-                                    <input type="hidden" name="oldImage" class="form-control" readonly required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Image URL</label>
-                                    <input type="file" name="imageFile" class="form-control" accept="image/*">
+                                    <input name="service_id" type="text" class="form-control" readonly required>
                                 </div>
                                 <div class="mb-3">
                                     <label>Name</label>
-                                    <input type="text" name="nameNews" class="form-control" required>
+                                    <input type="text" name="service_name" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label>Time</label>
-                                    <input type="text" name="postTime" class="form-control" readonly>
+                                    <label>Price</label>
+                                    <input type="text" name="price" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label>Description</label>
                                     <textarea name="description" class="form-control" rows="10" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Active</label><br>
-                                    <input type="radio" name="isActive" value="1"> Active
-                                    <input type="radio" name="isActive" value="0"> Deactive
-                                </div>                          					
+                                </div>                         					
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <input type="submit" name="submit" class="btn btn-info" value="Save">
-                                <input type="hidden" name="service" value="updateNews">                           
+                                <input type="hidden" name="service" value="updateService">                           
                             </div>
                         </form>
                     </div>
@@ -621,36 +581,24 @@
                     $(document).ready(function () {
                         $(".update-btn").click(function () {
                             // Lấy từ data-attributes
-                            var newsId = $(this).data("id");
-                            var imageUrl = $(this).data("image");
-                            var nameNews = $(this).data("name");
-                            var postTime = $(this).data("date");
+                            var service_id = $(this).data("id");
+                            var service_name = $(this).data("name");
+                            var price = $(this).data("price");
                             var description = $(this).data("describe");
-                            var isActive = $(this).data("active");
-                            var oldImage = $(this).data("oldimage");
 
                             // Debug nhanh: kiểm tra console
-                            console.log("ID:", newsId,
-                                    "imageUrl:", imageUrl,
-                                    "oldImage:", oldImage,
-                                    "name:", nameNews,
-                                    "time:", postTime,
-                                    "desc:", description,
-                                    "active:", isActive);
+                            console.log("ID:", service_id,
+                                    "name:", service_name,
+                                    "price:", price,
+                                    "desc:", description);
 
                             // Đổ giá trị vào các input trong modal
-                            $("#editEmployeeModal input[name='newsId']").val(newsId);
-                            $("#editEmployeeModal input[name='postTime']").val(postTime);
-                            $("#editEmployeeModal input[name='nameNews']").val(nameNews);
-                            $("#editEmployeeModal textarea[name='description']").val(description);
-                            $("#editEmployeeModal input[name='oldImage']").val(oldImage);
-
-                            // Set radio Active/Deactive
-                            if (isActive == 1 || isActive === "1" || isActive === true) {
-                                $("#editEmployeeModal input[name='isActive'][value='1']").prop("checked", true);
-                            } else {
-                                $("#editEmployeeModal input[name='isActive'][value='0']").prop("checked", true);
-                            }
+                            $("#editServiceModal input[name='service_id']").val(service_id);
+                            
+                            $("#editServiceModal input[name='price']").val(price);
+                            $("#editServiceModal input[name='service_name']").val(service_name);
+                            $("#editServiceModal textarea[name='description']").val(description);
+                            
                         });
                     });
         </script>
