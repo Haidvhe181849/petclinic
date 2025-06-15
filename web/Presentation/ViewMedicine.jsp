@@ -227,9 +227,7 @@
                                 </c:choose>
                             </div>
                         </div>
-                        <div class="header-right-btn f-right d-none d-lg-block ml-30">
-                            <a href="#" class="header-btn">01654.066.456</a>
-                        </div>
+                        
                     </div>
                 </div>
                 <!-- Mobile Menu -->

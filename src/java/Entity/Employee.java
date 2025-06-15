@@ -8,12 +8,11 @@ package Entity;
  *
  * @author LENOVO
  */
-
-
 public class Employee {
 
     private String employeeId;
     private String name;
+    private String image;
     private String phone;
     private String email;
     private String password;
@@ -23,12 +22,13 @@ public class Employee {
     private String workingHours;
     private boolean status;
 
-  
     public Employee() {
     }
 
-    public Employee(String name, String phone, String email, String password, String address, int roleId, String experience, String workingHours, boolean status) {
+    public Employee(String employeeId, String name, String image, String phone, String email, String password, String address, int roleId, String experience, String workingHours, boolean status) {
+        this.employeeId = employeeId;
         this.name = name;
+        this.image = image;
         this.phone = phone;
         this.email = email;
         this.password = password;
@@ -39,9 +39,11 @@ public class Employee {
         this.status = status;
     }
 
-    public Employee(String employeeId, String name, String phone, String email, String password, String address, int roleId, String experience, String workingHours, boolean status) {
-        this.employeeId = employeeId;
+    public Employee(String name, String image, String phone, String email,
+            String password, String address, int roleId, String experience,
+            String workingHours, boolean status) {
         this.name = name;
+        this.image = image;
         this.phone = phone;
         this.email = email;
         this.password = password;
@@ -66,6 +68,14 @@ public class Employee {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getPhone() {
@@ -134,9 +144,18 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" + "employeeId=" + employeeId + ", name=" + name + ", phone=" + phone + ", email=" + email + ", password=" + password + ", address=" + address + ", roleId=" + roleId + ", experience=" + experience + ", workingHours=" + workingHours + ", status=" + status + '}';
+        return "Employee{"
+                + "employeeId='" + employeeId + '\''
+                + ", name='" + name + '\''
+                + ", image='" + image + '\''
+                + ", phone='" + phone + '\''
+                + ", email='" + email + '\''
+                + ", password='" + password + '\''
+                + ", address='" + address + '\''
+                + ", roleId=" + roleId
+                + ", experience='" + experience + '\''
+                + ", workingHours='" + workingHours + '\''
+                + ", status=" + status
+                + '}';
     }
-    
-
-  
 }
