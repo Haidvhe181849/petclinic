@@ -62,7 +62,7 @@ public class Employee {
         this.employeeId = employeeId;
     }
 
-    public String getName() {
+    public String getNameEmployee() {
         return name;
     }
 
@@ -142,20 +142,12 @@ public class Employee {
         this.status = status;
     }
 
+    
+
     @Override
     public String toString() {
-        return "Employee{"
-                + "employeeId='" + employeeId + '\''
-                + ", name='" + name + '\''
-                + ", image='" + image + '\''
-                + ", phone='" + phone + '\''
-                + ", email='" + email + '\''
-                + ", password='" + password + '\''
-                + ", address='" + address + '\''
-                + ", roleId=" + roleId
-                + ", experience='" + experience + '\''
-                + ", workingHours='" + workingHours + '\''
-                + ", status=" + status
-                + '}';
+        return "Employee{" + "employeeId=" + employeeId + ", name=" + name + ", image=" + image + ", phone=" + phone + ", email=" + email + ", password=" + password + ", address=" + address + ", roleId=" + roleId + ", experience=" + experience + ", workingHours=" + workingHours + ", status=" + status + '}';
     }
+
+    
 }

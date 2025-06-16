@@ -1,9 +1,3 @@
-<%-- 
-    Document   : ServiceManagerment
-    Created on : Jun 11, 2025, 11:19:47 PM
-    Author     : LENOVO
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -159,7 +153,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/Service?service=listService">
+                        <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4" href="${pageContext.request.contextPath}/Service?service=listService">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
                             </div>
@@ -204,9 +198,9 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Managerment</span>
                         </a>
@@ -263,8 +257,8 @@
                     </nav>
 
                     <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-                        <form action="${pageContext.request.contextPath}/Service" method="get" class="flex items-center md:ml-auto md:pr-4">
-                            <input type="hidden" name="service" value="slist">
+                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="get" class="flex items-center md:ml-auto md:pr-4">
+                            <input type="hidden" name="service" value="blist">
                             <input type="hidden" name="submit" value="search">
                             <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease">
                                 <button type="submit" class="text-sm ease leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
@@ -272,15 +266,14 @@
                                 </button>
                                 <input 
                                     type="text" 
-                                    name="name"
-                                    value="${service_name}"
+                                    name="bookingId"
+                                    value="${param.bookingId != null ? param.bookingId : ''}"
                                     class="pl-9 text-sm focus:shadow-primary-outline ease w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 dark:bg-slate-850 dark:text-white bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:transition-shadow" 
-                                    placeholder="Search service by name..." 
-                                    value="${param.service_name != null ? param.service_name : ''}"
+                                    placeholder="Search booking by id..." 
                                     />
-
                             </div>
                         </form>
+
 
                         <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">                        
                             <li class="flex items-center">
@@ -392,33 +385,26 @@
                         <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                             <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                                 <div class="flex items-center justify-between">
-                                    <h6 class="dark:text-white text-lg font-semibold">Service Management</h6>
+                                    <h6 class="dark:text-white text-lg font-semibold">Booking Management</h6>
                                     <div class="flex gap-2 items-center">
                                         <!-- Nút Sort -->
-                                        <form action="${pageContext.request.contextPath}/Service" method="get" class="flex items-center ml-2">
-                                            <input type="hidden" name="service" value="slist" />
+                                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="get" class="flex items-center ml-2">
+                                            <input type="hidden" name="service" value="blist" />
                                             <select name="order" class="..." onchange="this.form.submit()" type="submit">
-                                                <option value="">Sort by price</option>
-                                                <option value="desc" <c:if test="${order eq 'desc'}">selected</c:if>>High to Low</option>
-                                                <option value="asc" <c:if test="${order eq 'asc'}">selected</c:if>>Low to High</option>
+                                                <option value="">Sort by time</option>
+                                                <option value="desc" <c:if test="${order == 'desc'}">selected</c:if>>Newest</option>
+                                                <option value="asc" <c:if test="${order == 'asc'}">selected</c:if>>Oldest</option>
                                                 </select>
                                             </form>
 
 
                                             <!-- Nút All -->
-                                            <form action="${pageContext.request.contextPath}/Service" method="get">
-                                            <input type="hidden" name="service" value="slist" />
+                                            <form action="${pageContext.request.contextPath}/ConfirmBooking" method="get">
+                                            <input type="hidden" name="service" value="blist" />
                                             <button type="submit" class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-blue-600 transition-all">
                                                 All
                                             </button>
                                         </form>
-
-                                        <!-- Nút Add Service -->
-                                        <button class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-green-600 transition-all"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#addServiceModal">
-                                            Add Service
-                                        </button>
                                     </div>
                                 </div>
 
@@ -430,53 +416,83 @@
                                     <table class="items-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
                                         <thead class="align-bottom">
                                             <tr>
-                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">ID</th>
-                                                <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Name</th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Price</th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Description</th>
-                                                <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
-                                            </tr>
+                                        <thead>
+                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking ID</th>
+                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Customer</th>
+                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pet</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Type</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Service</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Doctor</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking Time</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status</th>
+                                        <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
+                                        </tr>
                                         </thead>
+
+
                                         <tbody>
-                                            <c:forEach var="sv" items="${slist}">
+                                            <c:forEach var="b" items="${blist}">
                                                 <tr>
-                                                    <!-- ID -->
-                                                    <td><c:out value="${sv.service_id}"/></td>
+                                                    <!-- Booking ID -->
+                                                    <td>
+                                                        <c:out value="${b.bookingId}" />
+                                                    </td>
 
-                                                    <!-- Name -->
+                                                    <!-- Customer Name -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
-                                                        <c:out value="${sv.service_name}"/>
+                                                        <c:out value="${b.customerName}" />
                                                     </td>
 
-                                                    <!-- Price -->
+                                                    <!-- Pet Name -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:out value="${sv.price}"/>$
-                                                    </td> 
-
-                                                    <!-- DESCRIPTION -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <div class="line-clamp-2">
-                                                            <c:out value="${sv.description}" />
-                                                        </div>
+                                                        <c:out value="${b.petName}" />
                                                     </td>
 
+                                                    <!-- Pet Type -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.petType}" />
+                                                    </td>
+
+                                                    <!-- Service Name -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.serviceName}" />
+                                                    </td>
+
+                                                    <!-- Doctor Name -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.employeeName}" />
+                                                    </td>
+
+                                                    <!-- Booking Time -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <fmt:formatDate value="${b.bookingTime}" pattern="yyyy-MM-dd HH:mm" />
+                                                    </td>
+
+                                                    <!-- Status -->
                                                     <td class="text-center">
-                                                        <a href="#"
-                                                           class="btn btn-sm btn-outline-primary me-2 update-btn"
-                                                           style="background: #0000;"
-                                                           data-bs-toggle="modal"
-                                                           data-bs-target="#editServiceModal"
-                                                           data-id="${sv.service_id}"
-                                                           data-name="${sv.service_name}"
-                                                           data-price="${sv.price}"
-                                                           data-describe="${fn:escapeXml(sv.description)}"
-                                                           title="Edit Service">
-                                                            <i class="fa fa-edit" ></i> 
-                                                        </a>
-                                                        <a href="Service?service=deleteService&sID=<c:out value='${sv.service_id}'/>" 
-                                                           onclick="return confirm('Are you sure to delete this Service?');" 
-                                                           class="btn btn-sm btn-outline-danger" style="background: #0000;" title="Delete Service">
-                                                            <i class="fa fa-trash"></i>
+                                                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
+                                                            <input type="hidden" name="service" value="updateStatus" />
+                                                            <input type="hidden" name="bookingId" value="${b.bookingId}" />
+
+                                                            <select name="status" 
+                                                                    class="text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 p-1 bg-white dark:bg-slate-800 dark:text-white"
+                                                                    onchange="handleStatusChange(this, '${b.bookingId}')">
+                                                                <option value="Pending" ${b.status eq 'Pending' ? 'selected' : ''}>Pending</option>
+                                                                <option value="Confirmed" ${b.status eq 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                                                                <option value="Failed" ${b.status eq 'Failed' ? 'selected' : ''}>Failed</option>
+                                                            </select>
+
+                                                        </form>
+                                                    </td>
+
+
+
+
+                                                    <!-- Actions -->
+                                                    <td class="text-center">
+                                                        <a href="ConfirmBooking?service=bookingDetail&bookingId=${b.bookingId}" 
+                                                           class="btn btn-outline-info btn-sm" title="View Detail">
+                                                            <i class="fa fa-eye"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -490,38 +506,8 @@
                 </div>
             </div>
 
-            <!-- Add Service Modal -->
-            <div id="addServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/Service" method="post">
-                            <div class="modal-header">						
-                                <h4 class="modal-title">Add Service</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label>Name</label>
-                                    <input type="text" name="service_name" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Description</label>
-                                    <textarea name="description" class="form-control" rows="10" required></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <input type="submit" name="submit" class="btn btn-success" value="Add">
-                                <input type="hidden" name="service" value="addService">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+
+
 
             <c:if test="${not empty sessionScope.message}">
                 <div id="popup-message">${sessionScope.message}</div>
@@ -536,72 +522,175 @@
 
                 <c:remove var="message" scope="session"/>
             </c:if>
-
-            <!-- Update Service Modal -->
-            <div id="editServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div id="failStatusModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/Service" method="post">
-                            <div class="modal-header">						
-                                <h4 class="modal-title">Update Service</h4>
+                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Cancel Reason</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+
                             <div class="modal-body">
+                                <input type="hidden" name="service" value="updateStatus" />
+                                <input type="hidden" name="bookingId" />
+                                <input type="hidden" name="status" />
                                 <div class="mb-3">
-                                    <label>ID</label>
-                                    <input name="service_id" type="text" class="form-control" readonly required>
+                                    <label for="cancelReason" class="form-label">Reason for Cancellation</label>
+                                    <textarea name="cancelReason" class="form-control" required></textarea>
                                 </div>
-                                <div class="mb-3">
-                                    <label>Name</label>
-                                    <input type="text" name="service_name" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Description</label>
-                                    <textarea name="description" class="form-control" rows="10" required></textarea>
-                                </div>                         					
                             </div>
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <input type="submit" name="submit" class="btn btn-info" value="Save">
-                                <input type="hidden" name="service" value="updateService">                           
+                                <button type="submit" class="btn btn-danger">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <!-- Booking Detail Modal -->
+            <div id="BookingDetailModal" class="modal fade" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="bookingForm" action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="bookingModalTitle">Booking Detail</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>Booking ID</label>
+                                    <input name="bookingId" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Customer Name</label>
+                                    <input name="customerName" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Phone</label>
+                                    <input name="customerPhone" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input name="customerEmail" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Pet Name</label>
+                                    <input name="petName" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Pet Type</label>
+                                    <input name="petType" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Breed</label>
+                                    <input name="breed" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Service</label>
+                                    <input name="serviceName" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Doctor</label>
+                                    <input name="employeeName" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Booking Time</label>
+                                    <input name="bookingTime" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Status</label>
+                                    <input name="status" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Actual Check-in</label>
+                                    <input name="actualCheckinTime" type="text" class="form-control" readonly>
+                                </div>
+                                <c:if test="${bookingDetail.status eq 'Failed'}">
+                                    <div class="mb-3">
+                                        <label>Cancel Reason</label>
+                                        <textarea name="cancelReason" class="form-control" rows="2" readonly>
+                                            ${bookingDetail.cancelReason}
+                                        </textarea>
+                                    </div>
+                                </c:if>
+
+
+                                <div class="mb-3">
+                                    <label>Note</label>
+                                    <textarea name="note" class="form-control" rows="2" readonly></textarea>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <!-- Nếu ở chế độ update thì giữ nút Save -->
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script>
+        <c:if test="${not empty bookingDetail}">
+            <script>
                     $(document).ready(function () {
-                        $(".update-btn").click(function () {
-                            // Lấy từ data-attributes
-                            var service_id = $(this).data("id");
-                            var service_name = $(this).data("name");
-                            var price = $(this).data("price");
-                            var description = $(this).data("describe");
+                        $("#BookingDetailModal").modal("show");
 
-                            // Debug nhanh: kiểm tra console
-                            console.log("ID:", service_id,
-                                    "name:", service_name,
-                                    "price:", price,
-                                    "desc:", description);
-
-                            // Đổ giá trị vào các input trong modal
-                            $("#editServiceModal input[name='service_id']").val(service_id);
-                            
-                            $("#editServiceModal input[name='price']").val(price);
-                            $("#editServiceModal input[name='service_name']").val(service_name);
-                            $("#editServiceModal textarea[name='description']").val(description);
-                            
-                        });
+                        $("#BookingDetailModal input[name='bookingId']").val("${bookingDetail.bookingId}");
+                        $("#BookingDetailModal input[name='customerName']").val("${bookingDetail.customerName}");
+                        $("#BookingDetailModal input[name='customerPhone']").val("${bookingDetail.customerPhone}");
+                        $("#BookingDetailModal input[name='customerEmail']").val("${bookingDetail.customerEmail}");
+                        $("#BookingDetailModal input[name='petName']").val("${bookingDetail.petName}");
+                        $("#BookingDetailModal input[name='petType']").val("${bookingDetail.petType}");
+                        $("#BookingDetailModal input[name='breed']").val("${bookingDetail.breed}");
+                        $("#BookingDetailModal input[name='serviceName']").val("${bookingDetail.serviceName}");
+                        $("#BookingDetailModal input[name='employeeName']").val("${bookingDetail.employeeName}");
+                        $("#BookingDetailModal input[name='bookingTime']").val("${bookingDetail.bookingTime}");
+                        $("#BookingDetailModal input[name='status']").val("${bookingDetail.status}");
+                        $("#BookingDetailModal input[name='actualCheckinTime']").val("${bookingDetail.actualCheckinTime}");
+                        $("#BookingDetailModal textarea[name='cancelReason']").val("${bookingDetail.cancelReason}");
+                        $("#BookingDetailModal textarea[name='note']").val("${bookingDetail.note}");
                     });
+
+                    if ("${bookingDetail.status}" === "Failed") {
+                        $("textarea[name='cancelReason']").closest(".mb-3").show();
+                    } else {
+                        $("textarea[name='cancelReason']").closest(".mb-3").hide();
+                    }
+
+            </script>
+        </c:if>
+
+
+        <script>
+            function handleStatusChange(selectElement, bookingId) {
+                var selectedValue = selectElement.value;
+
+                if (selectedValue === "Failed") {
+                    // Gán giá trị vào modal để biết booking nào đang sửa
+                    $('#failStatusModal input[name="bookingId"]').val(bookingId);
+                    $('#failStatusModal input[name="status"]').val(selectedValue);
+
+                    // Hiện modal để nhập lý do
+                    $('#failStatusModal').modal('show');
+                } else {
+                    // Tự động submit với các status khác
+                    selectElement.form.submit();
+                }
+            }
         </script>
+
 
 
         <script>

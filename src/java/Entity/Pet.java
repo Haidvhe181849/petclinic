@@ -15,7 +15,7 @@ public class Pet {
     private String petId;
     private int ownerId;
     private String petTypeId;
-    private String name;
+    private String namePet;
     private double weight;
     private String breed;
     private LocalDate birthdate;
@@ -24,12 +24,12 @@ public class Pet {
     public Pet() {
     }
 
-    public Pet(String petId, int ownerId, String petTypeId, String name,
+    public Pet(String petId, int ownerId, String petTypeId, String namePet,
             double weight, String breed, LocalDate birthdate, String image) {
         this.petId = petId;
         this.ownerId = ownerId;
         this.petTypeId = petTypeId;
-        this.name = name;
+        this.namePet = namePet;
         this.weight = weight;
         this.breed = breed;
         this.birthdate = birthdate;
@@ -40,7 +40,6 @@ public class Pet {
         this.petId = petId;
         this.ownerId = ownerId;
     }
-    
 
     public String getPetId() {
         return petId;
@@ -66,12 +65,12 @@ public class Pet {
         this.petTypeId = petTypeId;
     }
 
-    public String getName() {
-        return name;
+    public String getNamePet() {
+        return namePet;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNamePet(String namePet) {
+        this.namePet = namePet;
     }
 
     public double getWeight() {
@@ -108,7 +107,10 @@ public class Pet {
 
     @Override
     public String toString() {
-        return "Pet{" + "petId=" + petId + ", ownerId=" + ownerId + ", petTypeId=" + petTypeId + ", name=" + name + ", weight=" + weight + ", breed=" + breed + ", birthdate=" + birthdate + ", image=" + image + '}';
+        return "Pet{" + "petId=" + petId + ", ownerId=" + ownerId + ", petTypeId=" + petTypeId + ", namePet=" + namePet + ", weight=" + weight + ", breed=" + breed + ", birthdate=" + birthdate + ", image=" + image + '}';
     }
+    
+
+    
 
 }

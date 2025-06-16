@@ -136,6 +136,7 @@
                                             <li><a href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a></li>
                                             <li><a href="#">Managerment</a>
                                                 <ul class="submenu">
+                                                    <li><a href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">Booking</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/Service?service=listService">Service</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">Medicine</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
