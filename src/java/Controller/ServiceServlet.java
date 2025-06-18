@@ -6,6 +6,8 @@ package Controller;
 
 import DAO.ServiceDAO;
 import Entity.Service;
+import Utility.DBContext;
+import java.sql.Connection; 
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -38,7 +40,9 @@ public class ServiceServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ServiceDAO sDAO = new ServiceDAO();
+        DBContext db = new DBContext();
+        Connection conn = db.connection;
+        ServiceDAO sDAO = new ServiceDAO(conn); 
 
         String service = request.getParameter("service");
         if (service == null || service.equals("listService") || service.equals("slist")) {

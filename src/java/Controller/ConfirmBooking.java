@@ -71,7 +71,7 @@ public class ConfirmBooking extends HttpServlet {
                         + "ORDER BY b.booking_time " + order;
 
                 blist = bDAO.getAllBooking(sql);
-                request.setAttribute("order", order); // truyền giá trị vào JSP
+                request.setAttribute("order", order); 
             } else {
                 blist = bDAO.getAllBooking("SELECT \n"
                         + "    b.booking_id,\n"

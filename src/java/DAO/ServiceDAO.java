@@ -28,8 +28,6 @@ public class ServiceDAO extends DBContext {
         this.connection = connection;
     }
 
-    public ServiceDAO() {
-    }
 
     public List<Service> getAllServices() throws SQLException {
         String sql = "SELECT * FROM Service";
