@@ -1,44 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Entity;
 
-/**
- *
- * @author LENOVO
- */
+
 import java.time.LocalDate;
 
 public class Pet {
 
     private String petId;
+
     private int ownerId;
     private String petTypeId;
-    private String namePet;
+    private String name;
     private double weight;
     private String breed;
     private LocalDate birthdate;
     private String image;
 
     public Pet() {
-    }
-
-    public Pet(String petId, int ownerId, String petTypeId, String namePet,
-            double weight, String breed, LocalDate birthdate, String image) {
-        this.petId = petId;
-        this.ownerId = ownerId;
-        this.petTypeId = petTypeId;
-        this.namePet = namePet;
-        this.weight = weight;
-        this.breed = breed;
-        this.birthdate = birthdate;
-        this.image = image;
-    }
-
-    public Pet(String petId, int ownerId) {
-        this.petId = petId;
-        this.ownerId = ownerId;
     }
 
     public String getPetId() {
@@ -65,12 +42,12 @@ public class Pet {
         this.petTypeId = petTypeId;
     }
 
-    public String getNamePet() {
-        return namePet;
+    public String getName() {
+        return name;
     }
 
-    public void setNamePet(String namePet) {
-        this.namePet = namePet;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getWeight() {
@@ -105,12 +82,23 @@ public class Pet {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "Pet{" + "petId=" + petId + ", ownerId=" + ownerId + ", petTypeId=" + petTypeId + ", namePet=" + namePet + ", weight=" + weight + ", breed=" + breed + ", birthdate=" + birthdate + ", image=" + image + '}';
+    
+    
+    public Pet(String petId, int ownerId, String petTypeId, String name,
+            double weight, String breed, LocalDate birthdate, String image) {
+        this.petId = petId;
+        this.ownerId = ownerId;
+        this.petTypeId = petTypeId;
+        this.name = name;
+        this.weight = weight;
+        this.breed = breed;
+        this.birthdate = birthdate;
+        this.image = image;
     }
-    
 
-    
+    public Pet(String petId, int ownerId) {
+        this.petId = petId;
+        this.ownerId = ownerId;
 
+    }
 }

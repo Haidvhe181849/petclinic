@@ -24,14 +24,14 @@ public class UserDAO extends DBContext {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new UserAccount(
-                    rs.getInt("user_id"),
-                    rs.getString("name"),
-                    rs.getString("phone"),
-                    rs.getString("email"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("address"),
-                    rs.getInt("role_id")
+                        rs.getInt("user_id"),
+                        rs.getString("name"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getInt("role_id")
                 );
             }
         } catch (SQLException e) {
@@ -64,14 +64,14 @@ public class UserDAO extends DBContext {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new UserAccount(
-                    rs.getInt("user_id"),
-                    rs.getString("name"),
-                    rs.getString("phone"),
-                    rs.getString("email"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("address"),
-                    rs.getInt("role_id")
+                        rs.getInt("user_id"),
+                        rs.getString("name"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getInt("role_id")
                 );
             }
         } catch (SQLException e) {
@@ -87,14 +87,14 @@ public class UserDAO extends DBContext {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new UserAccount(
-                    rs.getInt("user_id"),
-                    rs.getString("name"),
-                    rs.getString("phone"),
-                    rs.getString("email"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("address"),
-                    rs.getInt("role_id")
+                        rs.getInt("user_id"),
+                        rs.getString("name"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getInt("role_id")
                 );
             }
         } catch (SQLException e) {
@@ -114,6 +114,6 @@ public class UserDAO extends DBContext {
             return false;
         }
     }
-    
-    
+
+
 }

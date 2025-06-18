@@ -42,7 +42,11 @@ public class BookingDAO extends DBContext {
 
             ps.setString(1, booking.getBookingId());
             ps.setInt(2, booking.getUserId());
-            ps.setString(3, booking.getEmployeeId() != null ? booking.getEmployeeId() : "");
+            if (booking.getEmployeeId() != null && !booking.getEmployeeId().isEmpty()) {
+                ps.setString(3, booking.getEmployeeId());
+            } else {
+                ps.setNull(3, java.sql.Types.VARCHAR);  // PHẢI LÀ NULL
+            }
             ps.setString(4, booking.getServiceId() != null ? booking.getServiceId() : "");
             ps.setString(5, booking.getPetId() != null ? booking.getPetId() : "");
             ps.setString(6, booking.getNote() != null ? booking.getNote() : "");

@@ -13,15 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PetDAO extends DBContext {
+public class PetDAO{
 
     private Connection connection;
 
     public PetDAO(Connection connection) {
         this.connection = connection;
     }
-    
-    
+
     public List<Pet> getPetsByOwnerId(int ownerId) {
         List<Pet> pets = new ArrayList<>();
         String sql = "SELECT * FROM Pet WHERE owner_id = ?";

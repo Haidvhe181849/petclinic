@@ -97,6 +97,7 @@
                                 <li><a href="${pageContext.request.contextPath}/Presentation/ViewAboutUs.jsp">About Us</a></li>
                                 <li><a href="#">Managerment</a>
                                     <ul class="submenu">
+                                        <li><a href="${pageContext.request.contextPath}/ManagerBooking">Booking</a></li>
                                         <li><a href="#">Service</a></li>
                                         <li><a href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">Medicine</a></li>
                                         <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
@@ -126,26 +127,8 @@
                                     <ul class="dropdown-menu dropdown-menu-end"
                                         aria-labelledby="userDropdown">
                                         <li><a class="dropdown-item"
-                                               href="${pageContext.request.contextPath}/change-password">Đổi
-                                                mật khẩu</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </c:when>
-                        <c:when test="${not empty sessionScope.userName}">
-                            <div class="header-user-info">
-                                <span>Hi, ${sessionScope.userName}</span>
-                                <a href="${pageContext.request.contextPath}/logout"
-                                   class="header-btn custom-auth-btn">Đăng xuất</a>
-                                <div class="dropdown">
-                                    <a href="#"
-                                       class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
-                                       id="userDropdown" data-bs-toggle="dropdown"
-                                       aria-expanded="false">
-                                        <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end"
-                                        aria-labelledby="userDropdown">
+                                                           href="${pageContext.request.contextPath}/ViewBooking">Xem lịch khám
+                                                            </a></li>
                                         <li><a class="dropdown-item"
                                                href="${pageContext.request.contextPath}/change-password">Đổi
                                                 mật khẩu</a></li>
@@ -153,6 +136,7 @@
                                 </div>
                             </div>
                         </c:when>
+                        
                         <c:otherwise>
                             <div class="header-user-info">
                                 <a href="${pageContext.request.contextPath}/login"

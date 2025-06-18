@@ -35,6 +35,22 @@ public class Service {
         this.description = description;
     }
 
+     public String getServiceId() {
+        return service_id;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.service_id = service_id;
+    }
+
+    public String getServiceName() {
+        return service_name;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.service_name = service_name;
+    }
+    
     public String getService_id() {
         return service_id;
     }

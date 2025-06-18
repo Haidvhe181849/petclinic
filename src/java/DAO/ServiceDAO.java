@@ -6,9 +6,12 @@ package DAO;
 
 import Entity.Service;
 import Utility.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +21,32 @@ import java.util.logging.Logger;
  * @author LENOVO
  */
 public class ServiceDAO extends DBContext {
+
+    private Connection connection;
+
+    public ServiceDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public ServiceDAO() {
+    }
+
+    public List<Service> getAllServices() throws SQLException {
+        String sql = "SELECT * FROM Service";
+        List<Service> list = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Service s = new Service(
+                        rs.getString("service_id"),
+                        rs.getString("service_name"),
+                        rs.getDouble("price"),
+                        rs.getString("description")
+                );
+                list.add(s);
+            }
+        }
+        return list;
+    }
 
     public Vector<Service> getAllService(String sql) {
         Vector<Service> listService = new Vector<>();
@@ -120,12 +149,5 @@ public class ServiceDAO extends DBContext {
         return i;
     }
 
-    public static void main(String[] args) {
-        String sql = "SELECT * FROM Service";
-        ServiceDAO sDAO = new ServiceDAO();
-        Vector<Service> slist = sDAO.getAllService(sql);
-            System.out.println(slist);
-        
-    }
 
 }

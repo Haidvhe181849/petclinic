@@ -5,6 +5,7 @@
 package Entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -21,17 +22,14 @@ public class Booking {
     private LocalDateTime bookingTime;
     private String status;
 
-    public Booking() {
-    }
+    private String employeeName;
+    private String petName;
 
-    public Booking(int userId, String employeeId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status) {
-        this.userId = userId;
-        this.employeeId = employeeId;
-        this.serviceId = serviceId;
-        this.petId = petId;
-        this.note = note;
-        this.bookingTime = bookingTime;
-        this.status = status;
+    private String serviceName;
+    private double servicePrice;
+
+   
+    public Booking() {
     }
 
     public Booking(String bookingId, int userId, String employeeId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status) {
@@ -45,6 +43,32 @@ public class Booking {
         this.status = status;
     }
 
+    public Booking(String bookingId, int userId, String employeeId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status, String employeeName, String petName) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.employeeId = employeeId;
+        this.serviceId = serviceId;
+        this.petId = petId;
+        this.note = note;
+        this.bookingTime = bookingTime;
+        this.status = status;
+        this.employeeName = employeeName;
+        this.petName = petName;
+    }
+
+    public Booking(String bookingId, int userId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.employeeId = null;
+        this.serviceId = serviceId;
+        this.petId = petId;
+        this.note = note;
+        this.bookingTime = bookingTime;
+        this.status = status;
+    }
+
+    
+    
     public String getBookingId() {
         return bookingId;
     }
@@ -101,12 +125,52 @@ public class Booking {
         this.bookingTime = bookingTime;
     }
 
+    public String getFormattedDate() {
+        return bookingTime != null ? bookingTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+    }
+
+    public String getFormattedTime() {
+        return bookingTime != null ? bookingTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getPetName() {
+        return petName;
+    }
+
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public double getServicePrice() {
+        return servicePrice;
+    }
+
+    public void setServicePrice(double servicePrice) {
+        this.servicePrice = servicePrice;
     }
 
     @Override
