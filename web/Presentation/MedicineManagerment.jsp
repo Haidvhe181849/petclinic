@@ -1,3 +1,9 @@
+<%-- 
+    Document   : MedicineManagerment
+    Created on : Jun 18, 2025, 9:08:16 PM
+    Author     : LENOVO
+--%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -153,23 +159,21 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4" href="${pageContext.request.contextPath}/Service?service=listService">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Managerment</span>
                         </a>
                     </li>
-
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
+                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Managerment</span>
                         </a>
                     </li>
-
                     <li class="mt-0.5 w-full">
                         <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -198,9 +202,9 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Managerment</span>
                         </a>
@@ -257,8 +261,8 @@
                     </nav>
 
                     <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="get" class="flex items-center md:ml-auto md:pr-4">
-                            <input type="hidden" name="service" value="blist">
+                        <form action="${pageContext.request.contextPath}/Service" method="get" class="flex items-center md:ml-auto md:pr-4">
+                            <input type="hidden" name="service" value="mlist">
                             <input type="hidden" name="submit" value="search">
                             <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease">
                                 <button type="submit" class="text-sm ease leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
@@ -266,14 +270,15 @@
                                 </button>
                                 <input 
                                     type="text" 
-                                    name="bookingId"
-                                    value="${param.bookingId != null ? param.bookingId : ''}"
+                                    name="name"
+                                    value="${service_name}"
                                     class="pl-9 text-sm focus:shadow-primary-outline ease w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 dark:bg-slate-850 dark:text-white bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:transition-shadow" 
-                                    placeholder="Search booking by id..." 
+                                    placeholder="Search service by name..." 
+                                    value="${param.service_name != null ? param.service_name : ''}"
                                     />
+
                             </div>
                         </form>
-
 
                         <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">                        
                             <li class="flex items-center">
@@ -385,26 +390,33 @@
                         <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                             <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                                 <div class="flex items-center justify-between">
-                                    <h6 class="dark:text-white text-lg font-semibold">Booking Management</h6>
+                                    <h6 class="dark:text-white text-lg font-semibold">Medicine Management</h6>
                                     <div class="flex gap-2 items-center">
                                         <!-- Nút Sort -->
-                                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="get" class="flex items-center ml-2">
-                                            <input type="hidden" name="service" value="blist" />
+                                        <form action="${pageContext.request.contextPath}/Medicine" method="get" class="flex items-center ml-2">
+                                            <input type="hidden" name="service" value="mlist" />
                                             <select name="order" class="..." onchange="this.form.submit()" type="submit">
-                                                <option value="">Sort by time</option>
-                                                <option value="desc" <c:if test="${order == 'desc'}">selected</c:if>>Newest</option>
-                                                <option value="asc" <c:if test="${order == 'asc'}">selected</c:if>>Oldest</option>
+                                                <option value="">Sort by price</option>
+                                                <option value="desc" <c:if test="${order eq 'desc'}">selected</c:if>>High to Low</option>
+                                                <option value="asc" <c:if test="${order eq 'asc'}">selected</c:if>>Low to High</option>
                                                 </select>
                                             </form>
 
 
                                             <!-- Nút All -->
-                                            <form action="${pageContext.request.contextPath}/ConfirmBooking" method="get">
-                                            <input type="hidden" name="service" value="blist" />
+                                            <form action="${pageContext.request.contextPath}/Medicine" method="get">
+                                            <input type="hidden" name="service" value="getAllMedicines" />
                                             <button type="submit" class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-blue-600 transition-all">
                                                 All
                                             </button>
                                         </form>
+
+                                        <!-- Nút Add Service -->
+                                        <button class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-green-600 transition-all"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#addServiceModal">
+                                            Add Service
+                                        </button>
                                     </div>
                                 </div>
 
@@ -416,95 +428,73 @@
                                     <table class="items-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
                                         <thead class="align-bottom">
                                             <tr>
-                                        <thead>
-                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking ID</th>
-                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Customer</th>
-                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pet</th>
-                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Type</th>
-                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Service</th>
-                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Doctor</th>
-                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking Time</th>
-                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status</th>
-                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Accept</th>
-                                        <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
-                                        </tr>
+                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Image</th>
+                                                <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Name</th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">PriceSupplier</th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Medicine Type</th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Dosage</th>
+                                                <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
+                                            </tr>
                                         </thead>
-
-
                                         <tbody>
-                                            <c:forEach var="b" items="${blist}">
+                                            <c:forEach var="m" items="${mlist}">
                                                 <tr>
-                                                    <!-- Booking ID -->
-                                                    <td>
-                                                        <c:out value="${b.bookingId}" />
-                                                    </td>
-
-                                                    <!-- Customer Name -->
+                                                    <!-- Image -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
-                                                        <c:out value="${b.customerName}" />
+                                                        <img src="${pageContext.request.contextPath}/${m.image}" alt="medicine image" style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px;" />
                                                     </td>
 
-                                                    <!-- Pet Name -->
+                                                    <!-- Name -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
+                                                        <c:out value="${m.medicineName}"/>
+                                                    </td>
+
+                                                    <!-- Supplier -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:out value="${b.petName}" />
-                                                    </td>
+                                                        <c:out value="${m.supplier}"/>
+                                                    </td> 
 
-                                                    <!-- Pet Type -->
+                                                    <!-- Type -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:out value="${b.petType}" />
-                                                    </td>
+                                                        <c:out value="${m.type}"/>
+                                                    </td> 
 
-                                                    <!-- Service Name -->
+                                                    <!-- Dosage -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:out value="${b.serviceName}" />
-                                                    </td>
+                                                        <c:out value="${m.dosage}"/>$
+                                                    </td> 
 
-                                                    <!-- Doctor Name -->
-                                                    <td class="...">
-                                                        <c:choose>
-                                                            <c:when test="${not empty b.employeeName}">
-                                                                <c:out value="${b.employeeName}" />
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                Not selected yet
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
 
-                                                    <!-- Booking Time -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <fmt:formatDate value="${b.bookingTime}" pattern="yyyy-MM-dd HH:mm" />
-                                                    </td>
 
-                                                    <!-- Status -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:out value="${b.status}" />
-                                                    </td>
-
-                                                    <!-- Accept -->
                                                     <td class="text-center">
-                                                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
-                                                            <input type="hidden" name="service" value="updateStatus" />
-                                                            <input type="hidden" name="bookingId" value="${b.bookingId}" />
-
-                                                            <select name="status" 
-                                                                    class="text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 p-1 bg-white dark:bg-slate-800 dark:text-white"
-                                                                    onchange="handleStatusChange(this, '${b.bookingId}')">
-                                                                <option value="Pending" ${b.status eq 'Pending' ? 'selected' : ''}>Pending</option>
-                                                                <option value="Confirmed" ${b.status eq 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                                                                <option value="Failed" ${b.status eq 'Failed' ? 'selected' : ''}>Failed</option>
-                                                                <option value="Processing Cancel" ${b.status eq 'Processing Cancel' ? 'selected' : ''}>Processing Cancel</option>
-                                                            </select>
-
-                                                        </form>
-                                                    </td>
-                                                    <!-- Actions -->
-                                                    <td class="text-center">
-                                                        <a href="ConfirmBooking?service=bookingDetail&bookingId=${b.bookingId}"
-                                                           class="text-blue-600 hover:text-blue-800"
-                                                           title="Xem chi tiết">
-                                                            <i class="fa fa-eye"></i>
+                                                        <a href="#"
+                                                           class="btn btn-sm btn-outline-primary me-2 update-btn"
+                                                           style="background: #0000;"
+                                                           data-bs-toggle="modal"
+                                                           data-bs-target="#editMedicineModal"
+                                                           data-id="${m.medicineId}"
+                                                           data-name="${m.medicineName}"
+                                                           data-image="${m.image}"
+                                                           data-supplier="${m.supplier}"
+                                                           data-type="${m.type}"
+                                                           data-dosage="${m.dosage}"
+                                                           data-oldimage="${m.image}"
+                                                           title="Edit Medicine">
+                                                            <i class="fa fa-edit" ></i> 
                                                         </a>
+                                                        <form method="post" 
+                                                              action="${pageContext.request.contextPath}/Medicine" 
+                                                              onsubmit="return confirm('Are you sure to delete this medicine?');"
+                                                              style="display: inline;">
+                                                            <input type="hidden" name="service" value="deleteMedicine">
+                                                            <input type="hidden" name="medicineId" value="${m.medicineId}">
+                                                            <input type="hidden" name="page" value="${currentPage}">
+                                                            <button type="submit" 
+                                                                    class="btn btn-sm btn-outline-danger"
+                                                                    title="Delete Medicine">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -517,8 +507,53 @@
                 </div>
             </div>
 
-
-
+            <!-- Add Medicine Modal -->
+            <div id="addServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="${pageContext.request.contextPath}/Medicine" method="post" enctype="multipart/form-data">
+                            <div class="modal-header">						
+                                <h4 class="modal-title">Add Medicine</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>Image URL</label>
+                                    <input type="file" name="imageFile" class="form-control" accept="image/*" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Name</label>
+                                    <input type="text" name="medicineName" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Supplier</label>
+                                    <input pattern="^(?![\d\s\W]+$)[A-Za-z0-9\s\-]{2,30}$" type="text" name="supplier" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Type</label>
+                                    <select name="type" class="form-control" required>
+                                        <option value="">-- Select Type --</option>
+                                        <option value="Topical">Topical</option>
+                                        <option value="Spray">Spray</option>
+                                        <option value="Oral Drug">Oral Drug</option>
+                                        <option value="Vaccine">Vaccine</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Dosage</label>
+                                    <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <input type="submit" name="submit" class="btn btn-success" value="Add">
+                                <input type="hidden" name="service" value="addMedicine">
+                                <input type="hidden" name="page" value="${currentPage}">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             <c:if test="${not empty sessionScope.message}">
                 <div id="popup-message">${sessionScope.message}</div>
@@ -533,128 +568,123 @@
 
                 <c:remove var="message" scope="session"/>
             </c:if>
-            <div id="failStatusModal" class="modal fade" tabindex="-1" aria-hidden="true">
+
+            <!-- Update Medicine Modal -->
+            <div id="editMedicineModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Cancel Reason</h5>
+                        <form action="${pageContext.request.contextPath}/Medicine" method="post" enctype="multipart/form-data">
+                            <div class="modal-header">						
+                                <h4 class="modal-title">Update Medicine</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-
                             <div class="modal-body">
-                                <input type="hidden" name="service" value="updateStatus" />
-                                <input type="hidden" name="bookingId" />
-                                <input type="hidden" name="status" />
                                 <div class="mb-3">
-                                    <label for="cancelReason" class="form-label">Reason for Cancellation</label>
-                                    <textarea name="cancelReason" class="form-control" required></textarea>
+
+                                    <input type="hidden" name="oldImage" readonly class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Change Image</label>
+                                    <input type="file" name="imageFile" class="form-control" accept="image/*">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Medicine Name</label>
+                                    <input pattern="^(?![\d\s\W]+$)[A-Za-z0-9\s\-]{2,30}$" type="text" name="medicineName" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Supplier</label>
+                                    <input pattern="^(?![\d\s\W]+$)[A-Za-z0-9\s\-]{2,30}$" type="text" name="supplier" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Medicine Type</label>
+                                    <select name="type" class="form-control" required>
+                                        <option value="">-- Select Type --</option>
+                                        <option value="Topical">Topical</option>
+                                        <option value="Spray">Spray</option>
+                                        <option value="Oral Drug">Oral Drug</option>
+                                        <option value="Vaccine">Vaccine</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Dosage</label>
+                                    <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required>
                                 </div>
                             </div>
-
+                            <input type="hidden" name="medicineId">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger">Submit</button>
+                                <input type="submit" name="submit" class="btn btn-info" value="Save">
+                                <input type="hidden" name="service" value="updateMedicine">
+                                <input type="hidden" name="page" id="update-page" value="${currentPage}">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Booking Detail Modal -->
-            <c:if test="${not empty bookingDetail}">
-                <div class="mt-6 p-6 rounded-lg border bg-white shadow-md text-slate-700 dark:bg-slate-800 dark:text-white">
-                    <h2 class="text-xl font-bold mb-4">Booking Detail Information</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <c:if test="${totalPages > 1}">
+                <div class="modern-pagination">
+                    <c:if test="${currentPage > 1}">
+                        <a href="Medicine?service=getAllMedicines&page=${currentPage - 1}" class="page-btn">&laquo;</a>
+                    </c:if>
 
-                        <div><strong>Booking ID:</strong> ${bookingDetail.bookingId}</div>
-                        <div><strong>Customer Name:</strong> ${bookingDetail.customerName}</div>
-                        <div><strong>Phone Number:</strong> ${bookingDetail.customerPhone}</div>
-                        <div><strong>Email:</strong> ${bookingDetail.customerEmail}</div>
-                        <div><strong>Pet Name:</strong> ${bookingDetail.petName}</div>
-                        <div><strong>Breed:</strong> ${bookingDetail.breed}</div>
-                        <div><strong>Pet Type:</strong> ${bookingDetail.petType}</div>
-                        <div><strong>Service:</strong> ${bookingDetail.serviceName}</div>
-                        <div><strong>Doctor:</strong> ${bookingDetail.employeeName}</div>
-                        <div><strong>Booking Time:</strong> 
-                            <fmt:formatDate value="${bookingDetail.bookingTime}" pattern="yyyy-MM-dd HH:mm" />
-                        </div>
-                        <div><strong>Note:</strong> ${bookingDetail.note}</div>
-                        <div><strong>Status:</strong> ${bookingDetail.status}</div>
+                    <c:forEach begin="1" end="${totalPages}" var="i">
+                        <a href="Medicine?service=getAllMedicines&page=${i}"
+                           class="page-btn ${i == currentPage ? 'active' : ''}">${i}</a>
+                    </c:forEach>
 
-                        <c:if test="${bookingDetail.status eq 'Failed'}">
-                            <div class="text-red-600 col-span-2"><strong>Cancel Reason:</strong> ${bookingDetail.cancelReason}</div>
-                        </c:if>
-
-                        <c:if test="${bookingDetail.actualCheckinTime != null}">
-                            <div class="text-green-600 col-span-2"><strong>Actual Check-in:</strong> 
-                                <fmt:formatDate value="${bookingDetail.actualCheckinTime}" pattern="yyyy-MM-dd HH:mm" />
-                            </div>
-                        </c:if>
-
-                    </div>
+                    <c:if test="${currentPage < totalPages}">
+                        <a href="Medicine?service=getAllMedicines&page=${currentPage + 1}" class="page-btn">&raquo;</a>
+                    </c:if>
                 </div>
             </c:if>
 
 
-
-
-
-
-
+            <c:forEach var="i" begin="1" end="${totalPages}">
+                <a href="Medicine?service=manageQuery
+                   &keyword=${searchKeyword}
+                   &medicineType=${selectedType}
+                   &sortBy=${selectedSort}
+                   &page=${i}"
+                   class="${i == currentPage ? 'active' : ''}">${i}</a>
+            </c:forEach>    
 
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <c:if test="${not empty bookingDetail}">
-            <script>
-                    $(document).ready(function () {
-                        $("#BookingDetailModal").modal("show");
-
-                        $("#BookingDetailModal input[name='bookingId']").val("${bookingDetail.bookingId}");
-                        $("#BookingDetailModal input[name='customerName']").val("${bookingDetail.customerName}");
-                        $("#BookingDetailModal input[name='customerPhone']").val("${bookingDetail.customerPhone}");
-                        $("#BookingDetailModal input[name='customerEmail']").val("${bookingDetail.customerEmail}");
-                        $("#BookingDetailModal input[name='petName']").val("${bookingDetail.petName}");
-                        $("#BookingDetailModal input[name='petType']").val("${bookingDetail.petType}");
-                        $("#BookingDetailModal input[name='breed']").val("${bookingDetail.breed}");
-                        $("#BookingDetailModal input[name='serviceName']").val("${bookingDetail.serviceName}");
-                        $("#BookingDetailModal input[name='employeeName']").val("${bookingDetail.employeeName}");
-                        $("#BookingDetailModal input[name='bookingTime']").val("${bookingDetail.bookingTime}");
-                        $("#BookingDetailModal input[name='status']").val("${bookingDetail.status}");
-                        $("#BookingDetailModal input[name='actualCheckinTime']").val("${bookingDetail.actualCheckinTime}");
-                        $("#BookingDetailModal textarea[name='cancelReason']").val("${bookingDetail.cancelReason}");
-                        $("#BookingDetailModal textarea[name='note']").val("${bookingDetail.note}");
-                    });
-
-                    if ("${bookingDetail.status}" === "Failed") {
-                        $("textarea[name='cancelReason']").closest(".mb-3").show();
-                    } else {
-                        $("textarea[name='cancelReason']").closest(".mb-3").hide();
-                    }
-
-            </script>
-        </c:if>
-
-
         <script>
-            function handleStatusChange(selectElement, bookingId) {
-                var selectedValue = selectElement.value;
+                    $(document).ready(function () {
+                        $(".update-btn").click(function () {
+                            // Lấy từ data-attributes
+                            var medicineId = $(this).data("id");
+                            var medicineName = $(this).data("name");
+                            var price = $(this).data("price");
+                            var image = $(this).data("image");
+                            var supplier = $(this).data("supplier");
+                            var type = $(this).data("type");
+                            var dosage = $(this).data("dosage");
+                            var oldImage = $(this).data("oldimage");
 
-                if (selectedValue === "Failed") {
-                    // Gán giá trị vào modal để biết booking nào đang sửa
-                    $('#failStatusModal input[name="bookingId"]').val(bookingId);
-                    $('#failStatusModal input[name="status"]').val(selectedValue);
+                            // Debug nhanh: kiểm tra console
+                            console.log("ID:", medicineId,
+                                    "name:", medicineName,
+                                    "image:", image,
+                                    "supplier:", supplier,
+                                    "type:", type,
+                                    "dosage:", dosage);
 
-                    // Hiện modal để nhập lý do
-                    $('#failStatusModal').modal('show');
-                } else {
-                    // Tự động submit với các status khác
-                    selectElement.form.submit();
-                }
-            }
+                            // Đổ giá trị vào các input trong modal
+                            $("#editMedicineModal input[name='medicineId']").val(medicineId);
+                            $("#editMedicineModal input[name='medicineName']").val(medicineName);
+                            $("#editMedicineModal input[name='image']").val(image);
+                            $("#editMedicineModal input[name='supplier']").val(supplier);
+                            $("#editMedicineModal input[name='type']").val(type);
+                            $("#editMedicineModal input[name='dosage']").val(dosage);
+                            $("#editMedicineModal input[name='oldImage']").val(oldImage);
+
+                        });
+                    });
         </script>
-
 
 
         <script>

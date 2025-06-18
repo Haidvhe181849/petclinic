@@ -70,7 +70,7 @@ public class MedicineServlet extends HttpServlet {
             if (service == null || "getAllMedicines".equals(service)) {
                 int page = 1;
                 int pageSize = 10;
-
+                List<Medicine> mlist = medicineDAO.getAllMedicines();
                 String pageParam = request.getParameter("page");
                 if (pageParam != null) {
                     try {
@@ -84,6 +84,7 @@ public class MedicineServlet extends HttpServlet {
                 int totalPages = (int) Math.ceil((double) totalMedicines / pageSize);
 
                 List<Medicine> list = medicineDAO.getMedicinesByPage(page, pageSize);
+                request.setAttribute("mlist", mlist);
                 request.setAttribute("medicineList", list);
                 request.setAttribute("currentPage", page);
                 request.setAttribute("totalPages", totalPages);
@@ -95,7 +96,7 @@ public class MedicineServlet extends HttpServlet {
                     request.getSession().removeAttribute("message");
                 }
 
-                request.getRequestDispatcher("/Presentation/Medicine.jsp").forward(request, response);
+                request.getRequestDispatcher("/Presentation/MedicineManagerment.jsp").forward(request, response);
                 return;
             }
 
@@ -126,7 +127,7 @@ public class MedicineServlet extends HttpServlet {
             if ("addMedicine".equals(service)) {
                 String submit = request.getParameter("submit");
                 if (submit == null) {
-                    request.getRequestDispatcher("/Presentation/Medicine.jsp").forward(request, response);
+                    request.getRequestDispatcher("/Presentation/MedicineManagerment.jsp").forward(request, response);
                 } else {
                     String medicineId = medicineDAO.generateNextMedicineId();
                     String medicineName = request.getParameter("medicineName").trim();
@@ -178,7 +179,7 @@ public class MedicineServlet extends HttpServlet {
             } else if ("updateMedicine".equals(service)) {
                 String submit = request.getParameter("submit");
                 if (submit == null) {
-                    response.sendRedirect("Presentation/Medicine.jsp");
+                    response.sendRedirect("Presentation/MedicineManagerment.jsp");
                 } else {
                     String medicineId = request.getParameter("medicineId");
                     String medicineName = request.getParameter("medicineName");
@@ -244,7 +245,6 @@ public class MedicineServlet extends HttpServlet {
                 int page = 1;
                 int pageSize = 10;
 
-                
                 String pageParam = request.getParameter("page");
                 if (pageParam != null) {
                     try {
@@ -254,15 +254,12 @@ public class MedicineServlet extends HttpServlet {
                     }
                 }
 
-               
                 int totalFiltered = medicineDAO.countFilteredMedicines(keyword, type);
                 int totalPages = (int) Math.ceil((double) totalFiltered / pageSize);
                 int offset = (page - 1) * pageSize;
 
-            
                 List<Medicine> list = medicineDAO.getFilteredMedicinesPaged(keyword, type, sortBy, offset, pageSize);
 
-               
                 request.setAttribute("medicineList", list);
                 request.setAttribute("searchKeyword", keyword);
                 request.setAttribute("selectedType", type);
@@ -270,7 +267,7 @@ public class MedicineServlet extends HttpServlet {
                 request.setAttribute("currentPage", page);
                 request.setAttribute("totalPages", totalPages);
 
-                request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
+                request.getRequestDispatcher("Presentation/MedicineManagerment.jsp").forward(request, response);
                 return;
             }
 

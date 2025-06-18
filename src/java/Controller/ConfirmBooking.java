@@ -52,42 +52,13 @@ public class ConfirmBooking extends HttpServlet {
                 id = id.trim().replaceAll("\\s+", "%");
                 blist = bDAO.searchBookingById(id);
                 request.setAttribute("bookingId", id);
-            } else if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
-                String sql = "SELECT \n"
-                        + "    b.booking_id,\n"
-                        + "    ua.name AS customer_name,\n"
-                        + "    p.name AS pet_name,\n"
-                        + "    at.type_name AS pet_type,\n"
-                        + "    s.service_name,\n"
-                        + "    e.name AS employee_name,\n"
-                        + "    b.booking_time,\n"
-                        + "    b.status\n"
-                        + "FROM Booking b\n"
-                        + "JOIN UserAccount ua ON b.user_id = ua.user_id\n"
-                        + "JOIN Pet p ON b.pet_id = p.pet_id\n"
-                        + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id\n"
-                        + "JOIN Service s ON b.service_id = s.service_id\n"
-                        + "JOIN Employee e ON b.employee_id = e.employee_id\n"
-                        + "ORDER BY b.booking_time " + order;
 
-                blist = bDAO.getAllBooking(sql);
-                request.setAttribute("order", order); 
+            } else if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
+                blist = bDAO.getAllBookingSorted(order);  
+                request.setAttribute("order", order);
+
             } else {
-                blist = bDAO.getAllBooking("SELECT \n"
-                        + "    b.booking_id,\n"
-                        + "    ua.name AS customer_name,\n"
-                        + "    p.name AS pet_name,\n"
-                        + "    at.type_name AS pet_type,\n"
-                        + "    s.service_name,\n"
-                        + "    e.name AS employee_name,\n"
-                        + "    b.booking_time,\n"
-                        + "    b.status\n"
-                        + "FROM Booking b\n"
-                        + "JOIN UserAccount ua ON b.user_id = ua.user_id\n"
-                        + "JOIN Pet p ON b.pet_id = p.pet_id\n"
-                        + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id\n"
-                        + "JOIN Service s ON b.service_id = s.service_id\n"
-                        + "JOIN Employee e ON b.employee_id = e.employee_id;");
+                blist = bDAO.getAllBooking();
             }
 
             request.setAttribute("blist", blist);
@@ -111,21 +82,7 @@ public class ConfirmBooking extends HttpServlet {
             String bookingId = request.getParameter("bookingId");
             BookingDetail detail = bDAO.getBookingDetailById(bookingId);
 
-            List<BookingEx> blist = bDAO.getAllBooking("SELECT \n"
-                    + "    b.booking_id,\n"
-                    + "    ua.name AS customer_name,\n"
-                    + "    p.name AS pet_name,\n"
-                    + "    at.type_name AS pet_type,\n"
-                    + "    s.service_name,\n"
-                    + "    e.name AS employee_name,\n"
-                    + "    b.booking_time,\n"
-                    + "    b.status\n"
-                    + "FROM Booking b\n"
-                    + "JOIN UserAccount ua ON b.user_id = ua.user_id\n"
-                    + "JOIN Pet p ON b.pet_id = p.pet_id\n"
-                    + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id\n"
-                    + "JOIN Service s ON b.service_id = s.service_id\n"
-                    + "JOIN Employee e ON b.employee_id = e.employee_id;");
+            List<BookingEx> blist = bDAO.getAllBooking();
 
             request.setAttribute("blist", blist);
             request.setAttribute("bookingDetail", detail);

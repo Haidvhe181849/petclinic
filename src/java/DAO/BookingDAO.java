@@ -116,8 +116,19 @@ public class BookingDAO extends DBContext {
         return times;
     }
 
-    public List<BookingEx> getAllBooking(String sql) {
+    public List<BookingEx> getAllBooking() {
         List<BookingEx> listBooking = new ArrayList<>();
+
+        String sql = "SELECT b.booking_id, ua.name AS customer_name, p.name AS pet_name, "
+                + "at.type_name AS pet_type, s.service_name, e.name AS employee_name, "
+                + "b.booking_time, b.status "
+                + "FROM Booking b "
+                + "JOIN UserAccount ua ON b.user_id = ua.user_id "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id";
+
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -126,7 +137,7 @@ public class BookingDAO extends DBContext {
                 String petName = rs.getString("pet_name");
                 String petType = rs.getString("pet_type");
                 String serviceName = rs.getString("service_name");
-                String employeeName = rs.getString("employee_name");
+                String employeeName = rs.getString("employee_name"); // có thể null
                 Timestamp bookingTime = rs.getTimestamp("booking_time");
                 String status = rs.getString("status");
 
@@ -146,6 +157,7 @@ public class BookingDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return listBooking;
     }
 
@@ -159,7 +171,7 @@ public class BookingDAO extends DBContext {
                 + "JOIN Pet p ON b.pet_id = p.pet_id "
                 + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
                 + "JOIN Service s ON b.service_id = s.service_id "
-                + "JOIN Employee e ON b.employee_id = e.employee_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
                 + "WHERE b.booking_id LIKE ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -186,16 +198,48 @@ public class BookingDAO extends DBContext {
         return listBooking;
     }
 
-//    public void updateBookingStatus(String bookingId, String status) {
-//        String sql = "UPDATE Booking SET status = ? WHERE booking_id = ?";
-//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, status);
-//            ps.setString(2, bookingId);
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public List<BookingEx> getAllBookingSorted(String order) {
+        List<BookingEx> listBooking = new ArrayList<>();
+
+        // Chỉ cho phép 'ASC' hoặc 'DESC' để tránh SQL Injection
+        if (!"asc".equalsIgnoreCase(order) && !"desc".equalsIgnoreCase(order)) {
+            order = "asc";
+        }
+
+        String sql = "SELECT b.booking_id, ua.name AS customer_name, p.name AS pet_name, "
+                + "at.type_name AS pet_type, s.service_name, e.name AS employee_name, "
+                + "b.booking_time, b.status "
+                + "FROM Booking b "
+                + "JOIN UserAccount ua ON b.user_id = ua.user_id "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "ORDER BY b.booking_time " + order;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                BookingEx bookingEx = new BookingEx(
+                        rs.getString("booking_id"),
+                        rs.getString("customer_name"),
+                        rs.getString("pet_name"),
+                        rs.getString("pet_type"),
+                        rs.getString("service_name"),
+                        rs.getString("employee_name"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("status")
+                );
+                listBooking.add(bookingEx);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listBooking;
+    }
+
     public void updateBookingStatus(String bookingId, String status, String cancelReason) {
         String sql = "UPDATE Booking SET status = ? WHERE booking_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -240,7 +284,7 @@ public class BookingDAO extends DBContext {
                 + "JOIN Pet p ON b.pet_id = p.pet_id "
                 + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
                 + "JOIN Service s ON b.service_id = s.service_id "
-                + "JOIN Employee e ON b.employee_id = e.employee_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
                 + "LEFT JOIN BookingDetail bd ON b.booking_id = bd.booking_id "
                 + "WHERE b.booking_id = ?";
 
