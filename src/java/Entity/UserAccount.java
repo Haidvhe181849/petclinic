@@ -34,6 +34,8 @@ public class UserAccount {
         this.status = status;
     }
 
+    
+
     public int getUserId() {
         return userId;
     }

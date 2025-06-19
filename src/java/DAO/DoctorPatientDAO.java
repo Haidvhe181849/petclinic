@@ -31,7 +31,7 @@ public class DoctorPatientDAO extends DBContext {
 
             while (rs.next()) {
                 UserAccount u = new UserAccount();
-                u.setuserId(rs.getString("user_id"));
+                u.setUserId(rs.getInt("user_id"));
                 u.setName(rs.getString("name"));
                 u.setEmail(rs.getString("email"));
                 u.setPhone(rs.getString("phone"));

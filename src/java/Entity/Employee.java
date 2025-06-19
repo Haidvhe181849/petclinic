@@ -39,20 +39,7 @@ public class Employee {
         this.status = status;
     }
 
-    public Employee(String name, String image, String phone, String email,
-            String password, String address, int roleId, String experience,
-            String workingHours, boolean status) {
-        this.name = name;
-        this.image = image;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.roleId = roleId;
-        this.experience = experience;
-        this.workingHours = workingHours;
-        this.status = status;
-    }
+    
 
     public String getEmployeeId() {
         return employeeId;
