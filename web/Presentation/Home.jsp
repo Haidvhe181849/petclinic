@@ -78,6 +78,14 @@
                                                     <li><a
                                                             href="${pageContext.request.contextPath}/News?service=listNews">News</a>
                                                     </li>
+                                                    <li><a href="#">Managerment</a>
+                                                <ul class="submenu">
+                                                    <li><a href="${pageContext.request.contextPath}/Service?service=listService">Service</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/ManageAboutUsAdmin.jsp">About Us</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/doctor_schedule.jsp">Doctor Schedule</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/patients.jsp">List Patient</a></li>
+                                                </ul>
+                                            </li>
                                                 </ul>
                                             </nav>
                                         </div>
