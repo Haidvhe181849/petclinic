@@ -21,8 +21,8 @@ import org.json.JSONObject;
 public class GoogleLoginServlet extends HttpServlet {
 
     
-    private static final String CLIENT_ID = "591468416411-bnfsuhr21g4vfth1pt534emgp5qenqvt.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "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";
+    private static final String CLIENT_ID = "";
+    private static final String CLIENT_SECRET = "";
     private static final String REDIRECT_URI = "http://localhost:8080/PetClinic/google-login";
     private static final String SCOPE = "profile email";
 
