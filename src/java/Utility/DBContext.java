@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 public class DBContext {
     public Connection connection;
+
     public DBContext() {
         try {
             // Edit URL , username, password to authenticate with your MS SQL Server
@@ -22,24 +23,40 @@ public class DBContext {
             System.out.println(ex);
         }
     }
-    public ResultSet getData(String sql){
+
+    public ResultSet getData(String sql) {
         ResultSet rs = null;
         Statement st;
         try {
             st = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs=st.executeQuery(sql);
+            rs = st.executeQuery(sql);
         } catch (SQLException ex) {
             ex.getStackTrace();
-        }       
-       return rs; 
+        }
+        return rs;
     }
-    
+
     public boolean isConnected() {
         try {
             return connection != null && !connection.isClosed();
         } catch (SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        }
+    }
+
+    public Connection getConnection() {
+        try {
+            // Edit URL , username, password to authenticate with your MS SQL Server
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=PetHospital";
+            String username = "sa";
+            String password = "123";
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            return DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println("Error getting connection: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
         }
     }
 

@@ -84,22 +84,26 @@
                             <div class="col-md-6">
                                 <label for="username" class="form-label">Tên đăng nhập</label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Tên đăng nhập" required>
+                                    placeholder="Tên đăng nhập" required pattern="^[a-zA-Z0-9]{4,}$"
+                                    title="Tên đăng nhập chỉ gồm chữ cái, số, không dấu cách, tối thiểu 4 ký tự">
                             </div>
                             <div class="col-md-6">
                                 <label for="name" class="form-label">Họ tên</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Họ tên"
-                                    required>
+                                    required pattern="^[a-zA-ZÀ-ỹ\s]+$"
+                                    title="Họ tên chỉ gồm chữ cái và dấu cách">
                             </div>
                             <div class="col-md-6">
                                 <label for="password" class="form-label">Mật khẩu</label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Mật khẩu" required>
+                                    placeholder="Mật khẩu" required pattern=".{6,}"
+                                    title="Mật khẩu tối thiểu 6 ký tự">
                             </div>
                             <div class="col-md-6">
                                 <label for="confirmPassword" class="form-label">Xác nhận lại mật khẩu</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                    placeholder="Xác nhận lại mật khẩu" required>
+                                    placeholder="Xác nhận lại mật khẩu" required pattern=".{6,}"
+                                    title="Mật khẩu tối thiểu 6 ký tự">
                             </div>
                             <div class="col-md-6">
                                 <label for="email" class="form-label">Email</label>
@@ -109,7 +113,8 @@
                             <div class="col-md-6">
                                 <label for="phone" class="form-label">Số điện thoại</label>
                                 <input type="text" class="form-control" id="phone" name="phone"
-                                    placeholder="Số điện thoại" required>
+                                    placeholder="Số điện thoại" required pattern="^[0-9]{10,11}$"
+                                    title="Số điện thoại chỉ gồm 10-11 chữ số, không chứa dấu cách hoặc chữ">
                             </div>
                             <div class="col-md-12">
                                 <label for="address" class="form-label">Địa chỉ</label>

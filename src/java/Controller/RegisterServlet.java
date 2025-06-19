@@ -1,76 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package Controller;
 
-import DAO.UserDAO;
+import DAO.UserAccountDAO;
 import Entity.UserAccount;
+import Utility.EmailUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import Utility.EmailUtil;
 
-/**
- *
- * @author USA
- */
-@WebServlet(name="RegisterServlet", urlPatterns={"/register"})
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RegisterServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         request.getRequestDispatcher("Presentation/Register.jsp").forward(request, response);
-    } 
+    }
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
+
         String name = request.getParameter("name");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -78,40 +30,45 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        int roleId = 1; // luôn là User
+        int roleId = 1; // mặc định là User
+        String status = "Active"; // mặc định trạng thái
 
+        // Kiểm tra mật khẩu xác nhận
         if (confirmPassword == null || !password.equals(confirmPassword)) {
             request.setAttribute("error", "Mật khẩu xác nhận không khớp!");
             request.getRequestDispatcher("Presentation/Register.jsp").forward(request, response);
             return;
         }
 
-        UserAccount user = new UserAccount(name, phone, email, username, password, address, roleId);
-        UserDAO userDAO = new UserDAO();
+        // Tạo đối tượng user
+        UserAccount user = new UserAccount(0, name, phone, email, username, password, address, roleId, status);
 
-        if (userDAO.register(user)) {
-           
-            String subject = "Register successfully ! - Pet Hospital";
+        // Gọi DAO để xử lý đăng ký
+        UserAccountDAO userDAO = new UserAccountDAO();
+        boolean success = userDAO.createUser(user);
+
+        if (success) {
+            // Gửi email thông báo
+            String subject = "Register Successfully - Pet Hospital";
             String content = "<h3>Chào mừng bạn đến với Pet Hospital!</h3>"
-                + "<p>Bạn đã đăng ký tài khoản thành công với email: <b>" + email + "</b></p>"
-                + "<p>Bạn có thể đăng nhập và sử dụng các dịch vụ của chúng tôi.</p>"
-                + "<br><p>Trân trọng,<br>Pet Hospital</p>";
+                    + "<p>Bạn đã đăng ký tài khoản thành công với email: <b>" + email + "</b></p>"
+                    + "<p>Bạn có thể đăng nhập và sử dụng các dịch vụ của chúng tôi.</p>"
+                    + "<br><p>Trân trọng,<br>Pet Hospital</p>";
+
             EmailUtil.sendEmail(email, subject, content);
+
+            // Gửi thông báo thành công về trang login
             request.getSession().setAttribute("registerSuccess", "Đăng ký thành công! Bạn có thể đăng nhập.");
             response.sendRedirect(request.getContextPath() + "/login");
         } else {
+            // Đăng ký thất bại
             request.setAttribute("error", "Đăng ký thất bại! Tài khoản hoặc email đã tồn tại.");
             request.getRequestDispatcher("Presentation/Register.jsp").forward(request, response);
         }
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet xử lý đăng ký người dùng cho Pet Hospital";
+    }
 }
