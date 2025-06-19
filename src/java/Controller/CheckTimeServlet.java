@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,26 +30,42 @@ public class CheckTimeServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String doctorId = request.getParameter("doctorId");
-        String date = request.getParameter("date");
+        String dateStr = request.getParameter("date");
 
         List<String> availableTimes = new ArrayList<>(ALL_TIMES);
 
-        // Nếu có chọn bác sĩ thì mới lọc các giờ đã đặt
-        if (doctorId != null && !doctorId.trim().isEmpty()) {
-            try (Connection conn = new DBContext().connection) {
-                BookingDAO bookingDAO = new BookingDAO(conn);
-                List<String> bookedTimes = bookingDAO.getBookedTimesForDateAndDoctor(date, doctorId);
-                availableTimes.removeAll(bookedTimes); // loại bỏ các giờ đã đặt
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Trả về danh sách giờ còn trống
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Gson gson = new Gson();
-        response.getWriter().write(gson.toJson(availableTimes));
+        try {
+            // Parse ngày từ client gửi lên
+            LocalDate selectedDate = LocalDate.parse(dateStr);
+            LocalDate today = LocalDate.now();
+
+            // Nếu là ngày đã qua → không cho đặt
+            if (selectedDate.isBefore(today)) {
+                response.getWriter().write("[]"); // trả về danh sách trống
+                return;
+            }
+
+            // Nếu có chọn bác sĩ thì mới lọc giờ đã đặt
+            if (doctorId != null && !doctorId.trim().isEmpty()) {
+                try (Connection conn = new DBContext().connection) {
+                    BookingDAO bookingDAO = new BookingDAO(conn);
+                    List<String> bookedTimes = bookingDAO.getBookedTimesForDateAndDoctor(dateStr, doctorId);
+                    availableTimes.removeAll(bookedTimes);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Gson gson = new Gson();
+            response.getWriter().write(gson.toJson(availableTimes));
+
+        } catch (Exception e) {
+            // Nếu lỗi khi parse ngày → xử lý fallback
+            e.printStackTrace();
+            response.getWriter().write("[]");
+        }
     }
 }

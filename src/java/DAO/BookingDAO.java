@@ -316,4 +316,94 @@ public class BookingDAO extends DBContext {
         return detail;
     }
 
+    public List<Booking> getBookingsByUser(int userId, String status, String keyword, int offset, int pageSize) {
+        List<Booking> list = new ArrayList<>();
+
+        String sql = "SELECT b.booking_id, b.booking_time, b.status, b.note, "
+                + "s.service_name, s.price AS service_price, "
+                + "p.name AS pet_name, "
+                + "e.name AS employee_name "
+                + "FROM Booking b "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "WHERE b.user_id = ? ";
+
+        if (status != null && !status.isEmpty()) {
+            sql += " AND b.status = ? ";
+        }
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND p.name LIKE ? ";
+        }
+
+        sql += " ORDER BY b.booking_time DESC "
+                + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+            ps.setInt(index++, userId);
+            if (status != null && !status.isEmpty()) {
+                ps.setString(index++, status);
+            }
+            if (keyword != null && !keyword.isEmpty()) {
+                ps.setString(index++, "%" + keyword + "%");
+            }
+            ps.setInt(index++, offset);
+            ps.setInt(index, pageSize);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Booking b = new Booking();
+                    b.setBookingId(rs.getString("booking_id"));
+                    b.setBookingTime(rs.getTimestamp("booking_time").toLocalDateTime());
+                    b.setStatus(rs.getString("status"));
+                    b.setNote(rs.getString("note"));
+                    b.setServiceName(rs.getString("service_name"));
+                    b.setServicePrice(rs.getDouble("service_price"));
+                    b.setPetName(rs.getString("pet_name"));
+                    b.setEmployeeName(rs.getString("employee_name"));
+                    list.add(b);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public int countBookingsByUser(int userId, String status, String keyword) {
+        String sql = "SELECT COUNT(*) FROM Booking b "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "WHERE b.user_id = ? ";
+
+        if (status != null && !status.isEmpty()) {
+            sql += " AND b.status = ? ";
+        }
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND p.name LIKE ? ";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+            ps.setInt(index++, userId);
+            if (status != null && !status.isEmpty()) {
+                ps.setString(index++, status);
+            }
+            if (keyword != null && !keyword.isEmpty()) {
+                ps.setString(index++, "%" + keyword + "%");
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 }

@@ -171,8 +171,6 @@
     <body>
         <jsp:include page="Header.jsp"/>
 
-
-
         <div class="container py-5 mt-5">
             <h1 class="mb-4">Danh sách lịch khám</h1>
 

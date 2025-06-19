@@ -27,7 +27,6 @@ public class Booking {
 
     private String serviceName;
     private double servicePrice;
-
    
     public Booking() {
     }
@@ -55,7 +54,8 @@ public class Booking {
         this.employeeName = employeeName;
         this.petName = petName;
     }
-
+    
+    
     public Booking(String bookingId, int userId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status) {
         this.bookingId = bookingId;
         this.userId = userId;
@@ -172,7 +172,8 @@ public class Booking {
     public void setServicePrice(double servicePrice) {
         this.servicePrice = servicePrice;
     }
-
+    
+    
     @Override
     public String toString() {
         return "Booking{" + "bookingId=" + bookingId + ", userId=" + userId + ", employeeId=" + employeeId + ", serviceId=" + serviceId + ", petId=" + petId + ", note=" + note + ", bookingTime=" + bookingTime + ", status=" + status + '}';
