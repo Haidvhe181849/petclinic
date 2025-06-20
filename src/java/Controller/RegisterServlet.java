@@ -30,8 +30,9 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
+        String status = request.getParameter("status");
         int roleId = 1; // mặc định là User
-        String status = "Active"; // mặc định trạng thái
+        
 
         // Kiểm tra mật khẩu xác nhận
         if (confirmPassword == null || !password.equals(confirmPassword)) {

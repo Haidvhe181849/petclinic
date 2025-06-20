@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
+import org.apache.catalina.User;
 
 public class BookingDAO extends DBContext {
 
@@ -20,6 +21,10 @@ public class BookingDAO extends DBContext {
 
     public BookingDAO(Connection connection) {
         this.connection = connection;
+    }
+
+    public BookingDAO() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
@@ -405,5 +410,11 @@ public class BookingDAO extends DBContext {
 
         return 0;
     }
+
+    public List<User> getPatientsByDoctor(int doctorId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    
 
 }
