@@ -1,4 +1,3 @@
-
 package DAO;
 
 import java.util.Date;
@@ -19,34 +18,34 @@ import java.util.stream.Collectors;
  */
 public class DoctorDAO {
 
-     private Connection connection;
+    private Connection connection;
 
     public DoctorDAO(Connection connection) {
         this.connection = connection;
     }
-    
+
     public List<Employee> getAllDoctors() {
         List<Employee> doctors = new ArrayList<>();
-        String sql = "SELECT * FROM Employee WHERE role_id = 2";
+        String sql = "SELECT * FROM Employee WHERE role_id = 4";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Employee doctor = new Employee(
-                        rs.getString("employee_id"),
-                        rs.getString("name"),
-                        rs.getString("image"),
-                        rs.getString("phone"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("address"),
-                        rs.getInt("role_id"),
-                        rs.getString("experience"),
-                        rs.getString("working_hours"),
-                        rs.getBoolean("status")
-                );
+                Employee doctor = new Employee();
+                doctor.setEmployeeId(rs.getString("employee_id"));
+                doctor.setName(rs.getString("name"));
+                doctor.setPhone(rs.getString("phone"));
+                doctor.setEmail(rs.getString("email"));
+                doctor.setPassword(rs.getString("password"));
+                doctor.setAddress(rs.getString("address"));
+                doctor.setRoleId(rs.getInt("role_id"));
+                doctor.setExperience(rs.getString("experience"));
+                doctor.setWorkingHours(rs.getString("working_hours"));
+                doctor.setStatus("Active".equalsIgnoreCase(rs.getString("status")));
+
                 doctors.add(doctor);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

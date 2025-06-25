@@ -3,6 +3,7 @@ package DAO;
 import Entity.Booking;
 import Entity.BookingEx;
 import Entity.BookingDetail;
+import Entity.UserAccount;
 import Utility.DBContext;
 
 import java.sql.Connection;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
-import org.apache.catalina.User;
 
 public class BookingDAO extends DBContext {
 
@@ -21,10 +21,6 @@ public class BookingDAO extends DBContext {
 
     public BookingDAO(Connection connection) {
         this.connection = connection;
-    }
-
-    public BookingDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
@@ -43,30 +39,38 @@ public class BookingDAO extends DBContext {
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            // Thiết lập các tham số, kiểm tra null trước khi set
-
             ps.setString(1, booking.getBookingId());
             ps.setInt(2, booking.getUserId());
             if (booking.getEmployeeId() != null && !booking.getEmployeeId().isEmpty()) {
                 ps.setString(3, booking.getEmployeeId());
             } else {
-                ps.setNull(3, java.sql.Types.VARCHAR);  // PHẢI LÀ NULL
+                ps.setNull(3, java.sql.Types.VARCHAR);
             }
-            ps.setString(4, booking.getServiceId() != null ? booking.getServiceId() : "");
-            ps.setString(5, booking.getPetId() != null ? booking.getPetId() : "");
-            ps.setString(6, booking.getNote() != null ? booking.getNote() : "");
-            if (booking.getBookingTime() != null) {
-                ps.setTimestamp(7, java.sql.Timestamp.valueOf(booking.getBookingTime()));
-            } else {
-                ps.setTimestamp(7, null);
-            }
-            ps.setString(8, booking.getStatus() != null ? booking.getStatus() : "");
+            ps.setString(4, booking.getServiceId());
+            ps.setString(5, booking.getPetId());
+            ps.setString(6, booking.getNote());
+            ps.setTimestamp(7, Timestamp.valueOf(booking.getBookingTime()));
+            ps.setString(8, booking.getStatus());
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.err.println("Lỗi insertBooking:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertBookingDetail(String bookingId, UserAccount user) {
+        String sql = "INSERT INTO BookingDetail (booking_id, name, phone, email, actual_checkin_time, is_cancelled, cancel_reason) "
+                + "VALUES (?, ?, ?, ?, NULL, 0, NULL)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, bookingId);
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getEmail());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -411,10 +415,22 @@ public class BookingDAO extends DBContext {
         return 0;
     }
 
-    public List<User> getPatientsByDoctor(int doctorId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public int deleteBooking(String bookingId) {
+        String deleteDetailSQL = "DELETE FROM BookingDetail WHERE booking_id = ?";
+        String deleteBookingSQL = "DELETE FROM Booking WHERE booking_id = ?";
 
-    
+        try (PreparedStatement psDetail = connection.prepareStatement(deleteDetailSQL); PreparedStatement psBooking = connection.prepareStatement(deleteBookingSQL)) {
+
+            psDetail.setString(1, bookingId);
+            psDetail.executeUpdate();
+
+            psBooking.setString(1, bookingId);
+            return psBooking.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }

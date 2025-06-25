@@ -152,7 +152,7 @@
 
                                 <!-- Nút quay về trang chủ -->
                                 <div class="d-grid">
-                                    <a href="${pageContext.request.contextPath}/Presentation/Home.jsp"
+                                    <a href="${pageContext.request.contextPath}/Home"
                                         class="btn btn-back">← Back to Home</a>
                                 </div>
 

@@ -100,7 +100,7 @@
                     </div>
                 </form>
                 <div class="text-center mt-3">
-                    <a href="${pageContext.request.contextPath}/Presentation/Home.jsp" class="text-link">Quay lại trang
+                    <a href="${pageContext.request.contextPath}/Home" class="text-link">Quay lại trang
                         chủ</a>
                 </div>
             </div>
@@ -120,7 +120,7 @@
                         Swal.showLoading();
                     },
                     willClose: () => {
-                        window.location.href = '${pageContext.request.contextPath}/Presentation/Home.jsp';
+                        window.location.href = '${pageContext.request.contextPath}/Home';
                     }
                 });
             </script>

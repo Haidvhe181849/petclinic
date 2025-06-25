@@ -54,7 +54,7 @@ public class ConfirmBooking extends HttpServlet {
                 request.setAttribute("bookingId", id);
 
             } else if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
-                blist = bDAO.getAllBookingSorted(order);  
+                blist = bDAO.getAllBookingSorted(order);
                 request.setAttribute("order", order);
 
             } else {
@@ -87,6 +87,18 @@ public class ConfirmBooking extends HttpServlet {
             request.setAttribute("blist", blist);
             request.setAttribute("bookingDetail", detail);
             request.getRequestDispatcher("Presentation/BookingManagerment.jsp").forward(request, response);
+        }
+
+        if ("deleteBooking".equals(service)) {
+            String bookingId = request.getParameter("bookingId");
+            int result = bDAO.deleteBooking(bookingId);
+            if (result > 0) {
+                request.getSession().setAttribute("message", "Xóa booking thành công!");
+            } else {
+                request.getSession().setAttribute("message", "Xóa booking thất bại! Vui lòng thử lại.");
+            }
+            request.getSession().setAttribute("message", "Deleted successful!");
+            request.getRequestDispatcher("ConfirmBooking?service=listBooking").forward(request, response);
         }
 
     }

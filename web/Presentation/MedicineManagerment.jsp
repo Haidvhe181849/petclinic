@@ -127,7 +127,7 @@
                aria-expanded="false">
             <div class="h-19">
                 <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden" sidenav-close></i>
-                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Presentation/Home.jsp" >
+                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
 
@@ -141,7 +141,7 @@
                 <ul class="flex flex-col pl-0 mb-0">
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/dashboard.html">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class=" relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
                             </div>
@@ -175,7 +175,7 @@
                         </a>
                     </li>
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
                             </div>
@@ -207,6 +207,14 @@
                                 <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Managerment</span>
+                        </a>
+                    </li>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/feedback-management">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Managerment</span>
                         </a>
                     </li>
 
@@ -253,7 +261,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Presentation/Home.jsp">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>

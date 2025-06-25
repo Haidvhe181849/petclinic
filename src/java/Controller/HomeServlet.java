@@ -4,11 +4,10 @@
  */
 package Controller;
 
-import DAO.MedicineDAO;
 import DAO.ServiceDAO;
-import Entity.Medicine;
 import Entity.Service;
 import Utility.DBContext;
+import java.sql.Connection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,16 +15,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.util.List;
 import java.util.Vector;
 
 /**
  *
- * @author quang
+ * @author LENOVO
  */
-@WebServlet(name = "ViewMedicineServlet", urlPatterns = {"/ViewMedicine"})
-public class ViewMedicineServlet extends HttpServlet {
+@WebServlet(name = "HomeServlet", urlPatterns = {"/Home"})
+public class HomeServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,18 +36,7 @@ public class ViewMedicineServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ViewMedicineServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ViewMedicineServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,14 +51,19 @@ public class ViewMedicineServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try (Connection conn = new DBContext().connection) {
+            ServiceDAO sDAO = new ServiceDAO(conn);
+            Vector<Service> slist = sDAO.getAllService("SELECT * FROM Service");
 
-        DBContext db = new DBContext();
-        Connection conn = db.connection;
-        ServiceDAO sDAO = new ServiceDAO(conn);
-        Vector<Service> slist = sDAO.getAllService("Select * From Service");
-        request.setAttribute("slist", "slist");
-        request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
+            // Gửi dữ liệu sang JSP
+            request.setAttribute("slist", slist);
+            request.getRequestDispatcher("Presentation/Home.jsp").forward(request, response);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Không thể tải danh sách dịch vụ.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -86,31 +77,7 @@ public class ViewMedicineServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-
-        try {
-            String service = request.getParameter("service");
-            MedicineDAO medicineDAO = new MedicineDAO();
-            if ("manageQuery".equals(service)) {
-                String keyword = request.getParameter("keyword");
-                String type = request.getParameter("medicineType");
-                String sortBy = request.getParameter("sortBy");
-
-                List<Medicine> list = medicineDAO.getFilteredMedicines(keyword, type, sortBy);
-
-                request.setAttribute("medicineList", list);
-                request.setAttribute("searchKeyword", keyword);
-                request.setAttribute("selectedType", type);
-                request.setAttribute("selectedSort", sortBy);
-
-                request.getRequestDispatcher("Presentation/Medicine.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServletException(e);
-        }
-
+        doGet(request, response);
     }
 
     /**
@@ -120,7 +87,7 @@ public class ViewMedicineServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Home page loader - loads service list and forwards to Home.jsp";
+    }
 
 }

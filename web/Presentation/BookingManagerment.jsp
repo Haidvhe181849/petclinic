@@ -121,7 +121,7 @@
                aria-expanded="false">
             <div class="h-19">
                 <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden" sidenav-close></i>
-                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Presentation/Home.jsp" >
+                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
 
@@ -135,7 +135,7 @@
                 <ul class="flex flex-col pl-0 mb-0">
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/dashboard.html">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class=" relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
                             </div>
@@ -162,7 +162,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
                             </div>
@@ -171,7 +171,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
                             </div>
@@ -203,6 +203,14 @@
                                 <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Managerment</span>
+                        </a>
+                    </li>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/feedback-management">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Managerment</span>
                         </a>
                     </li>
 
@@ -249,7 +257,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Presentation/Home.jsp">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -487,15 +495,26 @@
                                                             <input type="hidden" name="service" value="updateStatus" />
                                                             <input type="hidden" name="bookingId" value="${b.bookingId}" />
 
-                                                            <select name="status" 
+                                                            <select name="status"
                                                                     class="text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 p-1 bg-white dark:bg-slate-800 dark:text-white"
                                                                     onchange="handleStatusChange(this, '${b.bookingId}')">
-                                                                <option value="Pending" ${b.status eq 'Pending' ? 'selected' : ''}>Pending</option>
-                                                                <option value="Confirmed" ${b.status eq 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                                                                <option value="Failed" ${b.status eq 'Failed' ? 'selected' : ''}>Failed</option>
-                                                                <option value="Processing Cancel" ${b.status eq 'Processing Cancel' ? 'selected' : ''}>Processing Cancel</option>
+                                                                <option value="Confirmed">Choose Status</option>
+                                                                <c:if test="${b.status eq 'Pending' || b.status eq 'Processing Cancel'}">
+                                                                    <option value="Confirmed">Confirmed</option>
+                                                                    <option value="Failed">Failed</option>
+                                                                </c:if>
+
+                                                                <c:if test="${b.status ne 'Pending' && b.status ne 'Processing Cancel'}">
+                                                                    <option value="${b.status}" selected>${b.status}</option>
+                                                                </c:if>
+
                                                             </select>
 
+                                                            <!-- Hiện input nhập lý do khi chọn Failed -->
+                                                            <div id="cancelReasonDiv-${b.bookingId}" style="display:none; margin-top: 5px;">
+                                                                <input type="text" name="cancelReason" placeholder="Enter cancel reason"
+                                                                       class="text-sm p-1 rounded border border-red-400 w-full" />
+                                                            </div>
                                                         </form>
                                                     </td>
                                                     <!-- Actions -->
@@ -505,6 +524,16 @@
                                                            title="Xem chi tiết">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
+
+                                                        <!-- Delete -->
+                                                        <form action="ConfirmBooking" method="post" style="display:inline;" 
+                                                              onsubmit="return confirm('Bạn có chắc chắn muốn xoá booking này không?');">
+                                                            <input type="hidden" name="service" value="deleteBooking"/>
+                                                            <input type="hidden" name="bookingId" value="${b.bookingId}"/>
+                                                            <button type="submit" class="text-red-600 hover:text-red-800" title="Xoá">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -653,6 +682,28 @@
                     selectElement.form.submit();
                 }
             }
+        </script>
+
+        <script>
+            function handleStatusChange(selectElement, bookingId) {
+                const selectedValue = selectElement.value;
+
+                // Ẩn hoặc hiện div lý do nếu đang dùng inline div
+                const reasonDiv = document.getElementById('cancelReasonDiv-' + bookingId);
+                if (reasonDiv) {
+                    reasonDiv.style.display = (selectedValue === 'Failed') ? 'block' : 'none';
+                }
+
+                if (selectedValue === "Failed") {
+                    $('#failStatusModal input[name="bookingId"]').val(bookingId);
+                    $('#failStatusModal input[name="status"]').val(selectedValue);
+                    $('#failStatusModal').modal('show');
+                } else {
+                    // Submit form ngay nếu chọn Confirm
+                    selectElement.form.submit();
+                }
+            }
+
         </script>
 
 

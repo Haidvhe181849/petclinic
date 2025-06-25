@@ -146,7 +146,7 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2 col-md-2 d-flex align-items-center">
                             <div class="logo">
-                                <a href="index.html"><img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" alt=""></a>
+                                <a href="${pageContext.request.contextPath}/Home"><img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" alt=""></a>
                             </div>
                         </div>
                         <!-- Menu -->
@@ -154,26 +154,36 @@
                             <div class="main-menu f-right d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="${pageContext.request.contextPath}/Presentation/Home.jsp">Home</a></li>
-                                        <li><a href="#">Services</a>
+                                        <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                                        <li>
+                                            <a href="#">Services</a>
                                             <ul class="submenu">
-                                                <li><a href="#">A</a></li>
-                                                <li><a href="#">B</a></li>
-                                                <li><a href="#">C</a></li>
+                                                <c:forEach var="sv" items="${services}">
+                                                    <li><a href="#">${sv.service_name}</a></li>
+                                                    </c:forEach>
                                             </ul>
+                                        </li>
+                                        <li><a
+                                                href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
                                         </li>
                                         <li><a href="#">Doctor</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/Presentation/ViewAboutUs.jsp">About Us</a></li>
-                                        <li><a href="#">Managerment</a>
-                                            <ul class="submenu">
-                                                <li><a href="${pageContext.request.contextPath}/ManagerBooking">Booking</a></li>
-                                                <li><a href="#">Service</a></li>
-                                                <li><a href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">Medicine</a></li>
-                                                <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
-                                                <li><a href="${pageContext.request.contextPath}/Presentation/ManageAboutUsAdmin.jsp">About Us</a></li>
-                                            </ul>
+                                            <c:if test="${sessionScope.user.roleId == 3}">
+                                            <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
+                                            </c:if>
+                                        <li><a
+                                                href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                         </li>
+                                        <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 4}">
+                                            <li><a href="#">Managerment</a>
+                                                <ul class="submenu">
+                                                    <li><a href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">Booking</a></li>
+                                                    <li><a href="#">Service</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">Medicine</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/Presentation/ManageAboutUsAdmin.jsp">About Us</a></li>
+                                                </ul>
+                                            </li>
+                                        </c:if>
                                     </ul>
                                 </nav>
                             </div>

@@ -168,7 +168,7 @@
             </c:if>
 
             <div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
-                <button class="btn btn-secondary" onclick="location.href = 'Presentation/dashboard.jsp'"> <i
+                <button class="btn btn-secondary" onclick="location.href = '${pageContext.request.contextPath}/Presentation/Dashbroard.jsp'"> <i
                         class="fas fa-arrow-left me-2"></i>Quay về quản
                     lý</button>
                 <button class="btn btn-success" onclick="location.href = 'account-management?action=create'">Tạo tài

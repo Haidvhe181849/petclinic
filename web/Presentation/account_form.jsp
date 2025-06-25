@@ -119,16 +119,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                <div class="mb-3 password-container">
-                                    <label class="form-label">Mật khẩu</label>
-                                    <input type="password" class="form-control" name="password" id="passwordInput"
-                                        ${accountUser==null ? 'required' : '' } autocomplete="new-password">
-                                    <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword"></i>
-                                    <c:if test="${accountUser != null}">
-                                        <small class="form-text text-muted">Để trống nếu không muốn thay đổi mật
-                                            khẩu</small>
-                                    </c:if>
-                                </div>
+                              
                                 <c:if test="${accountUser == null}">
                                     <div class="mb-3 password-container">
                                         <label class="form-label">Nhập lại mật khẩu</label>

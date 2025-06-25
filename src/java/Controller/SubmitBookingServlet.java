@@ -88,6 +88,10 @@ public class SubmitBookingServlet extends HttpServlet {
             System.out.println("✅ Kết quả insert: " + success);
 
             if (success) {
+                // THÊM DÒNG NÀY:
+                boolean detailInserted = dao.insertBookingDetail(bookingId, user);
+                System.out.println("📥 Detail inserted: " + detailInserted);
+
                 response.sendRedirect("BookingForm?success=true");
             } else {
                 System.out.println("❌ insertBooking trả về false");

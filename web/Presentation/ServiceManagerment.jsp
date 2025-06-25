@@ -69,6 +69,9 @@
                 z-index: 9999;
                 animation: fadeIn 0.4s ease;
             }
+            .is-invalid {
+                border: 1px solid red;
+            }
 
             #sidebar-scroll::-webkit-scrollbar {
                 width: 6px;
@@ -127,7 +130,7 @@
                aria-expanded="false">
             <div class="h-19">
                 <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden" sidenav-close></i>
-                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Presentation/Home.jsp" >
+                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
 
@@ -141,7 +144,7 @@
                 <ul class="flex flex-col pl-0 mb-0">
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/dashboard.html">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class=" relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
                             </div>
@@ -168,7 +171,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
                             </div>
@@ -177,7 +180,7 @@
                     </li>
 
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Presentation/Medicine.jsp">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
                             </div>
@@ -209,6 +212,14 @@
                                 <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
                             </div>
                             <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Managerment</span>
+                        </a>
+                    </li>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/feedback-management">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Managerment</span>
                         </a>
                     </li>
 
@@ -255,7 +266,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Presentation/Home.jsp">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -494,7 +505,7 @@
             <div id="addServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/Service" method="post">
+                        <form id="addServiceForm" onsubmit="return validateServiceForm('addServiceForm', 'addPriceError')" action="${pageContext.request.contextPath}/Service" method="post">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Add Service</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -506,7 +517,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required>
+                                    <input type="text" name="price" class="form-control" required step="0.01" min="0" placeholder="Enter price">
+                                    <div class="text-danger small" id="addPriceError"></div> <!-- chỗ hiển thị lỗi -->
                                 </div>
                                 <div class="mb-3">
                                     <label>Description</label>
@@ -541,7 +553,7 @@
             <div id="editServiceModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/Service" method="post">
+                        <form id="updateServiceForm" onsubmit="return validateServiceForm('updateServiceForm', 'updatePriceError')" action="${pageContext.request.contextPath}/Service" method="post">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Update Service</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -557,7 +569,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required>
+                                    <input type="text" name="price" class="form-control" required step="0.01" min="0" placeholder="Enter price">
+                                    <div class="text-danger small" id="updatePriceError"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label>Description</label>
@@ -578,30 +591,103 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script>
-                    $(document).ready(function () {
-                        $(".update-btn").click(function () {
-                            // Lấy từ data-attributes
-                            var service_id = $(this).data("id");
-                            var service_name = $(this).data("name");
-                            var price = $(this).data("price");
-                            var description = $(this).data("describe");
+                            $(document).ready(function () {
+                                $(".update-btn").click(function () {
+                                    // Lấy từ data-attributes
+                                    var service_id = $(this).data("id");
+                                    var service_name = $(this).data("name");
+                                    var price = $(this).data("price");
+                                    var description = $(this).data("describe");
 
-                            // Debug nhanh: kiểm tra console
-                            console.log("ID:", service_id,
-                                    "name:", service_name,
-                                    "price:", price,
-                                    "desc:", description);
+                                    // Debug nhanh: kiểm tra console
+                                    console.log("ID:", service_id,
+                                            "name:", service_name,
+                                            "price:", price,
+                                            "desc:", description);
 
-                            // Đổ giá trị vào các input trong modal
-                            $("#editServiceModal input[name='service_id']").val(service_id);
-                            
-                            $("#editServiceModal input[name='price']").val(price);
-                            $("#editServiceModal input[name='service_name']").val(service_name);
-                            $("#editServiceModal textarea[name='description']").val(description);
-                            
-                        });
-                    });
+                                    // Đổ giá trị vào các input trong modal
+                                    $("#editServiceModal input[name='service_id']").val(service_id);
+
+                                    $("#editServiceModal input[name='price']").val(price);
+                                    $("#editServiceModal input[name='service_name']").val(service_name);
+                                    $("#editServiceModal textarea[name='description']").val(description);
+
+                                });
+                            });
         </script>
+
+        <script>
+            function validateServiceForm(formId, errorId) {
+                const form = document.getElementById(formId);
+                const priceInput = form.querySelector("input[name='price']");
+                const errorDiv = document.getElementById(errorId);
+                const priceValue = priceInput.value.trim();
+
+                if (!/^-?\d+(\.\d{1,2})?$/.test(priceValue)) {
+                    errorDiv.innerText = "Giá phải là số, tối đa 2 chữ số thập phân và không chứa ký tự chữ";
+                    priceInput.classList.add("is-invalid");
+                    return false;
+                }
+
+                const price = parseFloat(priceValue);
+
+                if (isNaN(price)) {
+                    errorDiv.innerText = "Giá không hợp lệ";
+                    priceInput.classList.add("is-invalid");
+                    return false;
+                }
+
+                if (price <= 0) {
+                    errorDiv.innerText = "Giá phải lớn hơn 0";
+                    priceInput.classList.add("is-invalid");
+                    return false;
+                }
+
+                if (price > 10000) {
+                    errorDiv.innerText = "Giá không được vượt quá 10000$";
+                    priceInput.classList.add("is-invalid");
+                    return false;
+                }
+
+                // Nếu hợp lệ
+                errorDiv.innerText = "";
+                priceInput.classList.remove("is-invalid");
+                return true;
+            }
+
+        </script>
+
+
+
+        <script>
+            function attachLiveValidation(inputName, errorId) {
+                const inputFields = document.querySelectorAll(`input[name='${inputName}']`);
+                inputFields.forEach(el => {
+                    el.addEventListener("input", () => {
+                        const value = el.value.trim();
+                        const errorDiv = document.getElementById(errorId);
+
+                        if (!/^-?\d*(\.\d{0,2})?$/.test(value)) {
+                            errorDiv.innerText = "Chỉ được nhập số và tối đa 2 chữ số thập phân";
+                            el.classList.add("is-invalid");
+                        } else if (parseFloat(value) <= 0) {
+                            errorDiv.innerText = "Giá phải lớn hơn 0";
+                            el.classList.add("is-invalid");
+                        } else if (parseFloat(value) > 10000) {
+                            errorDiv.innerText = "Giá không được lớn hơn 10,000$";
+                            el.classList.add("is-invalid");
+                        } else {
+                            errorDiv.innerText = "";
+                            el.classList.remove("is-invalid");
+                        }
+                    });
+                });
+            }
+
+        </script>
+
+
+
 
 
         <script>

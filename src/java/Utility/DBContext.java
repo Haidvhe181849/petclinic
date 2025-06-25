@@ -45,7 +45,7 @@ public class DBContext {
         }
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         try {
             // Edit URL , username, password to authenticate with your MS SQL Server
             String url = "jdbc:sqlserver://localhost:1433;databaseName=PetHospital";

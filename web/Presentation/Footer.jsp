@@ -38,7 +38,7 @@
                             <div class="footer-tittle">
                                 <h4>Company</h4>
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
                                     <li><a href="about.html">About Us</a></li>
                                     <li><a href="single-blog.html">Services</a></li>
                                     <li><a href="#">Cases</a></li>

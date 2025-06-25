@@ -244,10 +244,9 @@
                 <div class="container my-4">
                     <div class="row mb-3">
                         <div class="col-12">
-                            <a href="${pageContext.request.contextPath}/Presentation/dashboard.jsp"
+                            <a href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp"
                                 class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Quay về trang quản lý
-                            </a>
+                                <i class="fas fa-arrow-left me-2"></i>Quay về</a>
                         </div>
                     </div>
 

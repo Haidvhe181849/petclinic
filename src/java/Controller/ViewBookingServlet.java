@@ -7,8 +7,10 @@ package Controller;
 import DAO.BookingDAO;
 import DAO.DoctorDAO;
 import DAO.PetDAO;
+import DAO.ServiceDAO;
 import DAO.UserDAO;
 import Entity.Booking;
+import Entity.Service;
 import Entity.UserAccount;
 import Utility.DBContext;
 import java.io.IOException;
@@ -21,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.sql.Connection;
+import java.util.Vector;
 
 /**
  *
@@ -48,7 +51,7 @@ public class ViewBookingServlet extends HttpServlet {
             UserDAO userDAO = new UserDAO();
             DoctorDAO doctorDAO = new DoctorDAO(conn);
             PetDAO petDAO = new PetDAO(conn);
-
+            ServiceDAO sDAO = new ServiceDAO(conn);
             // Lấy lại thông tin người dùng
             UserAccount userInfo = userDAO.getUserById(user.getUserId());
             request.setAttribute("userInfo", userInfo);
@@ -75,10 +78,11 @@ public class ViewBookingServlet extends HttpServlet {
             List<Booking> bookings = bookingDAO.getBookingsByUser(user.getUserId(), status, keyword, offset, pageSize);
             int totalRecords = bookingDAO.countBookingsByUser(user.getUserId(), status, keyword);
             int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
-
+            Vector<Service> slist = sDAO.getAllService("Select * from Service");
             System.out.println("Tìm được " + bookings.size() + " lịch");
 
             // Gửi dữ liệu sang ViewBooking.jsp
+            request.setAttribute("slist", slist);
             request.setAttribute("bookingList", bookings);
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
