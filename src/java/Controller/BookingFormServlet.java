@@ -5,6 +5,7 @@
 package Controller;
 
 import DAO.DoctorDAO;
+import DAO.EmployeeDAO;
 import DAO.PetDAO;
 import DAO.ServiceDAO;
 import Entity.UserAccount;
@@ -40,12 +41,12 @@ public class BookingFormServlet extends HttpServlet {
 
         try (Connection conn = new DBContext().connection) {
             PetDAO petDAO = new PetDAO(conn);
-            DoctorDAO doctorDAO = new DoctorDAO(conn);
+            EmployeeDAO eDAO = new EmployeeDAO(conn);
             ServiceDAO serviceDAO = new ServiceDAO(conn);
 
-            request.setAttribute("services", serviceDAO.getAllServices());
+            request.setAttribute("services", serviceDAO.getAllService("SELECT * FROM Service Where status = 1"));
             request.setAttribute("pets", petDAO.getPetsByOwnerId(user.getUserId()));
-            request.setAttribute("doctors", doctorDAO.getAllDoctors());
+            request.setAttribute("doctors", eDAO.getAllDoctor());
 
             request.getRequestDispatcher("Presentation/BookingForm.jsp").forward(request, response);
 

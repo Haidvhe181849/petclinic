@@ -10,18 +10,18 @@ package Entity;
  */
 public class AnimalType {
     private String animalTypeId;
+    private String image;
     private String typeName;
+    private boolean status;
 
     public AnimalType() {
     }
 
-    public AnimalType(String typeName) {
-        this.typeName = typeName;
-    }
-    
-    public AnimalType(String animalTypeId, String typeName) {
+    public AnimalType(String animalTypeId, String image, String typeName, boolean status) {
         this.animalTypeId = animalTypeId;
+        this.image = image;
         this.typeName = typeName;
+        this.status = status;
     }
 
     public String getAnimalTypeId() {
@@ -32,6 +32,14 @@ public class AnimalType {
         this.animalTypeId = animalTypeId;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public String getTypeName() {
         return typeName;
     }
@@ -40,11 +48,21 @@ public class AnimalType {
         this.typeName = typeName;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "AnimalType{" + "animalTypeId=" + animalTypeId + ", typeName=" + typeName + '}';
+        return "AnimalType{" + "animalTypeId=" + animalTypeId + ", image=" + image + ", typeName=" + typeName + ", status=" + status + '}';
     }
     
     
 }
 
+
+    

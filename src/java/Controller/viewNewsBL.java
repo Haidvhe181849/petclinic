@@ -55,7 +55,7 @@ public class viewNewsBL extends HttpServlet {
                         + "Where nameNews like N'%" + name + "%'");
                 request.setAttribute("nameNews", name);
             } else {
-                nlist = nDAO.getAllNews("SELECT * FROM News");
+                nlist = nDAO.getAllNews();
             }
             request.setAttribute("slist", slist);
             request.setAttribute("nlist", nlist);

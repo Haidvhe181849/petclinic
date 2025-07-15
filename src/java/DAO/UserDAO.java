@@ -27,6 +27,7 @@ public class UserDAO extends DBContext {
             if (rs.next()) {
                 return new UserAccount(
                         rs.getInt("user_id"),
+                        rs.getString("image"),
                         rs.getString("name"),
                         rs.getString("phone"),
                         rs.getString("email"),

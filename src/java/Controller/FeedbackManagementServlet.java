@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.FeedbackDAO;
+import Entity.Employee;
 import Entity.Feedback;
 import Entity.UserAccount;
 import java.io.IOException;
@@ -24,9 +25,9 @@ public class FeedbackManagementServlet extends HttpServlet {
         try {
             // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-            UserAccount user = (UserAccount) session.getAttribute("user");
-            if (user == null || (user.getRoleId() != 1 && user.getRoleId() != 2)) {
-                response.sendRedirect("login");
+            Employee currentUser = (Employee) session.getAttribute("staff");
+            if (currentUser == null || (currentUser.getRoleId() != 1 && currentUser.getRoleId() != 2)) {
+                response.sendRedirect("login-employee");
                 return;
             }
 

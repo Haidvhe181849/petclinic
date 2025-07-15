@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
 
 import Entity.Service;
@@ -16,10 +12,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author LENOVO
- */
 public class ServiceDAO extends DBContext {
 
     private Connection connection;
@@ -28,36 +20,17 @@ public class ServiceDAO extends DBContext {
         this.connection = connection;
     }
 
-
-    public List<Service> getAllServices() throws SQLException {
-        String sql = "SELECT * FROM Service";
-        List<Service> list = new ArrayList<>();
-        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+    public Vector<Service> getAllService(String sql) {
+        Vector<Service> listService = new Vector<>();
+        try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
             while (rs.next()) {
                 Service s = new Service(
                         rs.getString("service_id"),
+                        rs.getString("image"),
                         rs.getString("service_name"),
                         rs.getDouble("price"),
-                        rs.getString("description")
-                );
-                list.add(s);
-            }
-        }
-        return list;
-    }
-
-    public Vector<Service> getAllService(String sql) {
-        Vector<Service> listService = new Vector<>();
-
-        try {
-            PreparedStatement ptm = connection.prepareStatement(sql);
-            ResultSet rs = ptm.executeQuery();
-            while (rs.next()) {
-                Service s = new Service(
-                        rs.getString(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4)
+                        rs.getString("description"),
+                        rs.getBoolean("status")
                 );
                 listService.add(s);
             }
@@ -69,34 +42,67 @@ public class ServiceDAO extends DBContext {
 
     public Vector<Service> searchService(String sql) {
         Vector<Service> listService = new Vector<>();
-
         try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
-
             while (rs.next()) {
                 Service s = new Service(
-                        rs.getString(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4)
+                        rs.getString("service_id"),
+                        rs.getString("image"),
+                        rs.getString("service_name"),
+                        rs.getDouble("price"),
+                        rs.getString("description"),
+                        rs.getBoolean("status")
                 );
                 listService.add(s);
             }
-            System.out.println("Products fetched: " + listService.size());
-
+            System.out.println("Services fetched: " + listService.size());
         } catch (SQLException ex) {
-            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, "Error fetching products", ex);
+            Logger.getLogger(ServiceDAO.class.getName()).log(Level.SEVERE, "Error fetching services", ex);
         }
         return listService;
     }
 
+    public List<Service> searchFilteredServices(String name, String status, String order, Double minPrice, Double maxPrice) {
+        List<Service> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM Service WHERE 1=1");
+
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND service_name LIKE N'%").append(name.replaceAll("\\s+", "%")).append("%'");
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equalsIgnoreCase("active")) {
+                sql.append(" AND status = 1");
+            } else if (status.equalsIgnoreCase("inactive")) {
+                sql.append(" AND status = 0");
+            }
+        }
+
+        if (minPrice != null) {
+            sql.append(" AND price >= ").append(minPrice);
+        }
+
+        if (maxPrice != null) {
+            sql.append(" AND price <= ").append(maxPrice);
+        }
+
+        if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
+            sql.append(" ORDER BY price ").append(order);
+        }
+
+        // Gọi hàm getAllService truyền câu query
+        return getAllService(sql.toString());
+    }
+
     public int insertService(Service s) {
-        String sql = "INSERT INTO Service (service_id, service_name, price, description) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Service (service_id, image, service_name, price, description, status) VALUES (?, ?, ?, ?, ?, ?)";
         int i = 0;
         try (PreparedStatement ptm = connection.prepareStatement(sql)) {
-            ptm.setString(1, s.getService_id());
-            ptm.setString(2, s.getService_name());
-            ptm.setDouble(3, s.getPrice());
-            ptm.setString(4, s.getDescription());
+            ptm.setString(1, s.getServiceId());
+            ptm.setString(2, s.getImage());
+            ptm.setString(3, s.getServiceName());
+            ptm.setDouble(4, s.getPrice());
+            ptm.setString(5, s.getDescription());
+            ptm.setBoolean(6, s.isStatus());
 
             i = ptm.executeUpdate();
         } catch (SQLException ex) {
@@ -111,7 +117,7 @@ public class ServiceDAO extends DBContext {
             if (rs.next()) {
                 String lastId = rs.getString("service_id");
                 int num = Integer.parseInt(lastId.substring(1));
-                num++; // tăng lên
+                num++;
                 return String.format("S%03d", num);
             }
         } catch (SQLException e) {
@@ -121,12 +127,14 @@ public class ServiceDAO extends DBContext {
     }
 
     public void updateService(Service s) {
-        String sql = "UPDATE Service SET service_name = ?, price = ?, description = ? WHERE service_id = ?";
+        String sql = "UPDATE Service SET image = ?, service_name = ?, price = ?, description = ?, status = ? WHERE service_id = ?";
         try (PreparedStatement ptm = connection.prepareStatement(sql)) {
-            ptm.setString(1, s.getService_name());
-            ptm.setDouble(2, s.getPrice());
-            ptm.setString(3, s.getDescription());
-            ptm.setString(4, s.getService_id());
+            ptm.setString(1, s.getImage());
+            ptm.setString(2, s.getServiceName());
+            ptm.setDouble(3, s.getPrice());
+            ptm.setString(4, s.getDescription());
+            ptm.setBoolean(5, s.isStatus());
+            ptm.setString(6, s.getServiceId());
             ptm.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -134,18 +142,34 @@ public class ServiceDAO extends DBContext {
     }
 
     public int deleteService(String service_id) {
-        String sql = "DELETE FROM [dbo].[Service]\n"
-                + "      WHERE service_id=?";
+        String sql = "DELETE FROM [dbo].[Service] WHERE service_id=?";
         int i = 0;
-        try {
-            PreparedStatement ptm = connection.prepareStatement(sql);
+        try (PreparedStatement ptm = connection.prepareStatement(sql)) {
             ptm.setString(1, service_id);
             i = ptm.executeUpdate();
         } catch (SQLException ex) {
-            ex.getStackTrace();
+            ex.printStackTrace();
         }
         return i;
     }
 
+    public boolean isDuplicateServiceName(String serviceName, String excludeId) {
+        String sql = "SELECT COUNT(*) FROM Service WHERE service_name = ?"
+                + (excludeId != null ? " AND service_id != ?" : "");
+        try (PreparedStatement ptm = connection.prepareStatement(sql)) {
+            ptm.setString(1, serviceName);
+            if (excludeId != null) {
+                ptm.setString(2, excludeId);
+            }
+            try (ResultSet rs = ptm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 
 }

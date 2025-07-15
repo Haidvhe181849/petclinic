@@ -179,8 +179,8 @@
                     <option value="">Tất cả vai trò</option>
                     <option value="1">Admin</option>
                     <option value="2">Nhân viên</option>
-                    <option value="3">Khách hàng</option>
-                    <option value="4">Bác sĩ</option>
+                    <option value="3">Bác sĩ</option>
+                    <option value="4">Khách Hàng</option>
                 </select>
                 <select id="statusFilter" class="form-select" style="max-width:150px;">
                     <option value="">Tất cả trạng thái</option>
@@ -212,8 +212,8 @@
                                 <c:choose>
                                     <c:when test="${acc.roleId == 1}">Admin</c:when>
                                     <c:when test="${acc.roleId == 2}">Nhân viên</c:when>
-                                     <c:when test="${acc.roleId == 3}">Khách hàng</c:when>
-                                    <c:otherwise>Bác sĩ</c:otherwise>
+                                     <c:when test="${acc.roleId == 3}">Bác Sĩ</c:when>
+                                    <c:otherwise>Khách Hàng</c:otherwise>
                                 </c:choose>
                             </td>
                             <td data-status="${acc.status}">

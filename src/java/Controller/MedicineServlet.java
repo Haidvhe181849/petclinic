@@ -88,7 +88,7 @@ public class MedicineServlet extends HttpServlet {
                 request.setAttribute("medicineList", list);
                 request.setAttribute("currentPage", page);
                 request.setAttribute("totalPages", totalPages);
-
+                request.setAttribute("currentPage", "medicine");
                 // Lấy message từ session và xóa nó đi
                 String message = (String) request.getSession().getAttribute("message");
                 if (message != null) {

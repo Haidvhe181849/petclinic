@@ -158,8 +158,8 @@
                                         <li>
                                             <a href="#">Services</a>
                                             <ul class="submenu">
-                                                <c:forEach var="sv" items="${services}">
-                                                    <li><a href="#">${sv.service_name}</a></li>
+                                                <c:forEach var="sv" items="${slist}">
+                                                    <li><a href="#">${sv.serviceName}</a></li>
                                                     </c:forEach>
                                             </ul>
                                         </li>
@@ -313,6 +313,7 @@
                             <label class="form-label"><i class="far fa-clock"></i> Giờ khám</label>
                             <select name="time" id="time" class="form-select" required>
                                 <option selected disabled>-- Chọn giờ --</option>
+                                <option>8:00-9:00</option>
                             </select>
                         </div>
                     </div>

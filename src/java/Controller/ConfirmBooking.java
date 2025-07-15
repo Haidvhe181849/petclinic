@@ -15,8 +15,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Timestamp; // Dùng class này để xử lý thời gian trong SQL
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -25,121 +28,99 @@ import java.util.List;
 @WebServlet(name = "ConfirmBooking", urlPatterns = {"/ConfirmBooking"})
 public class ConfirmBooking extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        DBContext dbContext = new DBContext();
-        Connection conn = null;
-        conn = dbContext.connection;
-        BookingDAO bDAO = new BookingDAO(conn);
-
-        String service = request.getParameter("service");
-        if (service == null || service.equals("listBooking") || service.equals("blist")) {
-            String submit = request.getParameter("submit");
-            String order = request.getParameter("order");
-            List<BookingEx> blist;
-            if (submit != null) {
-                String id = request.getParameter("bookingId");
-                id = id.trim().replaceAll("\\s+", "%");
-                blist = bDAO.searchBookingById(id);
-                request.setAttribute("bookingId", id);
-
-            } else if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
-                blist = bDAO.getAllBookingSorted(order);
-                request.setAttribute("order", order);
-
-            } else {
-                blist = bDAO.getAllBooking();
-            }
-
-            request.setAttribute("blist", blist);
-            request.getRequestDispatcher("Presentation/BookingManagerment.jsp").forward(request, response);
-        }
-        if ("updateStatus".equals(service)) {
-            String bookingId = request.getParameter("bookingId");
-            String newStatus = request.getParameter("status");
-            String cancelReason = null;
-
-            if ("Failed".equals(newStatus)) {
-                cancelReason = request.getParameter("cancelReason");
-            }
-
-            bDAO.updateBookingStatus(bookingId, newStatus, cancelReason);
-            request.getSession().setAttribute("message", "Updated successfully!");
-            response.sendRedirect("ConfirmBooking?service=listBooking");
-        }
-
-        if ("bookingDetail".equals(service)) {
-            String bookingId = request.getParameter("bookingId");
-            BookingDetail detail = bDAO.getBookingDetailById(bookingId);
-
-            List<BookingEx> blist = bDAO.getAllBooking();
-
-            request.setAttribute("blist", blist);
-            request.setAttribute("bookingDetail", detail);
-            request.getRequestDispatcher("Presentation/BookingManagerment.jsp").forward(request, response);
-        }
-
-        if ("deleteBooking".equals(service)) {
-            String bookingId = request.getParameter("bookingId");
-            int result = bDAO.deleteBooking(bookingId);
-            if (result > 0) {
-                request.getSession().setAttribute("message", "Xóa booking thành công!");
-            } else {
-                request.getSession().setAttribute("message", "Xóa booking thất bại! Vui lòng thử lại.");
-            }
-            request.getSession().setAttribute("message", "Deleted successful!");
-            request.getRequestDispatcher("ConfirmBooking?service=listBooking").forward(request, response);
-        }
-
+    private BookingDAO getBookingDAO() {
+        return new BookingDAO(new DBContext().connection);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String service = request.getParameter("service");
+        BookingDAO bDAO = getBookingDAO();
+
+        try {
+            if (service == null || service.equals("listBooking") || service.equals("blist")) {
+                String bookingId = Optional.ofNullable(request.getParameter("bookingId")).orElse("").trim();
+                String status = request.getParameter("status");
+                String order = Optional.ofNullable(request.getParameter("order")).orElse("desc");
+
+                String fromDateStr = request.getParameter("fromDate");
+                String toDateStr = request.getParameter("toDate");
+                Timestamp from = null, to = null;
+                try {
+                    if (fromDateStr != null && !fromDateStr.isEmpty()) {
+                        from = Timestamp.valueOf(LocalDate.parse(fromDateStr).atStartOfDay());
+                    }
+                    if (toDateStr != null && !toDateStr.isEmpty()) {
+                        to = Timestamp.valueOf(LocalDate.parse(toDateStr).atTime(23, 59, 59));
+                    }
+                } catch (Exception ignored) {
+                }
+
+                List<BookingEx> blist = bDAO.getFilteredBookings(bookingId, status, order, from, to);
+                request.setAttribute("blist", blist);
+                request.setAttribute("bookingId", bookingId);
+                request.setAttribute("status", status);
+                request.setAttribute("order", order);
+                request.setAttribute("fromDate", fromDateStr);
+                request.setAttribute("toDate", toDateStr);
+                request.setAttribute("currentPage", "booking");
+                request.getRequestDispatcher("Presentation/BookingManagerment.jsp").forward(request, response);
+
+            } else if ("bookingDetail".equals(service)) {
+                String bookingId = request.getParameter("bookingId");
+                BookingDetail detail = bDAO.getBookingDetailById(bookingId);
+                List<BookingEx> blist = bDAO.getAllBooking();
+
+                request.setAttribute("blist", blist);
+                request.setAttribute("bookingDetail", detail);
+                request.setAttribute("currentPage", "booking");
+                request.getRequestDispatcher("Presentation/BookingManagerment.jsp").forward(request, response);
+
+            } else if ("deleteBooking".equals(service)) {
+                String bookingId = request.getParameter("bookingId");
+                int result = bDAO.deleteBooking(bookingId);
+                String msg = (result > 0) ? "Xóa booking thành công!" : "Xóa booking thất bại!";
+                request.getSession().setAttribute("message", msg);
+                response.sendRedirect("ConfirmBooking?service=listBooking");
+            }
+
+        } catch (Exception e) {
+            throw new ServletException("Lỗi GET ConfirmBooking: " + e.getMessage(), e);
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String service = request.getParameter("service");
+        BookingDAO bDAO = getBookingDAO();
+
+        try {
+            if ("updateStatus".equals(service)) {
+                String bookingId = request.getParameter("bookingId");
+                String newStatus = request.getParameter("status");
+                String cancelReason = "Failed".equals(newStatus) ? request.getParameter("cancelReason") : null;
+
+                bDAO.updateBookingStatus(bookingId, newStatus, cancelReason);
+                request.getSession().setAttribute("message", "Cập nhật trạng thái thành công!");
+                response.sendRedirect("ConfirmBooking?service=listBooking");
+            }
+        } catch (Exception e) {
+            throw new ServletException("Lỗi POST ConfirmBooking: " + e.getMessage(), e);
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet quản lý xác nhận booking";
+    }
 }

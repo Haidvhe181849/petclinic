@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.UserAccountDAO;
+import Entity.Employee;
 import Entity.UserAccount;
 import java.io.IOException;
 import java.util.List;
@@ -23,9 +24,9 @@ public class AccountManagementServlet extends HttpServlet {
         try {
             // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-            UserAccount currentUser = (UserAccount) session.getAttribute("user");
+            Employee currentUser = (Employee) session.getAttribute("staff");
             if (currentUser == null || (currentUser.getRoleId() != 1 && currentUser.getRoleId() != 2)) {
-                response.sendRedirect("login");
+                response.sendRedirect("login-employee");
                 return;
             }
 
@@ -150,9 +151,9 @@ public class AccountManagementServlet extends HttpServlet {
         try {
             // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-            UserAccount currentUser = (UserAccount) session.getAttribute("user");
+            Employee currentUser = (Employee) session.getAttribute("staff");
             if (currentUser == null || (currentUser.getRoleId() != 1 && currentUser.getRoleId() != 2)) {
-                response.sendRedirect("login");
+                response.sendRedirect("login-employee");
                 return;
             }
 

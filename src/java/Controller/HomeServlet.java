@@ -53,7 +53,7 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         try (Connection conn = new DBContext().connection) {
             ServiceDAO sDAO = new ServiceDAO(conn);
-            Vector<Service> slist = sDAO.getAllService("SELECT * FROM Service");
+            Vector<Service> slist = sDAO.getAllService("SELECT * FROM Service WHERE status = 1");
 
             // Gửi dữ liệu sang JSP
             request.setAttribute("slist", slist);

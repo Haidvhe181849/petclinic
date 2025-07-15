@@ -21,13 +21,14 @@ public class Booking {
     private String note;
     private LocalDateTime bookingTime;
     private String status;
-
     private String employeeName;
     private String petName;
-
     private String serviceName;
     private double servicePrice;
-   
+
+    private String formattedDate;
+    private String formattedTime;
+
     public Booking() {
     }
 
@@ -54,8 +55,7 @@ public class Booking {
         this.employeeName = employeeName;
         this.petName = petName;
     }
-    
-    
+
     public Booking(String bookingId, int userId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status) {
         this.bookingId = bookingId;
         this.userId = userId;
@@ -67,8 +67,6 @@ public class Booking {
         this.status = status;
     }
 
-    
-    
     public String getBookingId() {
         return bookingId;
     }
@@ -129,8 +127,16 @@ public class Booking {
         return bookingTime != null ? bookingTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
     }
 
+    public void setFormattedDate(String formattedDate) {
+        this.formattedDate = formattedDate;
+    }
+
     public String getFormattedTime() {
         return bookingTime != null ? bookingTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+    }
+
+    public void setFormattedTime(String formattedTime) {
+        this.formattedTime = formattedTime;
     }
 
     public String getStatus() {
@@ -172,8 +178,7 @@ public class Booking {
     public void setServicePrice(double servicePrice) {
         this.servicePrice = servicePrice;
     }
-    
-    
+
     @Override
     public String toString() {
         return "Booking{" + "bookingId=" + bookingId + ", userId=" + userId + ", employeeId=" + employeeId + ", serviceId=" + serviceId + ", petId=" + petId + ", note=" + note + ", bookingTime=" + bookingTime + ", status=" + status + '}';

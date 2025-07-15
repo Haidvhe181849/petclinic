@@ -6,7 +6,6 @@ import java.time.LocalDate;
 public class Pet {
 
     private String petId;
-
     private int ownerId;
     private String petTypeId;
     private String name;

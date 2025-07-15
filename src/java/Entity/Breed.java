@@ -9,23 +9,27 @@ package Entity;
  * @author LENOVO
  */
 public class Breed {
-
     private String breedId;
+    private String image;
     private String breedName;
-    private String animalTypeId;
+    private String animalTypeId; 
     private boolean isActive;
 
     public Breed() {
     }
 
-    public Breed(String breedName, String animalTypeId, boolean isActive) {
+    public Breed(String breedId, String image, String breedName, boolean isActive) {
+        this.breedId = breedId;
+        this.image = image;
         this.breedName = breedName;
-        this.animalTypeId = animalTypeId;
         this.isActive = isActive;
     }
+    
+    
 
-    public Breed(String breedId, String breedName, String animalTypeId, boolean isActive) {
+    public Breed(String breedId, String image, String breedName, String animalTypeId, boolean isActive) {
         this.breedId = breedId;
+        this.image = image;
         this.breedName = breedName;
         this.animalTypeId = animalTypeId;
         this.isActive = isActive;
@@ -37,6 +41,14 @@ public class Breed {
 
     public void setBreedId(String breedId) {
         this.breedId = breedId;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getBreedName() {
@@ -65,6 +77,7 @@ public class Breed {
 
     @Override
     public String toString() {
-        return "Breed{" + "breedId=" + breedId + ", breedName=" + breedName + ", animalTypeId=" + animalTypeId + ", isActive=" + isActive + '}';
+        return "Breed{" + "breedId=" + breedId + ", image=" + image + ", breedName=" + breedName + ", animalTypeId=" + animalTypeId + ", isActive=" + isActive + '}';
     }
+
 }

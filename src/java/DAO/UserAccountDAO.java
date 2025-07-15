@@ -25,6 +25,7 @@ public class UserAccountDAO extends DBContext {
             while (rs.next()) {
                 UserAccount user = new UserAccount(
                         rs.getInt("user_id"),
+                        rs.getString("image"),
                         rs.getString("name"),
                         rs.getString("phone"),
                         rs.getString("email"),
@@ -45,6 +46,31 @@ public class UserAccountDAO extends DBContext {
         return accounts;
     }
 
+    public UserAccount getByUsername(String username) {
+        String sql = "SELECT * FROM UserAccount WHERE username = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new UserAccount(
+                        rs.getInt("user_id"),
+                        rs.getString("image"),
+                        rs.getString("name"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getInt("role_id"),
+                        rs.getString("status")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public UserAccount getUserById(int userId) {
         String sql = "SELECT * FROM UserAccount WHERE user_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -53,6 +79,7 @@ public class UserAccountDAO extends DBContext {
             if (rs.next()) {
                 return new UserAccount(
                         rs.getInt("user_id"),
+                        rs.getString("image"),
                         rs.getString("name"),
                         rs.getString("phone"),
                         rs.getString("email"),
@@ -106,14 +133,15 @@ public class UserAccountDAO extends DBContext {
 
         String sql = "INSERT INTO UserAccount (name, phone, email, username, password, address, role_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getPhone());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getUsername());
-            stmt.setString(5, user.getPassword());
-            stmt.setString(6, user.getAddress());
-            stmt.setInt(7, user.getRoleId());
-            stmt.setString(8, user.getStatus() != null ? user.getStatus() : "Active");
+            stmt.setString(1, user.getImage());
+            stmt.setString(2, user.getName());
+            stmt.setString(3, user.getPhone());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getUsername());
+            stmt.setString(6, user.getPassword());
+            stmt.setString(7, user.getAddress());
+            stmt.setInt(8, user.getRoleId());
+            stmt.setString(9, user.getStatus() != null ? user.getStatus() : "Active");
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -127,24 +155,24 @@ public class UserAccountDAO extends DBContext {
             return false;
         }
 
-        String sql = (user.getPassword() == null || user.getPassword().isEmpty()) ?
-                "UPDATE UserAccount SET name = ?, phone = ?, email = ?, username = ?, address = ?, role_id = ?, status = ? WHERE user_id = ?" :
-                "UPDATE UserAccount SET name = ?, phone = ?, email = ?, username = ?, password = ?, address = ?, role_id = ?, status = ? WHERE user_id = ?";
+        String sql = (user.getPassword() == null || user.getPassword().isEmpty())
+                ? "UPDATE UserAccount SET image = ?, name = ?, phone = ?, email = ?, username = ?, address = ?, role_id = ?, status = ? WHERE user_id = ?"
+                : "UPDATE UserAccount SET image = ?, name = ?, phone = ?, email = ?, username = ?, password = ?, address = ?, role_id = ?, status = ? WHERE user_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getPhone());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getUsername());
-            int index = 5;
+            stmt.setString(1, user.getImage());
+            stmt.setString(2, user.getName());
+            stmt.setString(3, user.getPhone());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getUsername());
+            int index = 6;
             if (sql.contains("password")) {
                 stmt.setString(index++, user.getPassword());
             }
             stmt.setString(index++, user.getAddress());
             stmt.setInt(index++, user.getRoleId());
-            stmt.setString(index++, user.getStatus() != null ? user.getStatus() : "Active");
+            stmt.setString(index++, user.getStatus());
             stmt.setInt(index, user.getUserId());
-
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Lỗi cập nhật tài khoản: " + e.getMessage());
@@ -203,4 +231,4 @@ public class UserAccountDAO extends DBContext {
 
         return filteredAccounts;
     }
-} 
+}

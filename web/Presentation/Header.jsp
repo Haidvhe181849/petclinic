@@ -22,7 +22,7 @@
                                     <a href="#">Services</a>
                                     <ul class="submenu">
                                         <c:forEach var="sv" items="${slist}">
-                                            <li><a href="#">${sv.service_name}</a></li>
+                                            <li><a href="#">${sv.serviceName}</a></li>
                                             </c:forEach>
                                     </ul>
                                 </li>
@@ -30,13 +30,13 @@
                                         href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
                                 </li>
                                 <li><a href="#">Doctor</a></li>
-                                    <c:if test="${sessionScope.user.roleId == 3}">
+                                    <c:if test="${sessionScope.user.roleId == 4}">
                                     <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
                                     </c:if>
                                 <li><a
                                         href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                 </li>
-                                <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 4}">
+                                <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 3}">
                                     <li><a href="#">Managerment</a>
                                         <ul class="submenu">
                                             <li><a href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">Dashboard</a></li>
@@ -87,9 +87,9 @@
                                         <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item"
-                                               href="${pageContext.request.contextPath}/change-password">Đổi
-                                                mật khẩu</a></li>
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ProfileCustomer">Trang cá nhân</a></li>
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a></li>
+                                        <li><a class="dropdown-item text-danger fw-bold" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                     </ul>
                                 </div>
                             </div>

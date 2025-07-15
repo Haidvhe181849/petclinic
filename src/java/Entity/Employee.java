@@ -54,6 +54,10 @@ public class Employee {
         this.status = status;
     }
 
+    public void setEmployee_id(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
     public String getEmployeeId() {
         return employeeId;
     }

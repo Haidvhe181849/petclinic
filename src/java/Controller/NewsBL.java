@@ -25,6 +25,8 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.Optional;
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -45,121 +47,6 @@ public class NewsBL extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-
-        NewsDAO nDAO = new NewsDAO();
-
-        String service = request.getParameter("service");
-        if (service == null || service.equals("listNews") || service.equals("nlist")) {
-            String submit = request.getParameter("submit");
-            String order = request.getParameter("order"); 
-            if (order == null || (!order.equalsIgnoreCase("asc") && !order.equalsIgnoreCase("desc"))) {
-                order = "desc"; // mặc định giảm dần
-            }
-            Vector<News> nlist;
-            Vector<News> lastNews = nDAO.getLatestNews();
-
-            if (submit != null) {
-                String name = request.getParameter("name");
-                name = name.trim().replaceAll("\\s+", "%");
-                nlist = nDAO.searchNews("Select*from News\n"
-                        + "Where nameNews like N'%" + name + "%'");
-                request.setAttribute("nameNews", name);
-            } else {
-                String sql = "SELECT * FROM News ORDER BY post_time " + order;
-                nlist = nDAO.getAllNews(sql);
-            }
-
-            request.setAttribute("nlist", nlist);
-            request.setAttribute("top5News", lastNews);
-            request.setAttribute("order", order);
-            request.getRequestDispatcher("Presentation/NewsManagerment.jsp").forward(request, response);
-        }
-
-        if ("addNews".equals(service)) {
-            String submit = request.getParameter("submit");
-            if (submit == null) {
-                response.sendRedirect("News.jsp");
-            } else {
-                String newsId = nDAO.generateNextNewsId(); // tự sinh ID
-                String nameNews = request.getParameter("nameNews");
-                String description = request.getParameter("description");
-                Boolean isActive = Boolean.valueOf(request.getParameter("isActive"));
-
-                Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
-
-                Part filePart = request.getPart("imageFile");
-                String imageUrl = "";
-
-                if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                    String uploadPath = getServletContext().getRealPath("/") + "img/news";
-                    File uploadDir = new File(uploadPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    filePart.write(uploadPath + File.separator + fileName);
-                    imageUrl = "img/news/" + fileName;
-                } else {
-                    imageUrl = "img/news/default.jpg";
-                }
-
-                News n = new News(newsId, imageUrl, nameNews, timestampNow, description, isActive);
-                nDAO.insertNews(n);
-
-                request.getSession().setAttribute("message", "Added successful!");
-                response.sendRedirect("News?service=listNews");
-            }
-        }
-
-        if (service.equals("deleteNews")) {
-            String nID = request.getParameter("nID");
-            int n = nDAO.deleteNews(nID);
-            request.getSession().setAttribute("message", "Deleted successful!");
-            response.sendRedirect("News?service=listNews");
-
-        }
-
-        if ("updateNews".equals(service)) {
-            String submit = request.getParameter("submit");
-            if (submit == null) {
-                response.sendRedirect("News.jsp");
-            } else {
-                String newsId = request.getParameter("newsId");
-                String nameNews = request.getParameter("nameNews");
-                Timestamp postTime = new Timestamp(System.currentTimeMillis());
-                String description = request.getParameter("description");
-                Boolean isActive = "1".equals(request.getParameter("isActive"));
-
-                Part filePart = request.getPart("imageFile");
-                String imageUrl;
-
-                if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-
-                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                    String uploadPath = getServletContext().getRealPath("/") + "img/news";
-                    File uploadDir = new File(uploadPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    filePart.write(uploadPath + File.separator + fileName);
-                    imageUrl = "img/news/" + fileName;
-                } else {
-
-                    imageUrl = request.getParameter("oldImage");
-                }
-
-                News n = new News(newsId, imageUrl, nameNews, postTime, description, isActive);
-                nDAO.updateNews(n);
-                request.getSession().setAttribute("message", "Update successful!");
-                response.sendRedirect("News?service=listNews");
-            }
-        }
 
     }
 
@@ -175,7 +62,62 @@ public class NewsBL extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        NewsDAO nDAO = new NewsDAO();
+        String service = request.getParameter("service");
+        if (service == null || service.equals("listNews") || service.equals("nlist")) {
+            String order = Optional.ofNullable(request.getParameter("order")).orElse("desc");
+            String status = request.getParameter("status");
+            String fromDateStr = request.getParameter("fromDate");
+            String toDateStr = request.getParameter("toDate");
+            String name = Optional.ofNullable(request.getParameter("name")).orElse("").trim();
+            String pageParam = request.getParameter("page");
+
+            int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+            int pageSize = 5;
+            int offset = (currentPage - 1) * pageSize;
+
+            Timestamp fromDate = null, toDate = null;
+            try {
+                if (fromDateStr != null && !fromDateStr.isEmpty()) {
+                    fromDate = Timestamp.valueOf(LocalDate.parse(fromDateStr).atStartOfDay());
+                }
+                if (toDateStr != null && !toDateStr.isEmpty()) {
+                    toDate = Timestamp.valueOf(LocalDate.parse(toDateStr).atTime(23, 59, 59));
+                }
+            } catch (Exception ignored) {
+            }
+
+            Vector<News> newsList = nDAO.filterNews(name, status, fromDate, toDate, order, offset, pageSize);
+            int total = nDAO.countFilteredNews(name, status, fromDate, toDate);
+            int totalPages = (int) Math.ceil(total * 1.0 / pageSize);
+            Vector<News> top5 = nDAO.getLatestNews();
+
+            // Set attributes
+            request.setAttribute("nlist", newsList);
+            request.setAttribute("top5News", top5);
+            request.setAttribute("order", order);
+            request.setAttribute("nameNews", name);
+            request.setAttribute("status", status);
+            request.setAttribute("fromDate", fromDateStr);
+            request.setAttribute("toDate", toDateStr);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("currentPage", "news");
+            request.getRequestDispatcher("Presentation/NewsManagerment.jsp").forward(request, response);
+        } else if ("deleteNews".equals(service)) {
+            String newsId = request.getParameter("nID");
+            if (newsId != null) {
+                int result = nDAO.deleteNews(newsId);
+                if (result > 0) {
+                    request.getSession().setAttribute("message", "Deleted successfully!");
+                } else {
+                    request.getSession().setAttribute("message", "Delete failed!");
+                }
+            }
+            response.sendRedirect("News?service=listNews");
+        }
     }
 
     /**
@@ -189,7 +131,70 @@ public class NewsBL extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        NewsDAO nDAO = new NewsDAO();
+        String service = request.getParameter("service");
+
+        if ("addNews".equals(service)) {
+            String newsId = nDAO.generateNextNewsId();
+            String nameNews = request.getParameter("nameNews");
+            String description = request.getParameter("description");
+            Boolean isActive = Boolean.valueOf(request.getParameter("isActive"));
+            Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
+
+            Part filePart = request.getPart("imageFile");
+            String imageUrl;
+
+            if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                String uploadPath = getServletContext().getRealPath("/") + "img/news";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                filePart.write(uploadPath + File.separator + fileName);
+                imageUrl = "img/news/" + fileName;
+            } else {
+                imageUrl = "img/news/default.jpg";
+            }
+
+            News news = new News(newsId, imageUrl, nameNews, timestampNow, description, isActive);
+            nDAO.insertNews(news);
+
+            request.getSession().setAttribute("message", "Added successful!");
+            response.sendRedirect("News?service=listNews");
+        } else if ("updateNews".equals(service)) {
+            String newsId = request.getParameter("newsId");
+            String nameNews = request.getParameter("nameNews");
+            Timestamp postTime = new Timestamp(System.currentTimeMillis());
+            String description = request.getParameter("description");
+            Boolean isActive = "1".equals(request.getParameter("isActive"));
+
+            Part filePart = request.getPart("imageFile");
+            String imageUrl;
+
+            if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                String uploadPath = getServletContext().getRealPath("/") + "img/news";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                filePart.write(uploadPath + File.separator + fileName);
+                imageUrl = "img/news/" + fileName;
+            } else {
+                imageUrl = request.getParameter("oldImage");
+            }
+
+            News news = new News(newsId, imageUrl, nameNews, postTime, description, isActive);
+            nDAO.updateNews(news);
+
+            request.getSession().setAttribute("message", "Update successful!");
+            response.sendRedirect("News?service=listNews");
+        }
     }
 
     /**

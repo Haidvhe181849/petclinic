@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
+import java.sql.Date;
 
 public class BookingDAO extends DBContext {
 
@@ -310,10 +311,10 @@ public class BookingDAO extends DBContext {
                     detail.setPetType(rs.getString("pet_type"));
                     detail.setBreed(rs.getString("breed"));
                     detail.setServiceName(rs.getString("service_name"));
-                    detail.setEmployeeName(rs.getString("employee_name"));
+                    detail.setEmployeeName(rs.getString("employee_name") != null ? rs.getString("employee_name") : "Chưa phân công");
                     detail.setBookingTime(rs.getTimestamp("booking_time"));
                     detail.setStatus(rs.getString("status"));
-                    detail.setNote(rs.getString("note"));
+                    detail.setNote(rs.getString("note") != null ? rs.getString("note") : "(Không có)");
                     detail.setActualCheckinTime(rs.getTimestamp("actual_checkin_time"));
                     detail.setCancelReason(rs.getString("cancel_reason"));
                 }
@@ -427,6 +428,316 @@ public class BookingDAO extends DBContext {
             psBooking.setString(1, bookingId);
             return psBooking.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<BookingEx> getFilteredBookings(String keyword, String status, String order, Timestamp from, Timestamp to) {
+        List<BookingEx> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT b.booking_id, "
+                + "ua.name AS customer_name, "
+                + "p.name AS pet_name, "
+                + "at.type_name AS pet_type, "
+                + "s.service_name, "
+                + "e.name AS employee_name, "
+                + "b.booking_time, "
+                + "b.status "
+                + "FROM Booking b "
+                + "JOIN UserAccount ua ON b.user_id = ua.user_id "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "WHERE 1=1 "
+        );
+
+        List<Object> params = new ArrayList<>();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append("AND b.booking_id LIKE ? ");
+            params.add("%" + keyword.trim().replaceAll("\\s+", "%") + "%");
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append("AND b.status = ? ");
+            params.add(status);
+        }
+
+        if (from != null) {
+            sql.append("AND b.booking_time >= ? ");
+            params.add(from);
+        }
+
+        if (to != null) {
+            sql.append("AND b.booking_time <= ? ");
+            params.add(to);
+        }
+
+        if ("asc".equalsIgnoreCase(order)) {
+            sql.append("ORDER BY b.booking_time ASC ");
+        } else {
+            sql.append("ORDER BY b.booking_time DESC ");
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingEx b = new BookingEx(
+                        rs.getString("booking_id"),
+                        rs.getString("customer_name"),
+                        rs.getString("pet_name"),
+                        rs.getString("pet_type"),
+                        rs.getString("service_name"),
+                        rs.getString("employee_name"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("status")
+                );
+                list.add(b);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Booking> getUpcomingByUser(int userId) {
+        List<Booking> list = new ArrayList<>();
+        String sql = """
+        SELECT b.booking_id, b.booking_time, b.status, 
+               b.pet_id, p.name AS pet_name, 
+               b.service_id, s.service_name
+        FROM Booking b
+        JOIN Pet p ON b.pet_id = p.pet_id
+        JOIN Service s ON b.service_id = s.service_id
+        WHERE b.user_id = ? 
+          AND b.status IN ('Pending', 'Confirmed')
+        ORDER BY b.booking_time ASC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking b = new Booking();
+                b.setBookingId(rs.getString("booking_id"));
+                b.setBookingTime(rs.getTimestamp("booking_time").toLocalDateTime());
+                b.setStatus(rs.getString("status"));
+                b.setPetId(rs.getString("pet_id"));
+                b.setPetName(rs.getString("pet_name"));
+                b.setServiceId(rs.getString("service_id"));
+                b.setServiceName(rs.getString("service_name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Booking> getCompletedByUser(int userId) {
+        List<Booking> list = new ArrayList<>();
+        String sql = """
+        SELECT b.booking_id, b.booking_time, b.status, 
+               b.pet_id, p.name AS pet_name, 
+               b.service_id, s.service_name
+        FROM Booking b
+        JOIN Pet p ON b.pet_id = p.pet_id
+        JOIN Service s ON b.service_id = s.service_id
+        WHERE b.user_id = ? 
+          AND b.status = 'Completed'
+        ORDER BY b.booking_time DESC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking b = new Booking();
+                b.setBookingId(rs.getString("booking_id"));
+                b.setBookingTime(rs.getTimestamp("booking_time").toLocalDateTime());
+                b.setStatus(rs.getString("status"));
+                b.setPetId(rs.getString("pet_id"));
+                b.setPetName(rs.getString("pet_name"));
+                b.setServiceId(rs.getString("service_id"));
+                b.setServiceName(rs.getString("service_name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Booking> getAllByUser(int userId) {
+        List<Booking> list = new ArrayList<>();
+        String sql = """
+        SELECT b.booking_id, b.booking_time, b.status, 
+               b.pet_id, p.name AS pet_name, 
+               b.service_id, s.service_name
+        FROM Booking b
+        JOIN Pet p ON b.pet_id = p.pet_id
+        JOIN Service s ON b.service_id = s.service_id
+        WHERE b.user_id = ?
+        ORDER BY b.booking_time DESC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking b = new Booking();
+                b.setBookingId(rs.getString("booking_id"));
+                b.setBookingTime(rs.getTimestamp("booking_time").toLocalDateTime());
+                b.setStatus(rs.getString("status"));
+                b.setPetId(rs.getString("pet_id"));
+                b.setPetName(rs.getString("pet_name"));
+                b.setServiceId(rs.getString("service_id"));
+                b.setServiceName(rs.getString("service_name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public int countAppointmentsByUserId(int userId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Booking WHERE user_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public List<Booking> getBookingsForDoctorSchedule(String doctorId, List<Date> dateList) {
+        List<Booking> bookings = new ArrayList<>();
+        if (dateList == null || dateList.isEmpty()) {
+            return bookings;
+        }
+
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < dateList.size(); i++) {
+            placeholders.append("?");
+            if (i < dateList.size() - 1) {
+                placeholders.append(",");
+            }
+        }
+
+        String sql = "SELECT b.*, e.name AS employee_name, p.name AS pet_name, s.service_name "
+                + "FROM Booking b "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "LEFT JOIN Pet p ON b.pet_id = p.pet_id "
+                + "LEFT JOIN Service s ON b.service_id = s.service_id "
+                + "WHERE CAST(b.booking_time AS DATE) IN (" + placeholders + ") "
+                + "AND (b.employee_id IS NULL OR b.employee_id = ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+            for (Date date : dateList) {
+                ps.setDate(index++, new java.sql.Date(date.getTime()));
+            }
+            ps.setString(index, doctorId); // last param: bác sĩ cụ thể hoặc lịch chưa phân công
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setBookingId(rs.getString("booking_id"));
+                booking.setUserId(rs.getInt("user_id"));
+                booking.setEmployeeId(rs.getString("employee_id"));
+                booking.setServiceId(rs.getString("service_id"));
+                booking.setPetId(rs.getString("pet_id"));
+                booking.setNote(rs.getString("note"));
+                booking.setBookingTime(rs.getTimestamp("booking_time").toLocalDateTime());
+                booking.setStatus(rs.getString("status"));
+                booking.setEmployeeName(rs.getString("employee_name"));
+                booking.setPetName(rs.getString("pet_name"));
+                booking.setServiceName(rs.getString("service_name"));
+                bookings.add(booking);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bookings;
+    }
+
+    public void assignDoctorToBooking(String doctorId, String bookingId) {
+        String sql = "UPDATE Booking SET employee_id = ? WHERE booking_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
+            ps.setString(2, bookingId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public BookingDetail getBookingDetailByID(String bookingId) {
+        BookingDetail detail = null;
+
+        String sql = "SELECT b.booking_id, "
+                + "ua.name AS ua_name, ua.phone AS ua_phone, ua.email AS ua_email, "
+                + "p.name AS pet_name, at.type_name AS pet_type, p.breed AS breed, "
+                + "s.service_name, e.name AS employee_name, "
+                + "b.booking_time, b.note "
+                + "FROM Booking b "
+                + "JOIN UserAccount ua ON b.user_id = ua.user_id "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "WHERE b.booking_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, bookingId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    detail = new BookingDetail();
+                    detail.setBookingId(rs.getString("booking_id"));
+                    detail.setCustomerName(rs.getString("ua_name"));
+                    detail.setCustomerPhone(rs.getString("ua_phone"));
+                    detail.setCustomerEmail(rs.getString("ua_email"));
+                    detail.setPetName(rs.getString("pet_name"));
+                    detail.setPetType(rs.getString("pet_type"));
+                    detail.setBreed(rs.getString("breed"));
+                    detail.setServiceName(rs.getString("service_name"));
+                    detail.setEmployeeName(rs.getString("employee_name")); // null nếu chưa phân công
+                    detail.setBookingTime(rs.getTimestamp("booking_time"));
+                    detail.setNote(rs.getString("note") != null ? rs.getString("note") : "(Không có)");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return detail;
+    }
+
+    public int countBookingsByStatus(String status) {
+        String sql = "SELECT COUNT(*) FROM Booking WHERE status = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Entity;
 
 /**
@@ -9,62 +5,62 @@ package Entity;
  * @author LENOVO
  */
 public class Service {
-    
-    private String service_id;
-    private String service_name;
+
+    private String serviceId;
+    private String image;
+    private String serviceName;
     private double price;
     private String description;
+    private boolean status;
 
     public Service() {
-        this.service_id = "";
-        this.service_name = "";
+        this.serviceId = "";
+        this.image = "";
+        this.serviceName = "";
         this.price = 0;
         this.description = "";
+        this.status = true; 
     }
 
-    public Service(String service_name, double price, String description) {
-        this.service_name = service_name;
+    public Service(String image, String serviceName, double price, String description, boolean status) {
+        this.image = image;
+        this.serviceName = serviceName;
         this.price = price;
         this.description = description;
+        this.status = status;
     }
 
-    public Service(String service_id, String service_name, double price, String description) {
-        this.service_id = service_id;
-        this.service_name = service_name;
+    public Service(String serviceId, String image, String serviceName, double price, String description, boolean status) {
+        this.serviceId = serviceId;
+        this.image = image;
+        this.serviceName = serviceName;
         this.price = price;
         this.description = description;
+        this.status = status;
     }
 
-     public String getServiceId() {
-        return service_id;
+    public String getServiceId() {
+        return serviceId;
     }
 
     public void setServiceId(String serviceId) {
-        this.service_id = service_id;
+        this.serviceId = serviceId;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getServiceName() {
-        return service_name;
+        return serviceName;
     }
 
     public void setServiceName(String serviceName) {
-        this.service_name = service_name;
-    }
-    
-    public String getService_id() {
-        return service_id;
-    }
-
-    public void setService_id(String service_id) {
-        this.service_id = service_id;
-    }
-
-    public String getService_name() {
-        return service_name;
-    }
-
-    public void setService_name(String service_name) {
-        this.service_name = service_name;
+        this.serviceName = serviceName;
     }
 
     public double getPrice() {
@@ -83,13 +79,23 @@ public class Service {
         this.description = description;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Service{" + "service_id=" + service_id + ", service_name=" + service_name + ", price=" + price + ", description=" + description + '}';
+        return "Service{" +
+                "serviceId='" + serviceId + '\'' +
+                ", image='" + image + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
     }
-    
-    
-    
-    
-    
 }

@@ -44,7 +44,6 @@
                 </div>
             </div>
         </div>
-        <!-- Preloader Start -->
         <header>
             <!--? Header Start -->
             <div class="header-area header-transparent">
@@ -67,7 +66,7 @@
                                                 <a href="#">Services</a>
                                                 <ul class="submenu">
                                                     <c:forEach var="sv" items="${slist}">
-                                                        <li><a href="#">${sv.service_name}</a></li>
+                                                        <li><a href="#">${sv.serviceName}</a></li>
                                                         </c:forEach>
                                                 </ul>
                                             </li>
@@ -75,13 +74,13 @@
                                                     href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
                                             </li>
                                             <li><a href="#">Doctor</a></li>
-                                            <c:if test="${sessionScope.user.roleId == 3}">
-                                            <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
-                                            </c:if>
+                                                <c:if test="${sessionScope.user.roleId == 4}">
+                                                <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
+                                                </c:if>
                                             <li><a
                                                     href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                             </li>
-                                            
+
                                         </ul>
                                     </nav>
                                 </div>
@@ -93,23 +92,23 @@
                                     <c:when test="${not empty sessionScope.user}">
                                         <div class="header-user-info">
                                             <span>Xin chào, ${sessionScope.user.email}</span>
-
-                                            <a href="${pageContext.request.contextPath}/logout"
-                                               class="header-btn custom-auth-btn">Đăng xuất</a>
                                             <div class="dropdown">
                                                 <a href="#"
                                                    class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
                                                    id="userDropdown" data-bs-toggle="dropdown"
                                                    aria-expanded="false">
-                                                    <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                                    <img src="${pageContext.request.contextPath}/Presentation/img/images/avata/${user.image}"
+                                                         alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+
                                                 </a>
                                                 <ul class="dropdown-menu dropdown-menu-end"
                                                     aria-labelledby="userDropdown">
-                                                    <li><a class="dropdown-item"
-                                                           href="${pageContext.request.contextPath}/change-password">Đổi
-                                                            mật khẩu</a></li>
-                                                            <c:if
-                                                                test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2}">
+                                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ProfileCustomer">Trang cá nhân</a></li>
+                                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a></li>
+                                                    <li><a class="dropdown-item text-danger fw-bold" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+
+                                                    <c:if
+                                                        test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2}">
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
@@ -125,27 +124,6 @@
 
                                         </div>
                                     </c:when>
-                                    <c:when test="${not empty sessionScope.userName}">
-                                        <div class="header-user-info">
-                                            <span>Xin chào, ${sessionScope.userEmail}</span>
-                                            <a href="${pageContext.request.contextPath}/logout"
-                                               class="header-btn custom-auth-btn">Đăng xuất</a>
-                                            <div class="dropdown">
-                                                <a href="#"
-                                                   class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
-                                                   id="userDropdown" data-bs-toggle="dropdown"
-                                                   aria-expanded="false">
-                                                    <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
-                                                </a>
-                                                <ul class="dropdown-menu dropdown-menu-end"
-                                                    aria-labelledby="userDropdown">
-                                                    <li><a class="dropdown-item"
-                                                           href="${pageContext.request.contextPath}/change-password">Đổi
-                                                            mật khẩu</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </c:when>
                                     <c:otherwise>
                                         <div class="header-user-info">
                                             <a href="${pageContext.request.contextPath}/login"
@@ -157,9 +135,7 @@
                                 </c:choose>
                             </div>
                         </div>
-                        <div class="header-right-btn f-right d-none d-lg-block ml-30">
-                            <a href="#" class="header-btn">01654.066.456</a>
-                        </div>
+
                     </div>
                 </div>
                 <!-- Mobile Menu -->
@@ -699,8 +675,8 @@
     </div>
     <!-- Footer End-->
 </footer>
-                                
-                                <script>
+
+<script>
     $(window).on('load', function () {
         $('#preloader-active').fadeOut('slow');
     });
@@ -815,11 +791,11 @@
 <c:if test='${not empty changeSuccess}'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Thành công!',
-                                        text: '<%= changeSuccess %>',
-                                        confirmButtonColor: '#ff3d3d'
-                                    });
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: '<%= changeSuccess %>',
+        confirmButtonColor: '#ff3d3d'
+    });
     </script>
 </c:if>

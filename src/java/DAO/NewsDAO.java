@@ -20,12 +20,12 @@ import java.util.logging.Logger;
  */
 public class NewsDAO extends DBContext {
 
-    public Vector<News> getAllNews(String sql) {
+    public Vector<News> getAllNews() {
         Vector<News> listNews = new Vector<>();
+        String sql = "SELECT * FROM News";  // Query cố định ở đây
 
-        try {
-            PreparedStatement ptm = connection.prepareStatement(sql);
-            ResultSet rs = ptm.executeQuery();
+        try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
+
             while (rs.next()) {
                 News n = new News(
                         rs.getString(1),
@@ -42,7 +42,7 @@ public class NewsDAO extends DBContext {
         }
         return listNews;
     }
-    
+
     public Vector<News> searchNews(String sql) {
         Vector<News> listNews = new Vector<>();
 
@@ -67,6 +67,121 @@ public class NewsDAO extends DBContext {
         return listNews;
     }
 
+    public Vector<News> getAllNewsOrdered(String order) {
+        Vector<News> listNews = new Vector<>();
+        String sql = "SELECT * FROM News ORDER BY post_time " + ("asc".equalsIgnoreCase(order) ? "ASC" : "DESC");
+
+        try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
+
+            while (rs.next()) {
+                News n = new News(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getTimestamp(4),
+                        rs.getString(5),
+                        rs.getBoolean(6)
+                );
+                listNews.add(n);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return listNews;
+    }
+
+    public Vector<News> filterNews(String keyword, String status, Timestamp from, Timestamp to, String order, int offset, int limit) {
+        Vector<News> list = new Vector<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM News WHERE 1=1");
+
+        if (!keyword.isEmpty()) {
+            sql.append(" AND nameNews LIKE ?");
+        }
+        if ("active".equals(status)) {
+            sql.append(" AND is_active = 1");
+        } else if ("inactive".equals(status)) {
+            sql.append(" AND is_active = 0");
+        }
+        if (from != null) {
+            sql.append(" AND post_time >= ?");
+        }
+        if (to != null) {
+            sql.append(" AND post_time <= ?");
+        }
+        sql.append(" ORDER BY post_time ").append(order);
+        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try (PreparedStatement ptm = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+            if (!keyword.isEmpty()) {
+                ptm.setString(index++, "%" + keyword + "%");
+            }
+            if (from != null) {
+                ptm.setTimestamp(index++, from);
+            }
+            if (to != null) {
+                ptm.setTimestamp(index++, to);
+            }
+            ptm.setInt(index++, offset);
+            ptm.setInt(index++, limit);
+
+            ResultSet rs = ptm.executeQuery();
+            while (rs.next()) {
+                list.add(new News(
+                        rs.getString("news_id"),
+                        rs.getString("image_url"),
+                        rs.getString("nameNews"),
+                        rs.getTimestamp("post_time"),
+                        rs.getString("description"),
+                        rs.getBoolean("is_active")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int countFilteredNews(String keyword, String status, Timestamp from, Timestamp to) {
+        int count = 0;
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM News WHERE 1=1");
+
+        if (!keyword.isEmpty()) {
+            sql.append(" AND nameNews LIKE ?");
+        }
+        if ("active".equals(status)) {
+            sql.append(" AND is_active = 1");
+        } else if ("inactive".equals(status)) {
+            sql.append(" AND is_active = 0");
+        }
+        if (from != null) {
+            sql.append(" AND post_time >= ?");
+        }
+        if (to != null) {
+            sql.append(" AND post_time <= ?");
+        }
+
+        try (PreparedStatement ptm = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+            if (!keyword.isEmpty()) {
+                ptm.setString(index++, "%" + keyword + "%");
+            }
+            if (from != null) {
+                ptm.setTimestamp(index++, from);
+            }
+            if (to != null) {
+                ptm.setTimestamp(index++, to);
+            }
+            ResultSet rs = ptm.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
     public int insertNews(News n) {
         String sql = "INSERT INTO News (news_id, image_url, nameNews, post_time, description, is_active) VALUES (?, ?, ?, ?, ?, ?)";
         int i = 0;
@@ -88,15 +203,15 @@ public class NewsDAO extends DBContext {
         String sql = "SELECT TOP 1 news_id FROM News ORDER BY news_id DESC";
         try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
             if (rs.next()) {
-                String lastId = rs.getString("news_id"); 
-                int num = Integer.parseInt(lastId.substring(1)); 
+                String lastId = rs.getString("news_id");
+                int num = Integer.parseInt(lastId.substring(1));
                 num++; // tăng lên
-                return String.format("N%03d", num); 
+                return String.format("N%03d", num);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "N001"; 
+        return "N001";
     }
 
     public void updateNews(News n) {
@@ -139,7 +254,6 @@ public class NewsDAO extends DBContext {
         }
         return i;
     }
-    
 
     public Vector<News> getLatestNews() {
         Vector<News> list = new Vector<>();
@@ -172,7 +286,7 @@ public class NewsDAO extends DBContext {
 //            System.out.println(news);
 //        }
 //        nDAO.deleteNews("N012");
-News testNews = new News();
+        News testNews = new News();
         testNews.setNewsId("N011");                        // Đảm bảo ID này tồn tại trong DB
         testNews.setImageUrl("https://cdn-media.sforum.vn/storage/app/media/anh-dep-16.jpg");
         testNews.setNameNews("Bài viết cập nhật");
@@ -186,5 +300,4 @@ News testNews = new News();
         System.out.println("Update hoàn tất.");
     }
 
-    }
-
+}

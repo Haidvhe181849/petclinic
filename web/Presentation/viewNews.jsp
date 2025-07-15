@@ -63,8 +63,8 @@
                                     <li>
                                         <a href="#">Services</a>
                                         <ul class="submenu">
-                                            <c:forEach var="s" items="${slist}">
-                                                <li><a href="#">${s.service_name}</a></li>
+                                            <c:forEach var="sv" items="${slist}">
+                                                <li><a href="#">${sv.serviceName}</a></li>
                                                 </c:forEach>
                                         </ul>
                                     </li>
@@ -96,7 +96,8 @@
                                         <a href="#"
                                            class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
                                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-person-circle" style="font-size: 1rem;"></i>
+                                            <img src="${pageContext.request.contextPath}/Presentation/img/images/avata/${user.image}"
+                                                 alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                             <li><a class="dropdown-item"
