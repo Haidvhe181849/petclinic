@@ -313,7 +313,7 @@
                             <label class="form-label"><i class="far fa-clock"></i> Giờ khám</label>
                             <select name="time" id="time" class="form-select" required>
                                 <option selected disabled>-- Chọn giờ --</option>
-                                <option>8:00-9:00</option>
+                                
                             </select>
                         </div>
                     </div>

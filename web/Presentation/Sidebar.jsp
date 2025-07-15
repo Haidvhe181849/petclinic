@@ -20,6 +20,7 @@
 <c:set var="breedActive" value="${currentPage eq 'breed' ? 'font-bold text-blue-500' : ''}" />
 <c:set var="bookingActive" value="${currentPage eq 'booking' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
 <c:set var="feedbackActive" value="${currentPage eq 'feedback' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
+<c:set var="timeActive" value="${currentPage eq 'time' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
 <a class="absolute w-full h-full top-0 left-0 dark:hidden min-h-75 overflow-hidden">
     <img src="${pageContext.request.contextPath}/Presentation/img/hero/hero2.png" class="w-full h-50 object-cover" />
 </a>
@@ -107,6 +108,15 @@
                         <span class="ml-1">Feedback Managerment</span>
                     </a>
                 </li>
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${timeActive}" 
+                       href="${pageContext.request.contextPath}/ClinicWorking">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="text-red-600 ni ni-chat-round"></i>
+                        </div>
+                        <span class="ml-1">Working Time</span>
+                    </a>
+                </li>
             </c:if>
 
             <c:if test="${sessionScope.staff.roleId == 2}">
@@ -168,6 +178,7 @@
                         <span class="ml-1">Feedback Managerment</span>
                     </a>
                 </li>
+                
             </c:if>
 
             <li class="w-full mt-4">
