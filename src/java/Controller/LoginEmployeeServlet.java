@@ -37,6 +37,7 @@ public class LoginEmployeeServlet extends HttpServlet {
         if (employee != null) {
             HttpSession session = request.getSession();
             session.setAttribute("staff", employee);
+       
 
             int role = employee.getRoleId();
             switch (role) {
@@ -47,6 +48,7 @@ public class LoginEmployeeServlet extends HttpServlet {
                     response.sendRedirect("ProfileStaff");
                     break;
                 case 3: // Doctor
+                    session.setAttribute("doctor", employee);
                     response.sendRedirect("ProfileDoctor");
                     break;
                 default:

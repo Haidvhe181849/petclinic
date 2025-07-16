@@ -303,7 +303,6 @@ if (medicineList == null && request.getParameter("service") == null) {
                         <th style="width: 120px;">Name</th>
                         <th style="width: 80px;">Supplier</th>
                         <th style="width: 50px;">Medicine Type</th>
-                        <th style="width: 125px;">Dosage</th>
                         <th style="width: 50px;">Actions</th>
                     </tr>
                 </thead>
@@ -318,9 +317,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                             <td><c:out value="${medicine.medicineName}"/></td>
                             <td><c:out value="${medicine.supplier}"/></td>
                             <td><c:out value="${medicine.type}"/></td>
-                            <td style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <c:out value="${medicine.dosage}"/>
-                            </td>
+                           
 
                             <td class="text-center">
                                 <a href="#"
@@ -333,7 +330,6 @@ if (medicineList == null && request.getParameter("service") == null) {
                                    data-name="${medicine.medicineName}"
                                    data-supplier="${medicine.supplier}"
                                    data-type="${medicine.type}"
-                                   data-dosage="${medicine.dosage}"
                                    title="Update Medicine">
                                     <i class="fa fa-edit"></i> 
                                 </a>
@@ -402,10 +398,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                                 <option value="Vaccine">Vaccine</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label>Dosage</label>
-                            <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required></textarea>
-                        </div>
+                       
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -454,10 +447,7 @@ if (medicineList == null && request.getParameter("service") == null) {
                                 <option value="Vaccine">Vaccine</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label>Dosage</label>
-                            <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required></textarea>
-                        </div>
+                        
                     </div>
                     <input type="hidden" name="medicineId">
                     <div class="modal-footer">
@@ -522,14 +512,14 @@ if (medicineList == null && request.getParameter("service") == null) {
                     var medicineName = $(this).data("name");
                     var supplier = $(this).data("supplier");
                     var type = $(this).data("type");
-                    var dosage = $(this).data("dosage");
+                   
 
                     $("#updateMedicine input[name='medicineId']").val(medicineId);
                     $("#updateMedicine input[name='oldImage']").val(imageUrl);
                     $("#updateMedicine input[name='medicineName']").val(medicineName);
                     $("#updateMedicine input[name='supplier']").val(supplier);
                     $("#updateMedicine input[name='type']").val(type);
-                    $("#updateMedicine input[name='dosage']").val(dosage);
+                   
                 });
             });
     </script>

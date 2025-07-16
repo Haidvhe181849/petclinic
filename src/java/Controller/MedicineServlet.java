@@ -133,7 +133,7 @@ public class MedicineServlet extends HttpServlet {
                     String medicineName = request.getParameter("medicineName").trim();
                     String supplier = request.getParameter("supplier");
                     String type = request.getParameter("type");
-                    String dosage = request.getParameter("dosage");
+                   
 
                     if (medicineDAO.isMedicineNameExists(medicineName)) {
                         request.getSession().setAttribute("message", "Error! Madicine Name Exist.");
@@ -163,7 +163,7 @@ public class MedicineServlet extends HttpServlet {
                         image = folder + "/" + fileName;
                     }
 
-                    Medicine m = new Medicine(medicineId, medicineName, image, supplier, type, dosage);
+                    Medicine m = new Medicine(medicineId, medicineName, image, supplier, type);
                     medicineDAO.addMedicine(m);
 
                     request.getSession().setAttribute("message", "Add medicine successful!");
@@ -185,7 +185,7 @@ public class MedicineServlet extends HttpServlet {
                     String medicineName = request.getParameter("medicineName");
                     String supplier = request.getParameter("supplier");
                     String type = request.getParameter("type");
-                    String dosage = request.getParameter("dosage");
+                    
 
                     String image;
                     Part filePart = request.getPart("imageFile");
@@ -202,7 +202,7 @@ public class MedicineServlet extends HttpServlet {
                         image = request.getParameter("oldImage");
                     }
 
-                    Medicine m = new Medicine(medicineId, medicineName, image, supplier, type, dosage);
+                    Medicine m = new Medicine(medicineId, medicineName, image, supplier, type);
                     medicineDAO.updateMedicine(m);
 
                     request.getSession().setAttribute("message", "Update successful!");

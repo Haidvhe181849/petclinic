@@ -28,6 +28,35 @@ public class MedicineDAO extends DBContext {
         return false;
     }
 
+ 
+    public List<Medicine> getAllMediciness() {
+        List<Medicine> medicineList = new ArrayList<>();
+        String sql = "SELECT medicine_id, medicine_name, image, supplier, type FROM Medicine";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Medicine medicine = new Medicine();
+                medicine.setMedicineId(rs.getString("medicine_id"));
+                medicine.setMedicineName(rs.getString("medicine_name"));
+                medicine.setImage(rs.getString("image"));
+                medicine.setSupplier(rs.getString("supplier"));
+                medicine.setType(rs.getString("type"));
+               
+
+                medicineList.add(medicine);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // hoặc log nếu cần
+        }
+
+        return medicineList;
+    }
+
+
+    
     public List<Medicine> getFilteredMedicines(String keyword, String type, String sortBy) {
         List<Medicine> list = new ArrayList<>();
 
@@ -64,8 +93,8 @@ public class MedicineDAO extends DBContext {
                             rs.getString("medicine_name"),
                             rs.getString("image"),
                             rs.getString("supplier"),
-                            rs.getString("type"),
-                            rs.getString("dosage")
+                            rs.getString("type")
+                           
                     );
                     list.add(m);
                 }
@@ -154,8 +183,8 @@ public class MedicineDAO extends DBContext {
                         rs.getString("medicine_name"),
                         rs.getString("image"),
                         rs.getString("supplier"),
-                        rs.getString("type"),
-                        rs.getString("dosage")
+                        rs.getString("type")
+                        
                 );
                 list.add(m);
             }
@@ -195,8 +224,7 @@ public class MedicineDAO extends DBContext {
                         rs.getString("medicine_name"),
                         rs.getString("image"),
                         rs.getString("supplier"),
-                        rs.getString("type"),
-                        rs.getString("dosage")
+                        rs.getString("type")
                 ));
             }
         }
@@ -205,14 +233,14 @@ public class MedicineDAO extends DBContext {
     }
 
     public void addMedicine(Medicine medicine) throws SQLException {
-        String sql = "INSERT INTO Medicine (medicine_id, medicine_name, image, supplier, type, dosage) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Medicine (medicine_id, medicine_name, image, supplier, type ) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, medicine.getMedicineId());
         ps.setString(2, medicine.getMedicineName());
         ps.setString(3, medicine.getImage());
         ps.setString(4, medicine.getSupplier());
         ps.setString(5, medicine.getType());
-        ps.setString(6, medicine.getDosage());
+        
         ps.executeUpdate();
         ps.close();
     }
@@ -222,15 +250,15 @@ public class MedicineDAO extends DBContext {
         String sql = "SELECT * FROM Medicine";
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(sql);
-
+        
         while (rs.next()) {
             Medicine m = new Medicine(
                     rs.getString("medicine_id"),
                     rs.getString("medicine_name"),
                     rs.getString("image"),
                     rs.getString("supplier"),
-                    rs.getString("type"),
-                    rs.getString("dosage")
+                    rs.getString("type")
+                   
             );
             list.add(m);
         }
@@ -241,14 +269,13 @@ public class MedicineDAO extends DBContext {
     }
 
     public void updateMedicine(Medicine medicine) throws SQLException {
-        String sql = "UPDATE Medicine SET medicine_name = ?, image = ?, supplier = ?, type = ?, dosage = ? WHERE medicine_id = ?";
+        String sql = "UPDATE Medicine SET medicine_name = ?, image = ?, supplier = ?, type = ? WHERE medicine_id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, medicine.getMedicineName());
         ps.setString(2, medicine.getImage());
         ps.setString(3, medicine.getSupplier());
         ps.setString(4, medicine.getType());
-        ps.setString(5, medicine.getDosage());
-        ps.setString(6, medicine.getMedicineId());
+        ps.setString(5, medicine.getMedicineId());
         ps.executeUpdate();
         ps.close();
     }

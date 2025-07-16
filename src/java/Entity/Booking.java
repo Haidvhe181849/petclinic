@@ -67,6 +67,29 @@ public class Booking {
         this.status = status;
     }
 
+    public Booking(String bookingId, String note, LocalDateTime bookingTime, String status, String employeeName, String petName, String serviceName) {
+        this.bookingId = bookingId;
+        this.note = note;
+        this.bookingTime = bookingTime;
+        this.status = status;
+        this.employeeName = employeeName;
+        this.petName = petName;
+        this.serviceName = serviceName;
+    }
+
+    public Booking(String bookingId, LocalDateTime bookingTime, String status, String employeeName, String petName, String serviceName, String formattedDate, String formattedTime) {
+        this.bookingId = bookingId;
+        this.bookingTime = bookingTime;
+        this.formattedDate = formattedDate;
+        this.formattedTime = formattedTime;
+        this.status = status;
+        this.petName = petName;
+        this.serviceName = serviceName;
+        this.employeeName = employeeName;
+    }
+    
+    
+    
     public String getBookingId() {
         return bookingId;
     }

@@ -311,8 +311,7 @@
                 <th style="width: 120px;">Name</th>
                 <th style="width: 80px;">Supplier</th>
                 <th style="width: 50px;">Medicine Type</th>
-                <th style="width: 125px;">Dosage</th>
-
+                
             </tr>
         </thead>
         <tbody>
@@ -330,9 +329,7 @@
                     <td><c:out value="${medicine.medicineName}"/></td>
                     <td><c:out value="${medicine.supplier}"/></td>
                     <td><c:out value="${medicine.type}"/></td>
-                    <td style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <c:out value="${medicine.dosage}"/>
-                    </td>
+                    
 
 
                 </tr>

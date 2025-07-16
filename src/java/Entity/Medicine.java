@@ -14,26 +14,26 @@ public class Medicine {
     private String image;
     private String supplier;
     private String type;
-    private String dosage;
+  
 
     public Medicine() {
     }
 
-    public Medicine(String medicineName, String image, String supplier, String type, String dosage) {
+    public Medicine(String medicineName, String image, String supplier, String type) {
         this.medicineName = medicineName;
         this.image = image;
         this.supplier = supplier;
         this.type = type;
-        this.dosage = dosage;
+        
     }
 
-    public Medicine(String medicineId, String medicineName, String image, String supplier, String type, String dosage) {
+    public Medicine(String medicineId, String medicineName, String image, String supplier, String type) {
         this.medicineId = medicineId;
         this.medicineName = medicineName;
         this.image = image;
         this.supplier = supplier;
         this.type = type;
-        this.dosage = dosage;
+      
     }
 
     public String getMedicineId() {
@@ -75,21 +75,5 @@ public class Medicine {
     public void setType(String type) {
         this.type = type;
     }
-
-    public String getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
-    }
-
-    @Override
-    public String toString() {
-        return "Medicine{" + "medicineId=" + medicineId + ", medicineName=" + medicineName + ", image=" + image + ", supplier=" + supplier + ", type=" + type + ", dosage=" + dosage + '}';
-    }
-
-    
-    
-    
+  
 }

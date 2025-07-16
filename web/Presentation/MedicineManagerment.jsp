@@ -287,7 +287,7 @@
                                         <button class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-green-600 transition-all"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#addServiceModal">
-                                            Add Service
+                                            Add Medicine
                                         </button>
                                     </div>
                                 </div>
@@ -304,7 +304,6 @@
                                                 <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Name</th>
                                                 <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">PriceSupplier</th>
                                                 <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Medicine Type</th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Dosage</th>
                                                 <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
                                             </tr>
                                         </thead>
@@ -331,10 +330,7 @@
                                                         <c:out value="${m.type}"/>
                                                     </td> 
 
-                                                    <!-- Dosage -->
-                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                        <c:out value="${m.dosage}"/>$
-                                                    </td> 
+                                                   
 
 
 
@@ -349,7 +345,6 @@
                                                            data-image="${m.image}"
                                                            data-supplier="${m.supplier}"
                                                            data-type="${m.type}"
-                                                           data-dosage="${m.dosage}"
                                                            data-oldimage="${m.image}"
                                                            title="Edit Medicine">
                                                             <i class="fa fa-edit" ></i> 
@@ -410,10 +405,6 @@
                                         <option value="Oral Drug">Oral Drug</option>
                                         <option value="Vaccine">Vaccine</option>
                                     </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Dosage</label>
-                                    <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -477,10 +468,6 @@
                                         <option value="Vaccine">Vaccine</option>
                                     </select>
                                 </div>
-                                <div class="mb-3">
-                                    <label>Dosage</label>
-                                    <input type="text" pattern="^(?=.*[A-Za-z])(?!\s*$).{2,60}$" name="dosage" class="form-control" rows="3" required>
-                                </div>
                             </div>
                             <input type="hidden" name="medicineId">
                             <div class="modal-footer">
@@ -534,7 +521,6 @@
                             var image = $(this).data("image");
                             var supplier = $(this).data("supplier");
                             var type = $(this).data("type");
-                            var dosage = $(this).data("dosage");
                             var oldImage = $(this).data("oldimage");
 
                             // Debug nhanh: kiểm tra console
@@ -542,8 +528,7 @@
                                     "name:", medicineName,
                                     "image:", image,
                                     "supplier:", supplier,
-                                    "type:", type,
-                                    "dosage:", dosage);
+                                    "type:", type);
 
                             // Đổ giá trị vào các input trong modal
                             $("#editMedicineModal input[name='medicineId']").val(medicineId);
@@ -551,7 +536,6 @@
                             $("#editMedicineModal input[name='image']").val(image);
                             $("#editMedicineModal input[name='supplier']").val(supplier);
                             $("#editMedicineModal input[name='type']").val(type);
-                            $("#editMedicineModal input[name='dosage']").val(dosage);
                             $("#editMedicineModal input[name='oldImage']").val(oldImage);
 
                         });

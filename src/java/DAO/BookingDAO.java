@@ -15,6 +15,8 @@ import java.util.List;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class BookingDAO extends DBContext {
 
@@ -105,6 +107,50 @@ public class BookingDAO extends DBContext {
         }
 
         return "BK001"; // Trả về ID mặc định nếu không tìm thấy ID nào
+    }
+
+    public Booking getBookingById(String bookingId) {
+        String sql = "SELECT b.booking_id, b.user_id, b.employee_id, b.service_id, b.pet_id, b.note, "
+                + "b.booking_time, b.status, "
+                + "e.name AS employee_name, p.name AS pet_name, s.service_name, s.price "
+                + "FROM Booking b "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "LEFT JOIN Pet p ON b.pet_id = p.pet_id "
+                + "LEFT JOIN Service s ON b.service_id = s.service_id "
+                + "WHERE b.booking_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, bookingId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setBookingId(rs.getString("booking_id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setEmployeeId(rs.getString("employee_id"));
+                    booking.setServiceId(rs.getString("service_id"));
+                    booking.setPetId(rs.getString("pet_id"));
+                    booking.setNote(rs.getString("note"));
+
+                    Timestamp timestamp = rs.getTimestamp("booking_time");
+                    if (timestamp != null) {
+                        LocalDateTime dateTime = timestamp.toLocalDateTime();
+                        booking.setBookingTime(dateTime);
+                        booking.setFormattedDate(dateTime.toLocalDate().toString());
+                        booking.setFormattedTime(dateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+                    }
+
+                    booking.setStatus(rs.getString("status"));
+                    booking.setEmployeeName(rs.getString("employee_name"));
+                    booking.setPetName(rs.getString("pet_name"));
+                    booking.setServiceName(rs.getString("service_name"));
+                    booking.setServicePrice(rs.getDouble("price"));
+
+                    return booking;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<String> getBookedTimesForDateAndDoctor(String date, String doctorId) throws SQLException {
@@ -277,6 +323,18 @@ public class BookingDAO extends DBContext {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public boolean updateBookingDone(String bookingId, String status) {
+        String sql = "UPDATE Booking SET status = ? WHERE booking_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setString(2, bookingId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -742,6 +800,47 @@ public class BookingDAO extends DBContext {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<Booking> getConfirmedBookingsByDoctorId(String doctorId) {
+        List<Booking> list = new ArrayList<>();
+        String sql = "SELECT b.booking_id, b.booking_time, b.status, b.note, "
+                + "p.name AS pet_name, s.service_name, s.price, e.name AS employee_name "
+                + "FROM Booking b "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "WHERE b.status = 'Confirmed' AND b.employee_id = ? "
+                + "ORDER BY b.booking_time ASC";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking b = new Booking();
+                b.setBookingId(rs.getString("booking_id"));
+                b.setStatus(rs.getString("status"));
+                b.setNote(rs.getString("note"));
+
+                // DateTime conversion
+                Timestamp ts = rs.getTimestamp("booking_time");
+                if (ts != null) {
+                    LocalDateTime dateTime = ts.toLocalDateTime();
+                    b.setBookingTime(dateTime);
+                    b.setFormattedDate(dateTime.toLocalDate().toString());
+                    b.setFormattedTime(dateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+                }
+
+                b.setPetName(rs.getString("pet_name"));
+                b.setServiceName(rs.getString("service_name"));
+                b.setServicePrice(rs.getDouble("price"));
+                b.setEmployeeName(rs.getString("employee_name"));
+
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
