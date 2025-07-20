@@ -291,7 +291,7 @@
                                                             </a>
 
                                                             <!-- Delete -->
-                                                            <form action="ConfirmBooking" method="post" style="display:inline;" 
+                                                            <form action="ConfirmBooking" method="get" style="display:inline;" 
                                                                   onsubmit="return confirm('Bạn có chắc chắn muốn xoá booking này không?');">
                                                                 <input type="hidden" name="service" value="deleteBooking"/>
                                                                 <input type="hidden" name="bookingId" value="${b.bookingId}"/>

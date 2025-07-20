@@ -6,7 +6,9 @@ package DAO;
  */
 import Entity.ClinicWorking;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,4 +84,28 @@ public class ClinicWorkingDAO {
             stmt.executeUpdate();
         }
     }
+
+    public List<String> getValidTimeSlotsByDate(LocalDate date) throws SQLException {
+    List<String> slots = new ArrayList<>();
+    int dayOfWeek = date.getDayOfWeek().getValue(); // Monday = 1, ..., Sunday = 7
+    if (dayOfWeek == 7) dayOfWeek = 0; // Đổi về đúng với `day_of_week` trong DB
+
+    String sql = "SELECT start_time, end_time FROM ClinicWorking WHERE day_of_week = ? AND is_active = 1";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, dayOfWeek);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                LocalTime start = rs.getTime("start_time").toLocalTime();
+                LocalTime end = rs.getTime("end_time").toLocalTime();
+                while (!start.isAfter(end.minusMinutes(30))) {
+                    slots.add(start.format(DateTimeFormatter.ofPattern("HH:mm")));
+                    start = start.plusMinutes(30);
+                }
+            }
+        }
+    }
+    return slots;
+}
+
+
 }

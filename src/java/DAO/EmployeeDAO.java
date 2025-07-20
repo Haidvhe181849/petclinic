@@ -289,4 +289,40 @@ public class EmployeeDAO {
         }
     }
 
+    public List<Employee> getAvailableDoctorsAtTime(Timestamp ts) throws SQLException {
+    String sql = """
+        SELECT * FROM Employee
+        WHERE role_id = (SELECT role_id FROM Role WHERE role_name = 'Doctor')
+        AND employee_id NOT IN (
+            SELECT employee_id
+            FROM Booking
+            WHERE booking_time = ?
+            AND employee_id IS NOT NULL
+        )
+        AND status = 1
+    """;
+    List<Employee> list = new ArrayList<>();
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setTimestamp(1, ts);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Employee(
+                    rs.getString("employee_id"),
+                    rs.getString("name"),
+                    rs.getString("phone"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("address"),
+                    rs.getString("image"),
+                    rs.getInt("role_id"),
+                    rs.getString("experience"),
+                    rs.getString("working_hours"),
+                    rs.getBoolean("status")
+            ));
+        }
+    }
+    return list;
+}
+
+
 }

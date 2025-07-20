@@ -147,7 +147,7 @@ public class Booking {
     }
 
     public String getFormattedDate() {
-        return bookingTime != null ? bookingTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+        return bookingTime != null ? bookingTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
     }
 
     public void setFormattedDate(String formattedDate) {

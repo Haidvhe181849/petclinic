@@ -1,6 +1,22 @@
 package Controller;
+// Thời gian & định dạng ngày giờ
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
+// Danh sách & map
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+// Ngoại lệ SQL
+import java.sql.SQLException;
 
 import DAO.BookingDAO;
+import DAO.ClinicWorkingDAO;
 import DAO.EmployeeDAO;
 import Entity.Booking;
 import Entity.BookingDetail;
@@ -16,7 +32,11 @@ import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.UUID;
@@ -33,12 +53,66 @@ public class ProfileStaff extends HttpServlet {
         return new BookingDAO(new DBContext().connection);
     }
 
+    private ClinicWorkingDAO getClinicWorkingDAO() {
+        return new ClinicWorkingDAO(new DBContext().connection);
+    }
+
+    private Map<String, List<String>> buildHourSlotMap(List<Date> displayDates, ClinicWorkingDAO workingDAO) {
+        Map<String, List<String>> map = new HashMap<>();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (Date d : displayDates) {
+            LocalDate localDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String key = df.format(localDate);
+            try {
+                List<String> slots = workingDAO.getValidTimeSlotsByDate(localDate); // Gọi DAO
+                map.put(key, slots);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                map.put(key, new ArrayList<>()); // Nếu lỗi hoặc không có ca làm việc, trả về rỗng
+            }
+        }
+
+        return map;
+    }
+
+    private void handleGetAvailableDoctors(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String timeStr = request.getParameter("datetime");
+        System.out.println("🧪 Tham số datetime nhận được: " + timeStr);
+
+        List<Employee> availableDoctors = new ArrayList<>();
+        try {
+            // ✅ Sửa tại đây:
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime dateTime = LocalDateTime.parse(timeStr, formatter);
+            Timestamp ts = Timestamp.valueOf(dateTime);
+            System.out.println("✅ Parsed timestamp: " + ts);
+
+            EmployeeDAO employeeDAO = getEmployeeDAO();
+            availableDoctors = employeeDAO.getAvailableDoctorsAtTime(ts);
+
+            Gson gson = new Gson();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(gson.toJson(availableDoctors));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}"); // tạm in lỗi cụ thể
+        }
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         EmployeeDAO employeeDAO = getEmployeeDAO();
         BookingDAO bookingDAO = getBookingDAO();
+        ClinicWorkingDAO workingDAO = getClinicWorkingDAO();
 
         HttpSession session = request.getSession();
         Employee currentStaff = (Employee) session.getAttribute("staff");
@@ -47,7 +121,13 @@ public class ProfileStaff extends HttpServlet {
             return;
         }
         request.setAttribute("currentStaff", currentStaff);
-        
+
+        String action = request.getParameter("action");
+        if ("availableDoctors".equals(action)) {
+            handleGetAvailableDoctors(request, response);
+            return;
+        }
+
         int pendingBookingCount = getBookingDAO().countBookingsByStatus("Pending");
         request.setAttribute("pendingBookingCount", pendingBookingCount);
 
@@ -78,9 +158,26 @@ public class ProfileStaff extends HttpServlet {
         }
         request.setAttribute("dateList", displayDates);
 
-        List<String> hourSlots = Arrays.asList("08:00", "09:00", "10:00", "11:00", "12:00",
-                "13:00", "14:00", "15:00", "16:00");
-        request.setAttribute("hourSlots", hourSlots);
+        // ===== BUILD HOUR SLOT MAP THEO DATABASE =====
+        Map<String, List<String>> hourSlotMap = new HashMap<>();
+        Set<String> allHourSlotSet = new TreeSet<>(); // Dùng TreeSet để sort theo thứ tự
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (Date d : displayDates) {
+            LocalDate localDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String key = df.format(localDate);
+            try {
+                List<String> slots = workingDAO.getValidTimeSlotsByDate(localDate);
+                hourSlotMap.put(key, slots);
+                allHourSlotSet.addAll(slots);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                hourSlotMap.put(key, new ArrayList<>()); // Nếu lỗi thì vẫn gán rỗng
+            }
+        }
+        request.setAttribute("hourSlotMap", hourSlotMap);
+        request.setAttribute("allHourSlots", new ArrayList<>(allHourSlotSet)); // Gửi xuống JSP
 
         List<java.sql.Date> sqlDates = new ArrayList<>();
         for (String d : dateKeys) {
@@ -103,17 +200,19 @@ public class ProfileStaff extends HttpServlet {
         Map<String, List<String>> doctorBusyMap = new HashMap<>();
         for (Booking b : bookingList) {
             String date = b.getBookingTime().toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String hour = b.getBookingTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
-            String key = date + "_" + hour;
+            String time = b.getBookingTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+            String key = date + "_" + time;
+
             if (b.getEmployeeId() != null) {
                 doctorBusyMap.computeIfAbsent(key, k -> new ArrayList<>()).add(b.getEmployeeId());
             }
         }
         request.setAttribute("doctorBusyMap", doctorBusyMap);
 
+// Dùng cho client-side JavaScript nếu bạn muốn xử lý động
         Gson gson = new Gson();
-        request.setAttribute("doctorListJson", gson.toJson(doctorList));
         request.setAttribute("doctorBusyMapJson", gson.toJson(doctorBusyMap));
+        request.setAttribute("doctorListJson", gson.toJson(doctorList));
 
         request.getRequestDispatcher("/Presentation/ProfileStaff.jsp").forward(request, response);
     }
