@@ -66,23 +66,20 @@
                                                 <a href="#">Services</a>
                                                 <ul class="submenu">
                                                     <c:forEach var="sv" items="${slist}">
-                                                        <li><a href="#">${sv.serviceName}</a></li>
+                                                        <li><a href="BookingForm?serviceId=${sv.serviceId}">${sv.serviceName}</a></li>
                                                         </c:forEach>
                                                 </ul>
                                             </li>
                                             <li><a
                                                     href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
                                             </li>
-                                            <li><a href="#">Doctor</a></li>
-                                                <c:if test="${sessionScope.user.roleId == 4}">
+                                            <c:if test="${sessionScope.user.roleId == 4}">
                                                 <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
                                                 </c:if>
                                             <li><a
                                                     href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                             </li>
-                                            <li><a
-                                                    href="${pageContext.request.contextPath}/about-us">AboutUs</a>
-                                            </li>
+
                                         </ul>
                                     </nav>
                                 </div>
@@ -217,58 +214,42 @@
         </div>
     </div>
     <!-- Slider Area End -->
-    <!--? Our Services Start -->
+    <!-- Our Services Start -->
     <div class="our-services section-padding30">
         <div class="container">
             <div class="row justify-content-sm-center">
-                <div class="cl-xl-7 col-lg-8 col-md-10">
-                    <!-- Section Tittle -->
+                <div class="col-xl-7 col-lg-8 col-md-10">
                     <div class="section-tittle text-center mb-70">
                         <span>Our Professional Services</span>
                         <h2>Best Pet Care Services</h2>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class=" col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-services text-center mb-30">
-                        <div class="services-ion">
-                            <span class="flaticon-animal-kingdom"></span>
+
+            <!-- Scrollable card container -->
+            <div style="overflow-x: auto; white-space: nowrap; padding: 10px 0;">
+                <c:forEach var="s" items="${slist}">
+                    <div class="single-services text-center mb-30"
+                         style="display: inline-block; width: 300px; height: 360px; margin-right: 20px; vertical-align: top; border: 1px solid #eee; padding: 16px 16px 10px 16px; border-radius: 15px; background: #FEEEF2; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s;">
+
+                        <!-- Ảnh dịch vụ: to hơn -->
+                        <div class="services-ion mb-2">
+                            <img src="${s.image}" alt="${s.serviceName}"
+                                 style="width: 260px; height: 260px; border-radius: 10px; object-fit: cover;" />
                         </div>
-                        <div class="services-cap">
-                            <h5><a href="#">Pet Boarding</a></h5>
-                            <p>consectetur adipiscing elit, serfd dgo eiusmod tempor incididunt ut ore
-                                et
-                                dolore magna aliqua.</p>
-                        </div>
+
+                        <!-- Tên dịch vụ -->
+                        <h5 style="font-weight: 600; font-size: 17px; margin: 10px 0 5px 0;">
+                            <c:out value="${s.serviceName}" />
+                        </h5>
+
+                        <!-- Mô tả: giới hạn 2 dòng -->
+                        <p style="font-size: 14px; color: #555; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                            ${s.description}
+                        </p>
                     </div>
-                </div>
-                <div class=" col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-services text-center mb-30">
-                        <div class="services-ion">
-                            <span class="flaticon-animals"></span>
-                        </div>
-                        <div class="services-cap">
-                            <h5><a href="#">Pet Treatment</a></h5>
-                            <p>consectetur adipiscing elit, serfd dgo eiusmod tempor incididunt ut ore
-                                et
-                                dolore magna aliqua.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class=" col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-services text-center mb-30">
-                        <div class="services-ion">
-                            <span class="flaticon-animals-1"></span>
-                        </div>
-                        <div class="services-cap">
-                            <h5><a href="#">Vaccinations</a></h5>
-                            <p>consectetur adipiscing elit, serfd dgo eiusmod tempor incididunt ut ore
-                                et
-                                dolore magna aliqua.</p>
-                        </div>
-                    </div>
-                </div>
+
+                </c:forEach>
             </div>
         </div>
     </div>
@@ -277,48 +258,31 @@
     <div class="about-area fix">
         <!--Right Contents  -->
         <div class="about-img">
-            <div class="info-man text-center">
-                <div class="head-cap">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         width="28px" height="39px">
-                    <path fill-rule="evenodd" fill="rgb(255, 255, 255)"
-                          d="M24.000,19.000 C21.791,19.000 20.000,17.209 20.000,15.000 C20.000,12.790 21.791,11.000 24.000,11.000 C26.209,11.000 28.000,12.790 28.000,15.000 C28.000,17.209 26.209,19.000 24.000,19.000 ZM24.000,8.000 C21.791,8.000 20.000,6.209 20.000,4.000 C20.000,1.790 21.791,-0.001 24.000,-0.001 C26.209,-0.001 28.000,1.790 28.000,4.000 C28.000,6.209 26.209,8.000 24.000,8.000 ZM14.000,38.999 C11.791,38.999 10.000,37.209 10.000,35.000 C10.000,32.791 11.791,31.000 14.000,31.000 C16.209,31.000 18.000,32.791 18.000,35.000 C18.000,37.209 16.209,38.999 14.000,38.999 ZM14.000,29.000 C11.791,29.000 10.000,27.209 10.000,25.000 C10.000,22.791 11.791,21.000 14.000,21.000 C16.209,21.000 18.000,22.791 18.000,25.000 C18.000,27.209 16.209,29.000 14.000,29.000 ZM14.000,19.000 C11.791,19.000 10.000,17.209 10.000,15.000 C10.000,12.790 11.791,11.000 14.000,11.000 C16.209,11.000 18.000,12.790 18.000,15.000 C18.000,17.209 16.209,19.000 14.000,19.000 ZM14.000,8.000 C11.791,8.000 10.000,6.209 10.000,4.000 C10.000,1.790 11.791,-0.001 14.000,-0.001 C16.209,-0.001 18.000,1.790 18.000,4.000 C18.000,6.209 16.209,8.000 14.000,8.000 ZM4.000,29.000 C1.791,29.000 -0.000,27.209 -0.000,25.000 C-0.000,22.791 1.791,21.000 4.000,21.000 C6.209,21.000 8.000,22.791 8.000,25.000 C8.000,27.209 6.209,29.000 4.000,29.000 ZM4.000,19.000 C1.791,19.000 -0.000,17.209 -0.000,15.000 C-0.000,12.790 1.791,11.000 4.000,11.000 C6.209,11.000 8.000,12.790 8.000,15.000 C8.000,17.209 6.209,19.000 4.000,19.000 ZM4.000,8.000 C1.791,8.000 -0.000,6.209 -0.000,4.000 C-0.000,1.790 1.791,-0.001 4.000,-0.001 C6.209,-0.001 8.000,1.790 8.000,4.000 C8.000,6.209 6.209,8.000 4.000,8.000 ZM24.000,21.000 C26.209,21.000 28.000,22.791 28.000,25.000 C28.000,27.209 26.209,29.000 24.000,29.000 C21.791,29.000 20.000,27.209 20.000,25.000 C20.000,22.791 21.791,21.000 24.000,21.000 Z" />
-                    </svg>
-                    <h3>354</h3>
-                </div>
-                <p>Success<br>Treatment</p>
-            </div>
-            <div class="info-man info-man2 text-center">
-                <div class="head-cap">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         width="28px" height="39px">
-                    <path fill-rule="evenodd" fill="rgb(255, 255, 255)"
-                          d="M24.000,19.000 C21.791,19.000 20.000,17.209 20.000,15.000 C20.000,12.790 21.791,11.000 24.000,11.000 C26.209,11.000 28.000,12.790 28.000,15.000 C28.000,17.209 26.209,19.000 24.000,19.000 ZM24.000,8.000 C21.791,8.000 20.000,6.209 20.000,4.000 C20.000,1.790 21.791,-0.001 24.000,-0.001 C26.209,-0.001 28.000,1.790 28.000,4.000 C28.000,6.209 26.209,8.000 24.000,8.000 ZM14.000,38.999 C11.791,38.999 10.000,37.209 10.000,35.000 C10.000,32.791 11.791,31.000 14.000,31.000 C16.209,31.000 18.000,32.791 18.000,35.000 C18.000,37.209 16.209,38.999 14.000,38.999 ZM14.000,29.000 C11.791,29.000 10.000,27.209 10.000,25.000 C10.000,22.791 11.791,21.000 14.000,21.000 C16.209,21.000 18.000,22.791 18.000,25.000 C18.000,27.209 16.209,29.000 14.000,29.000 ZM14.000,19.000 C11.791,19.000 10.000,17.209 10.000,15.000 C10.000,12.790 11.791,11.000 14.000,11.000 C16.209,11.000 18.000,12.790 18.000,15.000 C18.000,17.209 16.209,19.000 14.000,19.000 ZM14.000,8.000 C11.791,8.000 10.000,6.209 10.000,4.000 C10.000,1.790 11.791,-0.001 14.000,-0.001 C16.209,-0.001 18.000,1.790 18.000,4.000 C18.000,6.209 16.209,8.000 14.000,8.000 ZM4.000,29.000 C1.791,29.000 -0.000,27.209 -0.000,25.000 C-0.000,22.791 1.791,21.000 4.000,21.000 C6.209,21.000 8.000,22.791 8.000,25.000 C8.000,27.209 6.209,29.000 4.000,29.000 ZM4.000,19.000 C1.791,19.000 -0.000,17.209 -0.000,15.000 C-0.000,12.790 1.791,11.000 4.000,11.000 C6.209,11.000 8.000,12.790 8.000,15.000 C8.000,17.209 6.209,19.000 4.000,19.000 ZM4.000,8.000 C1.791,8.000 -0.000,6.209 -0.000,4.000 C-0.000,1.790 1.791,-0.001 4.000,-0.001 C6.209,-0.001 8.000,1.790 8.000,4.000 C8.000,6.209 6.209,8.000 4.000,8.000 ZM24.000,21.000 C26.209,21.000 28.000,22.791 28.000,25.000 C28.000,27.209 26.209,29.000 24.000,29.000 C21.791,29.000 20.000,27.209 20.000,25.000 C20.000,22.791 21.791,21.000 24.000,21.000 Z" />
-                    </svg>
-                    <h3>354</h3>
-                </div>
-                <p>Success<br>Treatment</p>
-            </div>
+
         </div>
         <!-- left Contents -->
         <div class="about-details">
             <div class="right-caption">
                 <!-- Section Tittle -->
                 <div class="section-tittle mb-50">
-                    <h2>We are commited for<br> better service</h2>
+                    <h2>Chúng tôi cam kết mang đến<br> dịch vụ tốt nhất cho thú cưng của bạn</h2>
                 </div>
                 <div class="about-more">
-                    <p class="pera-top">Mollit anim laborum duis adseu dolor iuyn voluptcate velit ess
-                        <br>cillum dolore egru lofrre dsu.
+                    <p class="pera-top">
+                        Sức khỏe và hạnh phúc của thú cưng luôn là ưu tiên hàng đầu tại PetCare. 
+                        Chúng tôi không chỉ chữa bệnh, mà còn chăm sóc toàn diện về thể chất và tinh thần cho thú cưng của bạn.
                     </p>
-                    <p class="mb-65 pera-bottom">Mollit anim laborum.Dvcuis aute serunt iruxvfg
-                        dhjkolohr
-                        indd re voluptate velit esscillumlore eu quife nrulla parihatur. Excghcepteur
-                        sfwsignjnt occa cupidatat non aute iruxvfg dhjinulpadeserunt moll.</p>
-                    <a href="#" class="btn">Read More</a>
+                    <p class="mb-65 pera-bottom">
+                        ✅ Đội ngũ bác sĩ thú y tận tâm và giàu kinh nghiệm<br>
+                        ✅ Trang thiết bị hiện đại, tiệt trùng và an toàn<br>
+                        ✅ Tư vấn miễn phí và hỗ trợ chăm sóc sau điều trị<br>
+                        ✅ Luôn minh bạch, trách nhiệm và đồng hành cùng khách hàng<br>
+                        Chúng tôi tin rằng, thú cưng khỏe mạnh – gia đình hạnh phúc.
+                    </p>
                 </div>
             </div>
         </div>
+
     </div>
     <!-- About Area End-->
     <!--? Gallery Area Start -->
@@ -363,139 +327,53 @@
         </div>
     </div>
     <!-- Gallery Area End -->
-    <!--? Contact form Start -->
 
-    <!-- contact left Img-->
-
-    <!-- Contact form End -->
     <!--? Team Start -->
     <div class="team-area section-padding30">
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="cl-xl-7 col-lg-8 col-md-10">
-                    <!-- Section Tittle -->
                     <div class="section-tittle text-center mb-70">
-                        <span>Our Professional members </span>
-                        <h2>Our Team Mambers</h2>
+                        <span>Our Professional members</span>
+                        <h2>Our Team Members</h2>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <!-- single Tem -->
-                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-">
-                    <div class="single-team mb-30">
-                        <div class="team-img">
-                            <img src="img/gallery/team1.png" alt="">
-                        </div>
-                        <div class="team-caption">
-                            <span>Mike Janathon</span>
-                            <h3><a href="#">Doctor</a></h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-">
-                    <div class="single-team mb-30">
-                        <div class="team-img">
-                            <img src="img/gallery/team2.png" alt="">
-                        </div>
-                        <div class="team-caption">
-                            <span>Mike J Smith</span>
-                            <h3><a href="#">Doctor</a></h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-">
-                    <div class="single-team mb-30">
-                        <div class="team-img">
-                            <img src="img/gallery/team3.png" alt="">
-                        </div>
-                        <div class="team-caption">
-                            <span>Pule W Smith</span>
-                            <h3><a href="#">Doctor</a></h3>
+                <c:forEach var="doc" items="${dlist}">
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                        <div class="single-team mb-30 text-center" style="border: 1px solid #eee; padding: 20px; border-radius: 15px; background-color: #fffafc; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+
+                            <!-- Ảnh bác sĩ -->
+                            <div class="team-img mb-3">
+                                <img src="${doc.image}" alt="${doc.name}" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover;">
+                            </div>
+
+                            <!-- Tên bác sĩ -->
+                            <div class="team-caption">
+                                <h4 style="font-weight: 600;">${doc.name}</h4>
+
+                                <!-- Kinh nghiệm -->
+                                <p style="font-size: 14px; margin-bottom: 15px;">
+                                    ${doc.experience}
+                                </p>
+
+                                <!-- Nút đặt lịch -->
+                                <a href="BookingForm?doctorId=${doc.employeeId}"
+                                   style="background-color: #000; color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; text-decoration: none; display: inline-block;">
+                                    Đặt lịch
+                                </a>
+
+                            </div>
                         </div>
                     </div>
-                </div>
+                </c:forEach>
             </div>
         </div>
     </div>
     <!-- Team End -->
-    <!--? Testimonial Start -->
-    <div class="testimonial-area testimonial-padding section-bg"
-         data-background="img/gallery/section_bg03.png">
-        <div class="container">
-            <!-- Testimonial contents -->
-            <div class="row d-flex justify-content-center">
-                <div class="col-xl-8 col-lg-8 col-md-10">
-                    <div class="h1-testimonial-active dot-style">
-                        <!-- Single Testimonial -->
-                        <div class="single-testimonial text-center">
-                            <div class="testimonial-caption ">
-                                <!-- founder -->
-                                <div class="testimonial-founder">
-                                    <div class="founder-img mb-40">
-                                        <img src="img/gallery/testi-logo.png" alt="">
-                                        <span>Margaret Lawson</span>
-                                        <p>Creative Director</p>
-                                    </div>
-                                </div>
-                                <div class="testimonial-top-cap">
-                                    <p>"I am at an age where I just want to be fit and healthy our
-                                        bodies
-                                        are our responsibility! So start caring for your body and it
-                                        will
-                                        care for you. Eat clean it will care for you and workout hard."
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single Testimonial -->
-                        <div class="single-testimonial text-center">
-                            <div class="testimonial-caption ">
-                                <!-- founder -->
-                                <div class="testimonial-founder">
-                                    <div class="founder-img mb-40">
-                                        <img src="img/gallery/testi-logo.png" alt="">
-                                        <span>Margaret Lawson</span>
-                                        <p>Creative Director</p>
-                                    </div>
-                                </div>
-                                <div class="testimonial-top-cap">
-                                    <p>"I am at an age where I just want to be fit and healthy our
-                                        bodies
-                                        are our responsibility! So start caring for your body and it
-                                        will
-                                        care for you. Eat clean it will care for you and workout hard."
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single Testimonial -->
-                        <div class="single-testimonial text-center">
-                            <div class="testimonial-caption ">
-                                <!-- founder -->
-                                <div class="testimonial-founder">
-                                    <div class="founder-img mb-40">
-                                        <img src="img/gallery/testi-logo.png" alt="">
-                                        <span>Margaret Lawson</span>
-                                        <p>Creative Director</p>
-                                    </div>
-                                </div>
-                                <div class="testimonial-top-cap">
-                                    <p>"I am at an age where I just want to be fit and healthy our
-                                        bodies
-                                        are our responsibility! So start caring for your body and it
-                                        will
-                                        care for you. Eat clean it will care for you and workout hard."
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Testimonial End -->
+
     <!--? Blog start -->
     <div class="home_blog-area section-padding30">
         <div class="container">
@@ -503,83 +381,37 @@
                 <div class="cl-xl-7 col-lg-8 col-md-10">
                     <!-- Section Tittle -->
                     <div class="section-tittle text-center mb-70">
-                        <span>Oure recent news</span>
+                        <span>Our recent news</span>
                         <h2>Our Recent Blog</h2>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-blogs mb-30">
-                        <div class="blog-img">
-                            <img src="img/gallery/blog1.png" alt="">
-                        </div>
-                        <div class="blogs-cap">
-                            <div class="date-info">
-                                <span>Pet food</span>
-                                <p>Nov 30, 2020</p>
+                <c:forEach var="r" items="${top3News}">
+                    <div class="col-xl-4 col-lg-4 col-md-6 d-flex">
+                        <div class="single-blogs mb-30 h-100 d-flex flex-column">
+                            <div class="blog-img">
+                                <img src="${r.imageUrl}" alt="News Image">
                             </div>
-                            <h4>Amazing Places To Visit In Summer</h4>
-                            <a href="blog_details.html" class="read-more1">Read more</a>
+                            <div class="blogs-cap flex-grow-1 d-flex flex-column">
+                                <div class="date-info">
+                                    <span>Pet food</span>
+                                    <p><fmt:formatDate value="${r.postTime}" pattern="MMM dd, yyyy"/></p>
+                                </div>
+                                <h4>${r.nameNews}</h4>
+                                <p class="flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                    ${r.description}
+                                </p>
+                                <a href="newsdetail?id=${r.newsId}" class="read-more1 mt-auto">Read more</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-blogs mb-30">
-                        <div class="blog-img">
-                            <img src="img/gallery/blog2.png" alt="">
-                        </div>
-                        <div class="blogs-cap">
-                            <div class="date-info">
-                                <span>Pet food</span>
-                                <p>Nov 30, 2020</p>
-                            </div>
-                            <h4>Developing Creativithout Losing Visual</h4>
-                            <a href="blog_details.html" class="read-more1">Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-blogs mb-30">
-                        <div class="blog-img">
-                            <img src="img/gallery/blog3.png" alt="">
-                        </div>
-                        <div class="blogs-cap">
-                            <div class="date-info">
-                                <span>Pet food</span>
-                                <p>Nov 30, 2020</p>
-                            </div>
-                            <h4>Winter Photography Tips from Glenn</h4>
-                            <a href="blog_details.html" class="read-more1">Read more</a>
-                        </div>
-                    </div>
-                </div>
+
+                </c:forEach>
             </div>
         </div>
     </div>
     <!-- Blog End -->
-    <!--? contact-animal-owner Start -->
-    <div class="contact-animal-owner section-bg" data-background="img/gallery/section_bg04.png">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="contact_text text-center">
-                        <div class="section_title text-center">
-                            <h3>Any time you can call us!</h3>
-                            <p>Because we know that even the best technology is only as good as the
-                                people
-                                behind it. 24/7 tech support.</p>
-                        </div>
-                        <div class="contact_btn d-flex align-items-center justify-content-center">
-                            <a href="contact.html" class="btn white-btn">Contact Us</a>
-                            <p>Or<a href="#"> +880 4664 216</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- contact-animal-owner End -->
 </main>
 <footer>
     <!-- Footer Start-->

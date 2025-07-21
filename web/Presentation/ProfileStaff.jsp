@@ -134,7 +134,7 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2 col-md-2 d-flex align-items-center">
                             <div class="logo">
-                                <a href="${pageContext.request.contextPath}/Home">
+                                <a href="${pageContext.request.contextPath}/homeemployee">
                                     <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" alt="PetCare Logo">
                                 </a>
                             </div>

@@ -208,5 +208,35 @@ public class DoctorDAO {
 
         return list;
     }
+    
+    public List<Employee> getAllDoctors1() {
+        List<Employee> doctors = new ArrayList<>();
+        String sql = "SELECT * FROM Employee WHERE role_id = 3";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Employee doctor = new Employee();
+                doctor.setEmployeeId(rs.getString("employee_id"));
+                doctor.setName(rs.getString("name"));
+                doctor.setImage(rs.getString("image"));
+                doctor.setPhone(rs.getString("phone"));
+                doctor.setEmail(rs.getString("email"));
+                doctor.setPassword(rs.getString("password"));
+                doctor.setAddress(rs.getString("address"));
+                doctor.setRoleId(rs.getInt("role_id"));
+                doctor.setExperience(rs.getString("experience"));
+                doctor.setWorkingHours(rs.getString("working_hours"));
+                doctor.setStatus("Active".equalsIgnoreCase(rs.getString("status")));
+
+                doctors.add(doctor);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return doctors;
+    }
 
 }

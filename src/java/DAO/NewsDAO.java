@@ -43,6 +43,27 @@ public class NewsDAO extends DBContext {
         return listNews;
     }
 
+    public News getNewsByID(String id) {
+        String sql = "SELECT * FROM News WHERE news_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new News(
+                        rs.getString("news_id"),
+                        rs.getString("image_url"),
+                        rs.getString("nameNews"),
+                        rs.getTimestamp("post_time"),
+                        rs.getString("description"),
+                        rs.getBoolean("is_active")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Vector<News> searchNews(String sql) {
         Vector<News> listNews = new Vector<>();
 
@@ -90,7 +111,7 @@ public class NewsDAO extends DBContext {
         return listNews;
     }
 
-    public Vector<News> filterNews(String keyword, String status, Timestamp from, Timestamp to, String order, int offset, int limit) {
+    public Vector<News> filterNews(String keyword, String status, Timestamp from, Timestamp to, String order) {
         Vector<News> list = new Vector<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM News WHERE 1=1");
 
@@ -108,9 +129,12 @@ public class NewsDAO extends DBContext {
         if (to != null) {
             sql.append(" AND post_time <= ?");
         }
-        sql.append(" ORDER BY post_time ").append(order);
-        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
+        if ("asc".equalsIgnoreCase(order)) {
+            sql.append(" ORDER BY post_time ASC");
+        } else if ("desc".equalsIgnoreCase(order)) {
+            sql.append(" ORDER BY post_time DESC");
+        }
         try (PreparedStatement ptm = connection.prepareStatement(sql.toString())) {
             int index = 1;
             if (!keyword.isEmpty()) {
@@ -122,8 +146,6 @@ public class NewsDAO extends DBContext {
             if (to != null) {
                 ptm.setTimestamp(index++, to);
             }
-            ptm.setInt(index++, offset);
-            ptm.setInt(index++, limit);
 
             ResultSet rs = ptm.executeQuery();
             while (rs.next()) {
@@ -140,46 +162,6 @@ public class NewsDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
-    }
-
-    public int countFilteredNews(String keyword, String status, Timestamp from, Timestamp to) {
-        int count = 0;
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM News WHERE 1=1");
-
-        if (!keyword.isEmpty()) {
-            sql.append(" AND nameNews LIKE ?");
-        }
-        if ("active".equals(status)) {
-            sql.append(" AND is_active = 1");
-        } else if ("inactive".equals(status)) {
-            sql.append(" AND is_active = 0");
-        }
-        if (from != null) {
-            sql.append(" AND post_time >= ?");
-        }
-        if (to != null) {
-            sql.append(" AND post_time <= ?");
-        }
-
-        try (PreparedStatement ptm = connection.prepareStatement(sql.toString())) {
-            int index = 1;
-            if (!keyword.isEmpty()) {
-                ptm.setString(index++, "%" + keyword + "%");
-            }
-            if (from != null) {
-                ptm.setTimestamp(index++, from);
-            }
-            if (to != null) {
-                ptm.setTimestamp(index++, to);
-            }
-            ResultSet rs = ptm.executeQuery();
-            if (rs.next()) {
-                count = rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return count;
     }
 
     public int insertNews(News n) {
@@ -258,6 +240,29 @@ public class NewsDAO extends DBContext {
     public Vector<News> getLatestNews() {
         Vector<News> list = new Vector<>();
         String sql = "SELECT TOP 5 * FROM News WHERE is_active = 1 ORDER BY post_time DESC";
+
+        try (PreparedStatement ptm = connection.prepareStatement(sql)) {
+            ResultSet rs = ptm.executeQuery();
+            while (rs.next()) {
+                News n = new News(
+                        rs.getString("news_id"),
+                        rs.getString("image_url"),
+                        rs.getString("nameNews"),
+                        rs.getTimestamp("post_time"), // vì bạn dùng java.util.Date
+                        rs.getString("description"),
+                        rs.getBoolean("is_active")
+                );
+                list.add(n);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+    public Vector<News> getTop3News() {
+        Vector<News> list = new Vector<>();
+        String sql = "SELECT TOP 3 * FROM News WHERE is_active = 1 ORDER BY post_time DESC";
 
         try (PreparedStatement ptm = connection.prepareStatement(sql)) {
             ResultSet rs = ptm.executeQuery();

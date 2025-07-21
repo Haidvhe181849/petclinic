@@ -42,7 +42,7 @@ public class LoginEmployeeServlet extends HttpServlet {
             int role = employee.getRoleId();
             switch (role) {
                 case 1: // Admin
-                    response.sendRedirect("News?service=listNews");
+                    response.sendRedirect("http://localhost:9998/PetClinic/Presentation/Dashbroard.jsp");
                     break;
                 case 2: // Staff
                     response.sendRedirect("ProfileStaff");

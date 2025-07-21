@@ -119,7 +119,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/homeemployee">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -144,17 +144,15 @@
                                             <input type="hidden" name="service" value="blist" />
 
                                             <!-- Search by Booking ID -->
-                                            <input type="text" name="bookingId" style="min-width: 150px"
-                                                   placeholder="Booking ID..." value="${param.bookingId}" />
+                                            <input type="text" name="keyword" style="min-width: 300px"
+                                                   placeholder="Booking ID hoặc tên bác sĩ..." value="${param.keyword}" />
 
                                             <!-- Status Filter -->
                                             <select name="status" class="form-select form-select-sm w-auto">
                                                 <option value="">All Status</option>
                                                 <option value="Pending" ${param.status == 'Pending' ? 'selected' : ''}>Pending</option>
                                                 <option value="Confirmed" ${param.status == 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                                                <option value="Completed" ${param.status == 'Completed' ? 'selected' : ''}>Completed</option>
                                                 <option value="Cancelled" ${param.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                                                <option value="Failed" ${param.status == 'Failed' ? 'selected' : ''}>Failed</option>
                                             </select>
 
                                             <!-- From Date -->
@@ -189,128 +187,130 @@
                             </div>
                             <div class="flex-auto px-0 pt-0 pb-2">
                                 <div class="p-0 overflow-x-auto">
-                                        <table class="items-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
-                                            <thead class="align-bottom">
+                                    <table class="items-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
+                                        <thead class="align-bottom">
+                                            <tr>
+                                        <thead>
+                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking ID</th>
+                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Customer</th>
+                                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pet</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Type</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Service</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Doctor</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking Time</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status</th>
+                                        <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Accept</th>
+                                        <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="b" items="${blist}">
                                                 <tr>
-                                            <thead>
-                                            <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking ID</th>
-                                            <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Customer</th>
-                                            <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Pet</th>
-                                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Type</th>
-                                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Service</th>
-                                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Doctor</th>
-                                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Booking Time</th>
-                                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status</th>
-                                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Accept</th>
-                                            <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-collapse border-solid shadow-none dark:border-white/40 dark:text-white tracking-none whitespace-nowrap text-slate-400 opacity-70">Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="b" items="${blist}">
-                                                    <tr>
-                                                        <!-- Booking ID -->
-                                                        <td>
-                                                            <c:out value="${b.bookingId}" />
-                                                        </td>
+                                                    <!-- Booking ID -->
+                                                    <td>
+                                                        <c:out value="${b.bookingId}" />
+                                                    </td>
 
-                                                        <!-- Customer Name -->
-                                                        <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
-                                                            <c:out value="${b.customerName}" />
-                                                        </td>
+                                                    <!-- Customer Name -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-left text-black">
+                                                        <c:out value="${b.customerName}" />
+                                                    </td>
 
-                                                        <!-- Pet Name -->
-                                                        <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                            <c:out value="${b.petName}" />
-                                                        </td>
+                                                    <!-- Pet Name -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.petName}" />
+                                                    </td>
 
-                                                        <!-- Pet Type -->
-                                                        <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                            <c:out value="${b.petType}" />
-                                                        </td>
+                                                    <!-- Pet Type -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.petType}" />
+                                                    </td>
 
-                                                        <!-- Service Name -->
-                                                        <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                            <c:out value="${b.serviceName}" />
-                                                        </td>
+                                                    <!-- Service Name -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.serviceName}" />
+                                                    </td>
 
-                                                        <!-- Doctor Name -->
-                                                        <td class="...">
-                                                            <c:choose>
-                                                                <c:when test="${not empty b.employeeName}">
-                                                                    <c:out value="${b.employeeName}" />
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    Not selected yet
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
+                                                    <!-- Doctor Name -->
+                                                    <td class="...">
+                                                        <c:choose>
+                                                            <c:when test="${not empty b.employeeName}">
+                                                                <c:out value="${b.employeeName}" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                Not selected yet
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
 
-                                                        <!-- Booking Time -->
-                                                        <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                            <fmt:formatDate value="${b.bookingTime}" pattern="yyyy-MM-dd HH:mm" />
-                                                        </td>
-                                                        <!-- Status -->
-                                                        <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
-                                                            <c:out value="${b.status}" />
-                                                        </td>
+                                                    <!-- Booking Time -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <fmt:formatDate value="${b.bookingTime}" pattern="yyyy-MM-dd HH:mm" />
+                                                    </td>
+                                                    <!-- Status -->
+                                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
+                                                        <c:out value="${b.status}" />
+                                                    </td>
 
-                                                        <!-- Accept -->
-                                                        <td class="text-center">
-                                                            <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
-                                                                <input type="hidden" name="service" value="updateStatus" />
-                                                                <input type="hidden" name="bookingId" value="${b.bookingId}" />
+                                                    <!-- Accept -->
+                                                    <td class="text-center">
+                                                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
+                                                            <input type="hidden" name="service" value="updateStatus" />
+                                                            <input type="hidden" name="bookingId" value="${b.bookingId}" />
 
-                                                                <select name="status"
-                                                                        class="text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 p-1 bg-white dark:bg-slate-800 dark:text-white"
-                                                                        onchange="handleStatusChange(this, '${b.bookingId}')">
-                                                                    <option value="Confirmed">Choose Status</option>
-                                                                    <c:if test="${b.status eq 'Pending' || b.status eq 'Processing Cancel'}">
-                                                                        <option value="Confirmed">Confirmed</option>
-                                                                        <option value="Failed">Failed</option>
-                                                                    </c:if>
+                                                            <select name="status"
+                                                                    class="text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 p-1 bg-white dark:bg-slate-800 dark:text-white"
+                                                                    onchange="handleStatusChange(this, '${b.bookingId}')"
+                                                                    data-current-status="${b.status}">
 
-                                                                    <c:if test="${b.status ne 'Pending' && b.status ne 'Processing Cancel'}">
-                                                                        <option value="${b.status}" selected>${b.status}</option>
-                                                                    </c:if>
+                                                                <option value="Pending">Choose Status</option>
+                                                                <c:if test="${b.status eq 'Pending' || b.status eq 'Cancelled_Pending'}">
+                                                                    <option value="Confirmed">Confirmed</option>
+                                                                    <option value="Cancelled">Cancelled</option>
+                                                                </c:if>
 
-                                                                </select>
+                                                                <c:if test="${b.status ne 'Pending' && b.status ne 'Cancelled_Pending'}">
+                                                                    <option value="${b.status}" selected>${b.status}</option>
+                                                                </c:if>
 
-                                                                <!-- Hiện input nhập lý do khi chọn Failed -->
-                                                                <div id="cancelReasonDiv-${b.bookingId}" style="display:none; margin-top: 5px;">
-                                                                    <input type="text" name="cancelReason" placeholder="Enter cancel reason"
-                                                                           class="text-sm p-1 rounded border border-red-400 w-full" />
-                                                                </div>
-                                                            </form>
-                                                        </td>
-                                                        <!-- Actions -->
-                                                        <td class="text-center">
-                                                            <a href="ConfirmBooking?service=bookingDetail&bookingId=${b.bookingId}"
-                                                               class="text-blue-600 hover:text-blue-800 me-2"
-                                                               title="Xem chi tiết">
-                                                                <i class="fa fa-eye"></i>
-                                                            </a>
+                                                            </select>
 
-                                                            <!-- View Invoice -->
-                                                            <a href="${pageContext.request.contextPath}/ViewInvoice?bookingId=${b.bookingId}"
-                                                               class="text-green-600 hover:text-green-800 me-2"
-                                                               title="Xem hóa đơn">
-                                                                <i class="fas fa-file-invoice"></i>
-                                                            </a>
+                                                            <!-- Hiện input nhập lý do khi chọn Cancelled -->
+                                                            <div id="cancelReasonDiv-${b.bookingId}" style="display:none; margin-top: 5px;">
+                                                                <input type="text" name="cancelReason" placeholder="Enter cancel reason"
+                                                                       class="text-sm p-1 rounded border border-red-400 w-full" />
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                    <!-- Actions -->
+                                                    <td class="text-center">
+                                                        <a href="ConfirmBooking?service=bookingDetail&bookingId=${b.bookingId}"
+                                                           class="text-blue-600 hover:text-blue-800"
+                                                           title="Xem chi tiết">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
 
-                                                            <!-- Delete -->
-                                                            <form action="ConfirmBooking" method="post" style="display:inline;" 
-                                                                  onsubmit="return confirm('Bạn có chắc chắn muốn xoá booking này không?');">
-                                                                <input type="hidden" name="service" value="deleteBooking"/>
-                                                                <input type="hidden" name="bookingId" value="${b.bookingId}"/>
-                                                                <button type="submit" class="text-red-600 hover:text-red-800" title="Xoá">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>        
+                                                        <!-- View Invoice -->
+                                                        <a href="${pageContext.request.contextPath}/ViewInvoice?bookingId=${b.bookingId}"
+                                                           class="text-green-600 hover:text-green-800 me-2"
+                                                           title="Xem hóa đơn">
+                                                            <i class="fas fa-file-invoice"></i>
+                                                        </a>
+
+                                                        <!-- Delete -->
+                                                        <form action="ConfirmBooking" method="get" style="display:inline;" 
+                                                              onsubmit="return confirm('Bạn có chắc chắn muốn xoá booking này không?');">
+                                                            <input type="hidden" name="service" value="deleteBooking"/>
+                                                            <input type="hidden" name="bookingId" value="${b.bookingId}"/>
+                                                            <button type="submit" class="text-red-600 hover:text-red-800" title="Xoá">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>        
                                 </div>
                             </div>
                         </div>
@@ -334,33 +334,7 @@
 
                 <c:remove var="message" scope="session"/>
             </c:if>
-            <div id="failStatusModal" class="modal fade" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/ConfirmBooking" method="post">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Cancel Reason</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
 
-                            <div class="modal-body">
-                                <input type="hidden" name="service" value="updateStatus" />
-                                <input type="hidden" name="bookingId" />
-                                <input type="hidden" name="status" />
-                                <div class="mb-3">
-                                    <label for="cancelReason" class="form-label">Reason for Cancellation</label>
-                                    <textarea name="cancelReason" class="form-control" required></textarea>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             <!-- Booking Detail Modal -->
             <c:if test="${not empty bookingDetail}">
@@ -383,7 +357,7 @@
                         <div><strong>Note:</strong> ${bookingDetail.note}</div>
                         <div><strong>Status:</strong> ${bookingDetail.status}</div>
 
-                        <c:if test="${bookingDetail.status eq 'Failed'}">
+                        <c:if test="${bookingDetail.status eq 'Cancelled'}">
                             <div class="text-red-600 col-span-2"><strong>Cancel Reason:</strong> ${bookingDetail.cancelReason}</div>
                         </c:if>
 
@@ -428,7 +402,7 @@
                         $("#BookingDetailModal textarea[name='note']").val("${bookingDetail.note}");
                     });
 
-                    if ("${bookingDetail.status}" === "Failed") {
+                    if ("${bookingDetail.status}" === "Cancelled") {
                         $("textarea[name='cancelReason']").closest(".mb-3").show();
                     } else {
                         $("textarea[name='cancelReason']").closest(".mb-3").hide();
@@ -442,7 +416,7 @@
             function handleStatusChange(selectElement, bookingId) {
                 var selectedValue = selectElement.value;
 
-                if (selectedValue === "Failed") {
+                if (selectedValue === "Cancelled") {
                     // Gán giá trị vào modal để biết booking nào đang sửa
                     $('#failStatusModal input[name="bookingId"]').val(bookingId);
                     $('#failStatusModal input[name="status"]').val(selectedValue);
@@ -459,25 +433,23 @@
         <script>
             function handleStatusChange(selectElement, bookingId) {
                 const selectedValue = selectElement.value;
-
-                // Ẩn hoặc hiện div lý do nếu đang dùng inline div
+                const currentStatus = selectElement.dataset.currentStatus;
                 const reasonDiv = document.getElementById('cancelReasonDiv-' + bookingId);
-                if (reasonDiv) {
-                    reasonDiv.style.display = (selectedValue === 'Failed') ? 'block' : 'none';
-                }
 
-                if (selectedValue === "Failed") {
-                    $('#failStatusModal input[name="bookingId"]').val(bookingId);
-                    $('#failStatusModal input[name="status"]').val(selectedValue);
-                    $('#failStatusModal').modal('show');
+                // Chỉ hiện ô nhập lý do nếu chọn Cancelled và trạng thái hiện tại KHÔNG phải là Cancelled_Pending
+                if (selectedValue === 'Cancelled' && currentStatus !== 'Cancelled_Pending') {
+                    if (reasonDiv) {
+                        reasonDiv.style.display = 'block';
+                    }
                 } else {
-                    // Submit form ngay nếu chọn Confirm
+                    if (reasonDiv) {
+                        reasonDiv.style.display = 'none';
+                    }
+                    // Submit luôn nếu không cần lý do
                     selectElement.form.submit();
                 }
             }
-
         </script>
-
 
 
         <script>

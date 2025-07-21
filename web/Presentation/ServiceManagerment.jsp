@@ -128,7 +128,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/homeemployee">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -284,7 +284,8 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label>Name</label>
-                                    <input type="text" name="service_name" class="form-control" required>
+                                    <input type="text" name="service_name" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
+                                           title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự.">
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>
@@ -340,7 +341,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Name</label>
-                                    <input type="text" name="service_name" class="form-control" required>
+                                    <input type="text" name="service_name" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
+                                           title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự.">
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>

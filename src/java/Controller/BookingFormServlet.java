@@ -26,6 +26,7 @@ import java.sql.Connection;
  */
 @WebServlet("/BookingForm")
 public class BookingFormServlet extends HttpServlet {
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -43,7 +44,12 @@ public class BookingFormServlet extends HttpServlet {
             PetDAO petDAO = new PetDAO(conn);
             EmployeeDAO eDAO = new EmployeeDAO(conn);
             ServiceDAO serviceDAO = new ServiceDAO(conn);
-
+            String selectedServiceId = request.getParameter("serviceId");
+            String selectedDoctorId = request.getParameter("doctorId");
+            
+            
+            request.setAttribute("selectedServiceId", selectedServiceId);
+            request.setAttribute("selectedDoctorId", selectedDoctorId);
             request.setAttribute("services", serviceDAO.getAllService("SELECT * FROM Service Where status = 1"));
             request.setAttribute("pets", petDAO.getPetsByOwnerId(user.getUserId()));
             request.setAttribute("doctors", eDAO.getAllDoctor());

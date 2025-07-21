@@ -4,7 +4,11 @@
  */
 package Controller;
 
+import DAO.DoctorDAO;
+import DAO.NewsDAO;
 import DAO.ServiceDAO;
+import Entity.Employee;
+import Entity.News;
 import Entity.Service;
 import Utility.DBContext;
 import java.sql.Connection;
@@ -15,7 +19,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Vector;
+
 
 /**
  *
@@ -53,10 +59,15 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         try (Connection conn = new DBContext().connection) {
             ServiceDAO sDAO = new ServiceDAO(conn);
+            DoctorDAO dDAO = new DoctorDAO(conn);
+            NewsDAO nDAO = new NewsDAO();
             Vector<Service> slist = sDAO.getAllService("SELECT * FROM Service WHERE status = 1");
-
+            List<Employee> dlist = dDAO.getAllDoctors1();
+            Vector<News> top3News = nDAO.getTop3News();
             // Gửi dữ liệu sang JSP
             request.setAttribute("slist", slist);
+            request.setAttribute("dlist", dlist);
+            request.setAttribute("top3News", top3News);
             request.getRequestDispatcher("Presentation/Home.jsp").forward(request, response);
 
         } catch (Exception e) {

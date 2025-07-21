@@ -136,7 +136,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/homeemployee">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -329,11 +329,14 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Title</label>
-                                    <input type="text" name="nameNews" class="form-control" required>
+                                    <input type="text" name="nameNews" class="form-control" required pattern="^(?!\s*$).{5,100}$"
+                                           title="Tiêu đề không được để trống và từ 5 đến 100 ký tự">
                                 </div>
                                 <div class="mb-3">
                                     <label>Description</label>
-                                    <textarea name="description" class="form-control" rows="10" required></textarea>
+                                    <textarea name="description" class="form-control" rows="10"
+                                              required minlength="20" maxlength="5000"
+                                              title="Mô tả từ 20 đến 5000 ký tự"></textarea>
                                 </div>
 
                                 <div class="mb-3">
@@ -388,8 +391,9 @@
                                     <input type="file" name="imageFile" class="form-control" accept="image/*">
                                 </div>
                                 <div class="mb-3">
-                                    <label>Name</label>
-                                    <input type="text" name="nameNews" class="form-control" required>
+                                    <label>Title</label>
+                                    <input type="text" name="nameNews" class="form-control" required pattern="^(?!\s*$).{5,100}$"
+                                           title="Tiêu đề không được để trống và từ 5 đến 100 ký tự">
                                 </div>
                                 <div class="mb-3">
                                     <label>Time</label>
@@ -397,7 +401,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Description</label>
-                                    <textarea name="description" class="form-control" rows="10" required></textarea>
+                                    <textarea name="description" class="form-control" rows="10"
+                                              required minlength="20" maxlength="5000"
+                                              title="Mô tả từ 20 đến 5000 ký tự"></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label>Active</label><br>

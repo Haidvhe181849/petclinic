@@ -63,20 +63,6 @@ public class BookingDAO extends DBContext {
             return false;
         }
     }
-    
-    public int getTotalBookings() {
-        String sql = "SELECT COUNT(*) FROM Booking";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     public boolean insertBookingDetail(String bookingId, UserAccount user) {
         String sql = "INSERT INTO BookingDetail (booking_id, name, phone, email, actual_checkin_time, is_cancelled, cancel_reason) "
@@ -320,11 +306,13 @@ public class BookingDAO extends DBContext {
             e.printStackTrace();
         }
 
-        if ("Failed".equals(status)) {
-            String detailSql = "UPDATE BookingDetail SET cancel_reason = ?, is_cancelled = 1 WHERE booking_id = ?";
+        // Ghi lý do và trạng thái cancel_detail
+        if ("Cancelled".equals(status) || "Cancelled_Pending".equals(status)) {
+            String detailSql = "UPDATE BookingDetail SET cancel_reason = ?, is_cancelled = ? WHERE booking_id = ?";
             try (PreparedStatement ps2 = connection.prepareStatement(detailSql)) {
                 ps2.setString(1, cancelReason);
-                ps2.setString(2, bookingId);
+                ps2.setInt(2, "Cancelled".equals(status) ? 1 : 0); // 1 = staff chấp nhận hủy, 0 = đang chờ
+                ps2.setString(3, bookingId);
                 ps2.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -338,6 +326,35 @@ public class BookingDAO extends DBContext {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void updateBookingStatus1(String bookingId, String status, String cancelReason) throws SQLException {
+        String sql = "UPDATE Booking SET status = ?, updated_at = GETDATE() WHERE booking_id = ?";
+        String sqlDetail = "UPDATE BookingDetail SET cancel_reason = ? WHERE booking_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); PreparedStatement ps2 = connection.prepareStatement(sqlDetail)) {
+            ps.setString(1, status);
+            ps.setString(2, bookingId);
+            ps.executeUpdate();
+
+            ps2.setString(1, cancelReason);
+            ps2.setString(2, bookingId);
+            ps2.executeUpdate();
+        }
+    }
+
+    public String getBookingStatus(String bookingId) {
+        String sql = "SELECT status FROM Booking WHERE booking_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("status");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public boolean updateBookingDone(String bookingId, String status) {
@@ -529,8 +546,10 @@ public class BookingDAO extends DBContext {
         List<Object> params = new ArrayList<>();
 
         if (keyword != null && !keyword.trim().isEmpty()) {
-            sql.append("AND b.booking_id LIKE ? ");
-            params.add("%" + keyword.trim().replaceAll("\\s+", "%") + "%");
+            sql.append("AND (b.booking_id LIKE ? OR e.name LIKE ?) ");
+            String likeKeyword = "%" + keyword.trim().replaceAll("\\s+", "%") + "%";
+            params.add(likeKeyword);
+            params.add(likeKeyword);
         }
 
         if (status != null && !status.isEmpty()) {
@@ -855,6 +874,21 @@ public class BookingDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public int getTotalBookings() {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Bookings";
+
+        try (
+             PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+            if (rs.next()) {
+                total = rs.getInt(1);  // Lấy cột COUNT(*) = tổng số dòng
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
     }
 
 }

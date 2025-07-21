@@ -111,99 +111,7 @@
     <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
         <div class="absolute w-full bg-blue-500 dark:hidden min-h-75"></div>
         <!-- sidenav  -->
-        <aside class="fixed top-0 left-0 z-990 xl:ml-6 xl:left-0 xl:translate-x-0
-               max-w-64 w-64 h-screen bg-white dark:bg-slate-850
-               shadow-xl rounded-2xl transition-transform duration-200 transform -translate-x-full xl:relative flex flex-col"
-               aria-expanded="false">
-            <div class="h-19">
-                <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden" sidenav-close></i>
-                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
-                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
-                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
-
-                </a>
-            </div>
-
-            <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
-            <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2"
-                 style="height: calc(100vh - 5rem);">
-
-                <ul class="flex flex-col pl-0 mb-0">
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/dashboard">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Statistics</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/manage-about-us">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-world-2"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">About Us Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/feedback-management">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-chat-round"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Management</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>           
-        </aside>
+        <jsp:include page="/Presentation/Sidebar.jsp" />
 
         <!-- end sidenav -->
 
@@ -234,7 +142,6 @@
                     </div>
                 </div>
             </nav>
-
             <!-- end Navbar -->
 
             <!-- cards -->
@@ -346,10 +253,10 @@
                                 <div class="flex justify-between items-center">
                                     <div>
                                         <h6 class="capitalize dark:text-white">${chartTitle}</h6>
-                                <p class="mb-0 text-sm leading-normal dark:text-white dark:opacity-60">
-                                    <i class="fa fa-arrow-up text-emerald-500"></i>
+                                        <p class="mb-0 text-sm leading-normal dark:text-white dark:opacity-60">
+                                            <i class="fa fa-arrow-up text-emerald-500"></i>
                                             <span class="font-semibold">Revenue Overview</span>
-                                </p>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -395,7 +302,7 @@
                                 </div>
                                 <div class="relative mb-8">
                                     <div class="flex mb-2 justify-between">
-                                                    <div>
+                                        <div>
                                             <h6 class="mb-0 text-sm leading-normal dark:text-white">
                                                 ${selectedPeriod == 'month' ? '<strong>Monthly Revenue</strong>' : 'Monthly Revenue'}
                                             </h6>
@@ -405,11 +312,11 @@
                                                 <fmt:formatNumber value="${monthlyRevenue}" type="currency" currencySymbol="$" />
                                             </h6>
                                         </div>
-                                            </div>
+                                    </div>
                                     <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div class="h-1 bg-emerald-500 rounded-full" style="width: 100%"></div>
-                                            </div>
-                                        </div>
+                                    </div>
+                                </div>
                                 <div class="relative">
                                     <div class="flex mb-2 justify-between">
                                         <div>
@@ -422,12 +329,12 @@
                                                 <fmt:formatNumber value="${yearlyRevenue}" type="currency" currencySymbol="$" />
                                             </h6>
                                         </div>
-                                        </div>
+                                    </div>
                                     <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
                                         <div class="h-1 bg-orange-500 rounded-full" style="width: 100%"></div>
-                                            </div>
-                                        </div>
-                                
+                                    </div>
+                                </div>
+
                                 <div class="mt-8 text-center">
                                     <div class="p-3 bg-gray-100 rounded-lg">
                                         <h6 class="mb-0 text-sm font-bold">
@@ -440,7 +347,7 @@
                                             Revenue: <fmt:formatNumber value="${filteredRevenue}" type="currency" currencySymbol="$" />
                                         </p>
                                     </div>
-                                        </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -467,90 +374,90 @@
     <!-- JavaScript for the chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Setup chart data
-            var ctx = document.getElementById('revenue-chart').getContext('2d');
-            
-            // Get data passed from the servlet
-            var labels = [
-                <c:forEach var="label" items="${last7DaysLabels}" varStatus="status">
-                    "${label}"${!status.last ? ',' : ''}
-                </c:forEach>
-            ];
-            
-            var data = [
-                <c:forEach var="value" items="${last7DaysData}" varStatus="status">
-                    ${value}${!status.last ? ',' : ''}
-                </c:forEach>
-            ];
-            
-            var chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Daily Revenue ($)',
-                        data: data,
-                        backgroundColor: 'rgba(66, 135, 245, 0.2)',
-                        borderColor: 'rgba(66, 135, 245, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(66, 135, 245, 1)',
-                        pointRadius: 4,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Last 7 Days Revenue',
-                            font: {
-                                size: 16
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '$' + context.parsed.y.toFixed(2);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false,
-                                display: true,
-                                drawOnChartArea: true,
-                                drawTicks: false,
-                                borderDash: [5, 5]
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value;
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                drawBorder: false,
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false
-                            }
-                        }
-                    }
-                }
-            });
-        });
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            // Setup chart data
+                                            var ctx = document.getElementById('revenue-chart').getContext('2d');
+
+                                            // Get data passed from the servlet
+                                            var labels = [
+        <c:forEach var="label" items="${last7DaysLabels}" varStatus="status">
+                                            "${label}"${!status.last ? ',' : ''}
+        </c:forEach>
+                                            ];
+
+                                            var data = [
+        <c:forEach var="value" items="${last7DaysData}" varStatus="status">
+            ${value}${!status.last ? ',' : ''}
+        </c:forEach>
+                                            ];
+
+                                            var chart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: labels,
+                                                    datasets: [{
+                                                            label: 'Daily Revenue ($)',
+                                                            data: data,
+                                                            backgroundColor: 'rgba(66, 135, 245, 0.2)',
+                                                            borderColor: 'rgba(66, 135, 245, 1)',
+                                                            borderWidth: 2,
+                                                            pointBackgroundColor: 'rgba(66, 135, 245, 1)',
+                                                            pointRadius: 4,
+                                                            tension: 0.4,
+                                                            fill: true
+                                                        }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    plugins: {
+                                                        legend: {
+                                                            display: true,
+                                                            position: 'top'
+                                                        },
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Last 7 Days Revenue',
+                                                            font: {
+                                                                size: 16
+                                                            }
+                                                        },
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function (context) {
+                                                                    return '$' + context.parsed.y.toFixed(2);
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: true,
+                                                            grid: {
+                                                                drawBorder: false,
+                                                                display: true,
+                                                                drawOnChartArea: true,
+                                                                drawTicks: false,
+                                                                borderDash: [5, 5]
+                                                            },
+                                                            ticks: {
+                                                                callback: function (value) {
+                                                                    return '$' + value;
+                                                                }
+                                                            }
+                                                        },
+                                                        x: {
+                                                            grid: {
+                                                                drawBorder: false,
+                                                                display: false,
+                                                                drawOnChartArea: false,
+                                                                drawTicks: false
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        });
     </script>
     <!-- plugin for charts  -->
     <script src="${pageContext.request.contextPath}/Presentation/js/plugins/chartjs.min.js" async></script>

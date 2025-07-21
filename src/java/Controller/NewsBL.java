@@ -36,29 +36,23 @@ import java.util.Optional;
 @WebServlet(name = "NewsBL", urlPatterns = {"/News"})
 public class NewsBL extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private String saveFile(Part filePart, String folder, HttpServletRequest request) throws IOException {
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        if (fileName == null || fileName.isEmpty()) {
+            return null;
+        }
 
+        String uploadPath = request.getServletContext().getRealPath("/Presentation/img/" + folder);
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        filePart.write(uploadPath + File.separator + fileName);
+
+        return "Presentation/img/" + folder + "/" + fileName;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -74,9 +68,7 @@ public class NewsBL extends HttpServlet {
             String name = Optional.ofNullable(request.getParameter("name")).orElse("").trim();
             String pageParam = request.getParameter("page");
 
-            int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
-            int pageSize = 5;
-            int offset = (currentPage - 1) * pageSize;
+            
 
             Timestamp fromDate = null, toDate = null;
             try {
@@ -89,9 +81,9 @@ public class NewsBL extends HttpServlet {
             } catch (Exception ignored) {
             }
 
-            Vector<News> newsList = nDAO.filterNews(name, status, fromDate, toDate, order, offset, pageSize);
-            int total = nDAO.countFilteredNews(name, status, fromDate, toDate);
-            int totalPages = (int) Math.ceil(total * 1.0 / pageSize);
+            Vector<News> newsList = nDAO.filterNews(name, status, fromDate, toDate, order);
+            
+           
             Vector<News> top5 = nDAO.getLatestNews();
 
             // Set attributes
@@ -102,8 +94,6 @@ public class NewsBL extends HttpServlet {
             request.setAttribute("status", status);
             request.setAttribute("fromDate", fromDateStr);
             request.setAttribute("toDate", toDateStr);
-            request.setAttribute("currentPage", currentPage);
-            request.setAttribute("totalPages", totalPages);
             request.setAttribute("currentPage", "news");
             request.getRequestDispatcher("Presentation/NewsManagerment.jsp").forward(request, response);
         } else if ("deleteNews".equals(service)) {
@@ -139,28 +129,12 @@ public class NewsBL extends HttpServlet {
         if ("addNews".equals(service)) {
             String newsId = nDAO.generateNextNewsId();
             String nameNews = request.getParameter("nameNews");
+            Part imagePart = request.getPart("imageFile");
+            String imagePath = saveFile(imagePart, "images/news", request);
             String description = request.getParameter("description");
             Boolean isActive = Boolean.valueOf(request.getParameter("isActive"));
             Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
-
-            Part filePart = request.getPart("imageFile");
-            String imageUrl;
-
-            if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                String uploadPath = getServletContext().getRealPath("/") + "img/news";
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-
-                filePart.write(uploadPath + File.separator + fileName);
-                imageUrl = "img/news/" + fileName;
-            } else {
-                imageUrl = "img/news/default.jpg";
-            }
-
-            News news = new News(newsId, imageUrl, nameNews, timestampNow, description, isActive);
+            News news = new News(newsId, imagePath, nameNews, timestampNow, description, isActive);
             nDAO.insertNews(news);
 
             request.getSession().setAttribute("message", "Added successful!");
@@ -171,25 +145,11 @@ public class NewsBL extends HttpServlet {
             Timestamp postTime = new Timestamp(System.currentTimeMillis());
             String description = request.getParameter("description");
             Boolean isActive = "1".equals(request.getParameter("isActive"));
+            String oldImage = request.getParameter("oldImage");
+            Part imagePart = request.getPart("imageFile");
+            String imagePath = imagePart.getSize() > 0 ? saveFile(imagePart, "images/news", request) : oldImage;
 
-            Part filePart = request.getPart("imageFile");
-            String imageUrl;
-
-            if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null && !filePart.getSubmittedFileName().isEmpty()) {
-                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                String uploadPath = getServletContext().getRealPath("/") + "img/news";
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-
-                filePart.write(uploadPath + File.separator + fileName);
-                imageUrl = "img/news/" + fileName;
-            } else {
-                imageUrl = request.getParameter("oldImage");
-            }
-
-            News news = new News(newsId, imageUrl, nameNews, postTime, description, isActive);
+            News news = new News(newsId, imagePath, nameNews, postTime, description, isActive);
             nDAO.updateNews(news);
 
             request.getSession().setAttribute("message", "Update successful!");

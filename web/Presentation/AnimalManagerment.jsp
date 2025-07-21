@@ -128,7 +128,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/homeemployee">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -257,7 +257,8 @@
                     <form class="modal-content" action="Animal" method="post" enctype="multipart/form-data">
                         <div class="modal-header"><h5 class="modal-title">Add Animal Type</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                         <div class="modal-body">
-                            <div class="mb-3"><label>Name</label><input name="typeName" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự"></div>
+                            <div class="mb-3"><label>Name</label><input name="typeName" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
+                                                                        title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự."></div>
                             <div class="mb-3"><label>Image</label><input type="file" name="image" accept="image/*" class="form-control" required></div>
                             <input type="hidden" name="status" value="true">
                             <input type="hidden" name="service" value="addType">
@@ -289,7 +290,8 @@
                         <div class="modal-header"><h5 class="modal-title">Edit Animal Type</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                         <div class="modal-body">
                             <input type="hidden" name="typeId">
-                            <div class="mb-3"><label>Name</label><input name="typeName" class="form-control" required></div>
+                            <div class="mb-3"><label>Name</label><input name="typeName" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
+                                                                        title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự."></div>
                             <div class="mb-3"><label>Image</label><input type="file" name="image" class="form-control"><input type="hidden" name="oldImage"></div>
                             <div class="mb-3">
                                 <label>Status</label>

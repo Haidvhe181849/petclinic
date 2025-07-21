@@ -166,57 +166,55 @@
                                         <li><a
                                                 href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
                                         </li>
-                                        <li><a href="#">Doctor</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
                                             <c:if test="${sessionScope.user.roleId == 3}">
                                             <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
                                             </c:if>
                                         <li><a
                                                 href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                         </li>
-                                        <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 4}">
-                                            <li><a href="#">Managerment</a>
-                                                <ul class="submenu">
-                                                    <li><a href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">Booking</a></li>
-                                                    <li><a href="#">Service</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">Medicine</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/Presentation/ManageAboutUsAdmin.jsp">About Us</a></li>
-                                                </ul>
-                                            </li>
-                                        </c:if>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
                         <!-- User info -->
-                        <div
-                            class="col-xl-3 col-lg-3 col-md-3 d-flex align-items-center justify-content-end">
+                        <div class="col-xl-3 col-lg-3 col-md-3 d-flex align-items-center justify-content-end">
                             <c:choose>
                                 <c:when test="${not empty sessionScope.user}">
                                     <div class="header-user-info">
-                                        <span>Hi, ${sessionScope.user.name}</span>
-                                        <a href="${pageContext.request.contextPath}/logout"
-                                           class="header-btn custom-auth-btn">Đăng xuất</a>
+                                        <span>Xin chào, ${sessionScope.user.email}</span>
                                         <div class="dropdown">
                                             <a href="#"
                                                class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
                                                id="userDropdown" data-bs-toggle="dropdown"
                                                aria-expanded="false">
-                                                <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                                <img src="${pageContext.request.contextPath}/Presentation/img/images/avata/${user.image}"
+                                                     alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 aria-labelledby="userDropdown">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ProfileCustomer">Trang cá nhân</a></li>
                                                 <li><a class="dropdown-item"
                                                        href="${pageContext.request.contextPath}/ViewBooking">Xem lịch khám
-                                                    </a></li>
-                                                <li><a class="dropdown-item"
-                                                       href="${pageContext.request.contextPath}/change-password">Đổi
-                                                        mật khẩu</a></li>
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a></li>
+                                                <li><a class="dropdown-item text-danger fw-bold" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+
+                                                <c:if
+                                                    test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2}">
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li><a class="dropdown-item"
+                                                           href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">Managerment</a></li>
+
+                                                </c:if>
                                             </ul>
                                         </div>
                                     </div>
                                 </c:when>
-
                                 <c:otherwise>
                                     <div class="header-user-info">
                                         <a href="${pageContext.request.contextPath}/login"
@@ -285,10 +283,11 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label"><i class="fas fa-stethoscope"></i> Chọn dịch vụ</label>
-                            <select name="serviceId" id="service" class="form-select" required>
-                                <option value="">-- Vui lòng chọn dịch vụ --</option>
+                            <select name="serviceId" class="form-control">
                                 <c:forEach var="s" items="${services}">
-                                    <option value="${s.serviceId}">${s.serviceName} - ${s.price} VNĐ</option>
+                                    <option value="${s.serviceId}" ${s.serviceId == selectedServiceId ? "selected" : ""}>
+                                        ${s.serviceName}
+                                    </option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -301,7 +300,7 @@
                             <select name="doctorId" id="doctorId" class="form-select" onchange="loadAvailableTimes()">
                                 <option value="">-- Không chọn bác sĩ --</option>
                                 <c:forEach var="doc" items="${doctors}">
-                                    <option value="${doc.employeeId}">${doc.name}</option>
+                                    <option value="${doc.employeeId}" ${doc.employeeId == selectedDoctorId ? "selected" : ""}>${doc.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -313,7 +312,7 @@
                             <label class="form-label"><i class="far fa-clock"></i> Giờ khám</label>
                             <select name="time" id="time" class="form-select" required>
                                 <option selected disabled>-- Chọn giờ --</option>
-                                
+
                             </select>
                         </div>
                     </div>

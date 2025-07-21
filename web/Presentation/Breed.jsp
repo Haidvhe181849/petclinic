@@ -128,7 +128,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/homeemployee">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -286,7 +286,8 @@
                             <input type="hidden" name="service" value="addBreed">
                             <div class="mb-3">
                                 <label>Name</label>
-                                <input name="breed_name" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên giống không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
+                                <input name="breed_name" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
+                                       title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự.">
                             </div>
                             <div class="mb-3">
                                 <label>Animal Type</label>
@@ -333,7 +334,8 @@
                             <input type="hidden" name="oldImage">
                             <div class="mb-3">
                                 <label>Name</label>
-                                <input name="breed_name" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên giống không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
+                                <input name="breed_name" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
+                                       title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự.">
                             </div>
                             <div class="mb-3">
                                 <label>Animal Type</label>

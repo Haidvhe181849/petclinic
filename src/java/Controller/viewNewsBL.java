@@ -9,98 +9,75 @@ import DAO.ServiceDAO;
 import Entity.News;
 import Entity.Service;
 import Utility.DBContext;
+
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.util.Vector;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.util.Vector;
+import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @author LENOVO
- */
 @WebServlet(name = "viewNewsBL", urlPatterns = {"/viewNews"})
 public class viewNewsBL extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        DBContext db = new DBContext();
-        Connection conn = db.connection;
-        ServiceDAO sDAO = new ServiceDAO(conn);
-        NewsDAO nDAO = new NewsDAO();
-
-        String service = request.getParameter("service");
-        if (service == null || service.equals("listNews") || service.equals("nlist")) {
-            String submit = request.getParameter("submit");
-            Vector<News> nlist;
-            Vector<News> lastNews = nDAO.getLatestNews();
-            Vector<Service> slist = sDAO.getAllService("Select*from Service");
-            if (submit != null) {
-                String name = request.getParameter("name");
-                nlist = nDAO.searchNews("Select*from News\n"
-                        + "Where nameNews like N'%" + name + "%'");
-                request.setAttribute("nameNews", name);
-            } else {
-                nlist = nDAO.getAllNews();
-            }
-            request.setAttribute("slist", slist);
-            request.setAttribute("nlist", nlist);
-            request.setAttribute("top5News", lastNews);
-            request.getRequestDispatcher("Presentation/viewNews.jsp").forward(request, response);
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        DBContext db = new DBContext();
+        Connection conn = db.connection;
+        NewsDAO nDAO = new NewsDAO();
+        ServiceDAO sDAO = new ServiceDAO(conn);
+
+
+        String submit = request.getParameter("submit");
+        String newsId = request.getParameter("id"); 
+        Vector<News> nlist;
+        Vector<News> lastNews = nDAO.getLatestNews();
+        Vector<Service> slist = sDAO.getAllService("SELECT * FROM Service");
+
+        // ✅ Nếu có newsId → vào trang chi tiết
+        if (newsId != null && !newsId.trim().isEmpty()) {
+            News newsDetail = nDAO.getNewsByID(newsId);
+            if (newsDetail != null) {
+                request.setAttribute("newsDetail", newsDetail);
+                request.setAttribute("top5", lastNews);
+                request.getRequestDispatcher("Presentation/NewsDetail.jsp").forward(request, response);
+                return;
+            } else {
+                response.sendRedirect("error.jsp");
+                return;
+            }
+        }
+
+        // ✅ Nếu là tìm kiếm
+        if (submit != null) {
+            String name = request.getParameter("name");
+            nlist = nDAO.searchNews("SELECT * FROM News WHERE nameNews LIKE N'%" + name + "%'");
+            request.setAttribute("nameNews", name);
+        } else {
+            nlist = nDAO.getAllNews();
+        }
+
+        request.setAttribute("slist", slist);
+        request.setAttribute("nlist", nlist);
+        request.setAttribute("top5News", lastNews);
+        request.getRequestDispatcher("Presentation/viewNews.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Chuyển hướng mọi POST về GET
+        response.sendRedirect("viewNews");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet xử lý xem danh sách và chi tiết tin tức";
+    }
 }

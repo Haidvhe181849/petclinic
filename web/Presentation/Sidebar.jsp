@@ -40,10 +40,10 @@
 
     <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2" style="height: calc(100vh - 5rem);">
         <ul class="flex flex-col pl-0 mb-0">
-            <c:if test="${sessionScope.user.roleId == 1}">
+            <c:if test="${sessionScope.staff.roleId == 1}">
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${dashboardActive}" 
-                       href="${pageContext.request.contextPath}/dashboard">
+                       href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="text-blue-500 ni ni-tv-2"></i>
                         </div>
@@ -130,13 +130,13 @@
                     </a>
                 </li>
                 <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/manage-about-us">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-world-2"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">About Us Management</span>
-                        </a>
-                    </li>
+                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/manage-about-us">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-world-2"></i>
+                        </div>
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">About Us Management</span>
+                    </a>
+                </li>
 
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${serviceActive}" 
@@ -185,21 +185,22 @@
                         <span class="ml-1">Feedback Managerment</span>
                     </a>
                 </li>
-                
+
             </c:if>
 
             <li class="w-full mt-4">
                 <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
             </li>
-
-            <li class="mt-0.5 w-full">
-                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="ProfileStaff">
-                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                        <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
-                    </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
-                </a>
-            </li>
+            <c:if test="${sessionScope.staff.roleId == 2}">
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="ProfileStaff">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
+                        </div>
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
+                    </a>
+                </li>
+            </c:if>
             <li class="mt-0.5 w-full">
                 <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="logout">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">

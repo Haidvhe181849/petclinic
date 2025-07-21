@@ -137,7 +137,7 @@
                         <!-- breadcrumb -->
                         <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                             <li class="text-sm leading-normal">
-                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/Home">Home</a>
+                                <a class="text-black opacity-50" href="${pageContext.request.contextPath}/homeemployee">Home</a>
                             </li>
                             <!--                            <li class="text-sm pl-2 capitalize leading-normal text-black before:float-left before:pr-2 before:text-white before:content-['/']" aria-current="page">Tables</li>-->
                         </ol>
@@ -177,7 +177,6 @@
                                                 <option value="">Sort by</option>
                                                 <option value="name" ${param.sortColumn == 'name' ? 'selected' : ''}>Name</option>
                                                 <option value="email" ${param.sortColumn == 'email' ? 'selected' : ''}>Email</option>
-                                                <option value="role_id" ${param.sortColumn == 'role_id' ? 'selected' : ''}>Role</option>
                                             </select>
 
                                             <select name="sortType" class="form-select form-select-sm w-auto mx-2">
@@ -238,7 +237,7 @@
                                                     <td><c:out value="${d.name}"/></td>
                                                     <td><c:out value="${d.phone}"/></td>
                                                     <td><c:out value="${d.email}"/></td>
-                                                    <td><c:out value="${d.roleId}"/></td>
+                                                    <td>Doctor</td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${d.status}">
@@ -479,77 +478,82 @@
         
             <!-- Update Employee Modal -->
             <div id="editDoctorModal" class="modal fade" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <form action="${pageContext.request.contextPath}/DoctorManagerment" method="post" enctype="multipart/form-data">
                             <div class="modal-header">
                                 <h4 class="modal-title">Update Employee</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+
                             <div class="modal-body">
-                                <!-- ID ẩn -->
-                                <input type="hidden" name="employeeId" class="form-control" required readonly>
-                                <input type="hidden" name="old_image" class="form-control" readonly>
+                                <div class="row g-3">
+                                    <!-- ID ẩn -->
+                                    <input type="hidden" name="employeeId" class="form-control" required readonly>
+                                    <input type="hidden" name="old_image" class="form-control" readonly>
 
-                                <div class="mb-3">
-                                    <label>Image</label>
-                                    <input type="file" name="imageFile" class="form-control" accept="image/*">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Name</label>
+                                        <input type="text" name="name" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Name</label>
-                                    <input type="text" name="name" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Phone</label>
+                                        <input type="text" name="phone" class="form-control" required pattern="^0\d{9}$" title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone" class="form-control" required pattern="^0\d{9}$" title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+$" title="Email phải đúng định dạng">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Email phải đúng định dạng">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Password</label>
+                                        <input type="password" name="password" class="form-control" required minlength="6" title="Nhập mật khẩu mới nếu muốn đổi">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Password</label>
-                                    <input type="password" name="password" class="form-control" required minlength="6" title="Tối thiểu 6 ký tự">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Address</label>
+                                        <input type="text" name="address" class="form-control" maxlength="255" title="Tối đa 255 ký tự" required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Address</label>
-                                    <input type="text" name="address" class="form-control" maxlength="255" title="Tối đa 255 ký tự">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Role</label>
+                                        <select name="roleId" class="form-select" required>
+                                            <option value="">-- Select Role --</option>
+                                            <option value="1">Admin</option>
+                                            <option value="2">Staff</option>
+                                            <option value="3">Doctor</option>
+                                        </select>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Role</label>
-                                    <select name="roleId" class="form-select" readonly>
-                                        <option value="1">Admin</option>
-                                        <option value="2">Staff</option>
-                                        <option value="3">Doctor</option>
-                                    </select>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Experience</label>
+                                        <textarea  type="text" name="experience" class="form-control" required maxlength="255" title="Tối đa 255 ký tự"></textarea>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Experience</label>
-                                    <textarea name="experience" class="form-control" maxlength="255" title="Tối đa 255 ký tự" rows="3"></textarea>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Working Hours</label>
+                                        <input type="text" name="workingHours" class="form-control" placeholder="e.g. 8:00-17:00" pattern="^\d{1,2}:\d{2}-\d{1,2}:\d{2}$" title="Định dạng hợp lệ: 8:00-17:00" required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Working Hours</label>
-                                    <input type="text" name="workingHours" class="form-control" placeholder="e.g. 8:00-17:00" pattern="^\d{1,2}:\d{2}-\d{1,2}:\d{2}$" title="Định dạng hợp lệ: 8:00-17:00">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Image</label>
+                                        <input type="file" name="imageFile" class="form-control" accept="image/*">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Status</label><br>
-                                    <input type="radio" name="status" value="true"> Active
-                                    <input type="radio" name="status" value="false"> Inactive
+                                    <div class="col-md-6">
+                                        <label>Status</label><br>
+                                        <input type="radio" name="status" value="true" checked/> Active
+                                        <input type="radio" name="status" value="false" /> Inactive
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <input type="submit" class="btn btn-info" value="Save">
                                 <input type="hidden" name="service" value="update">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-info">Save</button>
                             </div>
                         </form>
                     </div>

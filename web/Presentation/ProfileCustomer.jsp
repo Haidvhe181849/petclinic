@@ -245,7 +245,6 @@
                                         <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
                                         <li><a href="#">Services</a></li>
                                         <li><a href="#">Medicine</a></li>
-                                        <li><a href="#">Doctor</a></li>
                                             <c:if test="${sessionScope.user.roleId == 4}">
                                             <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
                                             </c:if>
@@ -282,6 +281,10 @@
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ProfileCustomer">Trang cá nhân</a></li>
+                                                <li><a class="dropdown-item"
+                                                       href="${pageContext.request.contextPath}/ViewBooking">Xem lịch khám
+                                                    </a>
+                                                </li>
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a></li>
                                                 <li><a class="dropdown-item text-danger fw-bold" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                             </ul>
@@ -698,7 +701,7 @@
         <script src="${pageContext.request.contextPath}/Presentation/js/vendor/jquery-1.12.4.min.js"></script>
         <script src="${pageContext.request.contextPath}/Presentation/js/argon-dashboard-tailwind.js"></script>
         <script src="${pageContext.request.contextPath}/Presentation/js/jquery.sticky.js"></script>
-        
+
         <script>
                                 document.querySelectorAll('.avatar-radio').forEach(radio => {
                                     radio.addEventListener('change', function () {

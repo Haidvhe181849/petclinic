@@ -44,7 +44,7 @@ public class ConfirmBooking extends HttpServlet {
 
         try {
             if (service == null || service.equals("listBooking") || service.equals("blist")) {
-                String bookingId = Optional.ofNullable(request.getParameter("bookingId")).orElse("").trim();
+                String keyword = Optional.ofNullable(request.getParameter("keyword")).orElse("").trim();
                 String status = request.getParameter("status");
                 String order = Optional.ofNullable(request.getParameter("order")).orElse("desc");
 
@@ -61,9 +61,9 @@ public class ConfirmBooking extends HttpServlet {
                 } catch (Exception ignored) {
                 }
 
-                List<BookingEx> blist = bDAO.getFilteredBookings(bookingId, status, order, from, to);
+                List<BookingEx> blist = bDAO.getFilteredBookings(keyword, status, order, from, to);
                 request.setAttribute("blist", blist);
-                request.setAttribute("bookingId", bookingId);
+                request.setAttribute("keyword", keyword);
                 request.setAttribute("status", status);
                 request.setAttribute("order", order);
                 request.setAttribute("fromDate", fromDateStr);
@@ -108,12 +108,34 @@ public class ConfirmBooking extends HttpServlet {
             if ("updateStatus".equals(service)) {
                 String bookingId = request.getParameter("bookingId");
                 String newStatus = request.getParameter("status");
-                String cancelReason = "Failed".equals(newStatus) ? request.getParameter("cancelReason") : null;
+
+                // Xác định trạng thái hiện tại
+                String currentStatus = bDAO.getBookingStatus(bookingId);
+                String cancelReason = null;
+
+                if ("Cancelled".equals(newStatus)) {
+                    // Nếu trạng thái hiện tại KHÔNG phải Cancelled_Pending → staff chủ động hủy
+                    if (!"Cancelled_Pending".equals(currentStatus)) {
+                        cancelReason = request.getParameter("cancelReason");
+                    }
+                    // Ngược lại, nếu đang xử lý yêu cầu hủy từ khách thì không cần lý do
+                }
 
                 bDAO.updateBookingStatus(bookingId, newStatus, cancelReason);
                 request.getSession().setAttribute("message", "Cập nhật trạng thái thành công!");
                 response.sendRedirect("ConfirmBooking?service=listBooking");
+
+            } else if ("requestCancel".equals(service)) {
+                // Khách hàng yêu cầu hủy
+                String bookingId = request.getParameter("bookingId");
+                String reason = request.getParameter("cancelReason");
+
+                // Cập nhật về trạng thái chờ hủy
+                bDAO.updateBookingStatus(bookingId, "Cancelled_Pending", reason);
+                request.getSession().setAttribute("message", "Đã gửi yêu cầu hủy. Vui lòng đợi xác nhận từ phòng khám.");
+                response.sendRedirect("UserBookingHistory?service=viewHistory");
             }
+
         } catch (Exception e) {
             throw new ServletException("Lỗi POST ConfirmBooking: " + e.getMessage(), e);
         }
