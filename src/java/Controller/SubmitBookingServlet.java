@@ -87,12 +87,22 @@ public class SubmitBookingServlet extends HttpServlet {
             boolean success = dao.insertBooking(booking);
             System.out.println("✅ Kết quả insert: " + success);
 
+//            if (success) {
+//                // THÊM DÒNG NÀY:
+//                boolean detailInserted = dao.insertBookingDetail(bookingId, user);
+//                System.out.println("📥 Detail inserted: " + detailInserted);
+//
+//                response.sendRedirect("BookingForm?success=true");
+//            } else {
+//                System.out.println("❌ insertBooking trả về false");
+//                response.sendRedirect("BookingForm?error=Đặt lịch thất bại.");
+//            }
             if (success) {
-                // THÊM DÒNG NÀY:
-                boolean detailInserted = dao.insertBookingDetail(bookingId, user);
-                System.out.println("📥 Detail inserted: " + detailInserted);
+                // Lưu bookingId vào session để sử dụng trong quá trình thanh toán
+                session.setAttribute("pendingBookingId", bookingId);
 
-                response.sendRedirect("BookingForm?success=true");
+                // Chuyển hướng đến trang thanh toán
+                response.sendRedirect("payment");
             } else {
                 System.out.println("❌ insertBooking trả về false");
                 response.sendRedirect("BookingForm?error=Đặt lịch thất bại.");

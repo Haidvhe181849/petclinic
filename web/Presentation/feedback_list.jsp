@@ -1,582 +1,719 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-            <!DOCTYPE html>
-            <html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="apple-touch-icon" sizes="76x76" href="${pageContext.request.contextPath}/Presentation/img/apple-icon.png" />
+        <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/Presentation/img/favicon.png" />
+        <title>Feedback Management</title>
 
-            <head>
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>Quản lý Feedback - PetClinic</title>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-                    rel="stylesheet">
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+        <!--     Fonts and icons     -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+        <!-- Font Awesome Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-                    html,
-                    body {
-                        font-family: 'Poppins', Arial, sans-serif;
-                        background: #f6f7f8;
-                        color: #222;
-                    }
+        <script src="${pageContext.request.contextPath}/Presentation/js/argon-dashboard-tailwind.js"></script>
 
-                    .container {
-                        padding: 40px 15px;
-                    }
+        <!-- Nucleo Icons -->
+        <link href="${pageContext.request.contextPath}/Presentation/css/nucleo-icons.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/Presentation/css/nucleo-svg.css" rel="stylesheet" />
+        <!-- Main Styling -->
+        <link href="${pageContext.request.contextPath}/Presentation/css/argon-dashboard-tailwind.css?v=1.0.1" rel="stylesheet" />
 
-                    .card.shadow {
-                        border-radius: 18px;
-                        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-                        border: none;
-                    }
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            a {
+                text-decoration: none !important;
+            }
 
-                    .card-header.bg-primary {
-                        background: #ff3d3d !important;
-                        color: #fff !important;
-                        border-radius: 18px 18px 0 0;
-                        border: none;
-                        font-size: 24px;
-                        font-weight: 600;
-                        letter-spacing: 0.5px;
-                    }
+            a:hover {
+                text-decoration: none !important;
+            }
 
-                    .table {
-                        background: #fff;
-                        border-radius: 0 0 18px 18px;
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-                        margin-top: 0;
-                        font-family: 'Poppins', Arial, sans-serif;
-                    }
+            #popup-message {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #d1e7dd;
+                color: #0f5132;
+                padding: 20px 30px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.3);
+                font-size: 18px;
+                font-weight: 500;
+                z-index: 9999;
+                animation: fadeIn 0.4s ease;
+            }
 
-                    .table thead th {
-                        background-color: #fff;
-                        color: #222;
-                        border: none;
-                        font-weight: 600;
-                        font-size: 16px;
-                    }
+            #sidebar-scroll::-webkit-scrollbar {
+                width: 6px;
+            }
 
-                    .table-striped>tbody>tr:nth-of-type(odd) {
-                        background-color: #f8f9fa;
-                    }
+            #sidebar-scroll::-webkit-scrollbar-track {
+                background: transparent;
+            }
 
-                    .table-hover tbody tr:hover {
-                        background: #fff0f0;
-                        box-shadow: 0 8px 32px rgba(255, 32, 32, 0.08);
-                        transition: all 0.3s;
-                    }
+            #sidebar-scroll::-webkit-scrollbar-thumb {
+                background-color: rgba(100, 116, 139, 0.5);
+                border-radius: 3px;
+            }
 
-                    .table td {
-                        padding: 14px 10px;
-                        vertical-align: middle;
-                        border-color: #f0f0f0;
-                        font-size: 15px;
-                        color: #222;
-                    }
+            #sidebar-scroll:hover::-webkit-scrollbar-thumb {
+                background-color: rgba(100, 116, 139, 0.7);
+            }
 
-                    .btn-info {
-                        background: #03a9f4;
-                        border: none;
-                        color: #fff;
-                        font-weight: 600;
-                        border-radius: 8px;
-                        box-shadow: none;
-                        transition: all 0.3s;
-                        font-family: 'Poppins', Arial, sans-serif;
-                    }
+            html, body {
+                height: 100%;
+                overflow-x: hidden;
+            }
 
-                    .btn-info:hover {
-                        background: #0288d1;
-                        transform: translateY(-2px);
-                    }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
 
-                    .btn-warning {
-                        background: #ff3d3d;
-                        border: none;
-                        color: #fff;
-                        font-weight: 600;
-                        border-radius: 8px;
-                        box-shadow: none;
-                        transition: all 0.3s;
-                        font-family: 'Poppins', Arial, sans-serif;
-                    }
+            .star-rating .fa-star {
+                margin-right: 2px;
+                color: #ffd600 !important;
+            }
 
-                    .btn-warning:hover {
-                        background: #d32f2f;
-                        transform: translateY(-2px);
-                    }
+            .star-rating .fa-regular {
+                color: #bdbdbd !important;
+            }
 
-                    .btn-secondary {
-                        border: 2px solid #ff3d3d;
-                        color: #ff3d3d;
-                        font-weight: 500;
-                        border-radius: 30px;
-                        padding: 10px 25px;
-                        background: #fff;
-                        transition: all 0.3s;
-                        font-family: 'Poppins', Arial, sans-serif;
-                        font-size: 16px;
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 6px;
-                    }
+            .customer-name {
+                font-weight: 600;
+                color: #ff3d3d;
+            }
 
-                    .btn-secondary:hover {
-                        background-color: #ff3d3d;
-                        color: #fff;
-                        border-color: #ff3d3d;
-                        transform: translateY(-2px);
-                    }
+            .customer-email {
+                font-size: 12px;
+                color: #6c757d;
+            }
 
-                    .badge,
-                    .status-badge {
-                        font-size: 14px;
-                        border-radius: 8px;
-                        padding: 6px 16px;
-                        font-weight: 500;
-                        font-family: 'Poppins', Arial, sans-serif;
-                        transition: all 0.3s;
-                    }
+            .preview-text {
+                max-width: 350px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: #222;
+            }
 
-                    .bg-success {
-                        background: #e0f2f1 !important;
-                        color: #00897b !important;
-                    }
+            .reply-preview {
+                font-size: 13px;
+                color: #ff3d3d;
+                font-style: italic;
+                margin-top: 4px;
+                display: block;
+            }
 
-                    .bg-secondary {
-                        background: #ececec !important;
-                        color: #616161 !important;
-                    }
+            /* Mobile responsive styles */
+            @media (max-width: 1279px) {
+                #sidebar {
+                    display: none;
+                }
+                
+                .main-content {
+                    margin-left: 0 !important;
+                }
+            }
+            
+            @media (min-width: 1280px) {
+                #sidebar {
+                    display: flex !important;
+                    position: relative;
+                }
+                
+                .main-content {
+                    margin-left: 0;
+                }
+            }
 
-                    .bg-danger,
-                    .bg-pink,
-                    .bg-hide,
-                    .status-hidden {
-                        background: #ff3d3d !important;
-                        color: #fff !important;
-                        border: none !important;
-                    }
+            /* Overlay for mobile */
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 30;
+                display: none;
+            }
 
-                    .status-visible {
-                        background-color: #e0f2f1 !important;
-                        color: #00897b !important;
-                    }
+            .sidebar-overlay.show {
+                display: block;
+            }
+        </style>
 
-                    .reply-status.has-reply {
-                        background: #e0f2f1;
-                        color: #00897b;
-                    }
+    </head>
 
-                    .reply-status {
-                        background: #ececec;
-                        color: #616161;
-                    }
+    <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
+        <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 h-screen bg-white dark:bg-slate-850 shadow-xl rounded-2xl flex flex-col"
+               aria-expanded="false">
+            <div class="h-19">
+                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
+                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
+                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
+                </a>
+            </div>
 
-                    .star-rating .fa-star,
-                    .rating .fa-star {
-                        margin-right: 2px;
-                        color: #ffd600 !important;
-                    }
+            <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
+            <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2"
+                 style="height: calc(100vh - 5rem);">
 
-                    .star-rating .fa-regular.text-secondary,
-                    .rating .fa-regular.text-secondary {
-                        color: #bdbdbd !important;
-                    }
+                <ul class="flex flex-col pl-0 mb-0">
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/dashboard">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class=" relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
+                        </a>
+                    </li>
 
-                    .customer-name {
-                        font-weight: 600;
-                        color: #ff3d3d;
-                    }
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
+                        </a>
+                    </li>
 
-                    .customer-email {
-                        font-size: 12px;
-                        color: #6c757d;
-                    }
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
+                        </a>
+                    </li>
 
-                    .preview-text {
-                        max-width: 300px;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        color: #222;
-                    }
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
+                        </a>
+                    </li>
 
-                    .reply-preview {
-                        font-size: 13px;
-                        color: #ff3d3d;
-                        font-style: italic;
-                        margin-top: 4px;
-                        display: block;
-                    }
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
+                        </a>
+                    </li>
 
-                    .action-btn {
-                        padding: 4px 8px;
-                        margin: 0 2px;
-                        font-size: 13px;
-                        border-radius: 8px;
-                        transition: all 0.3s;
-                    }
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
+                        </a>
+                    </li>
+                    
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/feedback-management">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-purple-500 ni ni-chat-round"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Management</span>
+                        </a>
+                    </li>
 
-                    .action-btn.btn-info:hover,
-                    .action-btn.btn-warning:hover,
-                    .action-btn.btn-success:hover {
-                        box-shadow: 0 4px 16px rgba(255, 32, 32, 0.10);
-                        transform: translateY(-2px);
-                    }
+                    <li class="w-full mt-4">
+                        <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
+                    </li>
 
-                    @media (max-width: 768px) {
-                        .card-header.bg-primary {
-                            font-size: 18px;
-                        }
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/profile.html">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
+                        </a>
+                    </li>
 
-                        .table td,
-                        .table th {
-                            padding: 8px 4px;
-                            font-size: 13px;
-                        }
-                    }
-                </style>
-            </head>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/sign-in.html">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-single-copy-04"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign In</span>
+                        </a>
+                    </li>
 
-            <body>
-                <div class="container my-4">
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <a href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp"
-                                class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Quay về</a>
-                        </div>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/sign-up.html">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>           
+        </aside>
+        
+        <!-- Content Wrapper -->
+        <main class="flex-1 min-h-screen p-6 main-content">
+            <!-- Navbar -->
+            <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+                 navbar-main navbar-scroll="false">
+                <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
+                    <nav>
+                        <h6 class="mb-0 font-bold text-slate-700 dark:text-white">Feedback Management</h6>
+                    </nav>
+
+                    <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
+                        <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
+                            <!-- Mobile menu removed for laptop-only design -->
+                        </ul>
                     </div>
+                </div>
+            </nav>
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card shadow">
-                                <div class="card-header bg-primary text-white">
-                                    <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Quản lý Feedback</h4>
+            <!-- Content -->
+            <div class="w-full mx-auto">
+                <!-- Search and Actions -->
+                <div class="flex flex-wrap -mx-3">
+                    <div class="flex-none w-full max-w-full px-3">
+                        <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                            <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
+                                <div class="flex flex-wrap items-center mb-4">
+                                    <div class="flex-grow">
+                                        <h6 class="mb-2 text-slate-700 dark:text-white">Quản lý Feedback</h6>
+                                        <p class="mb-0 text-sm leading-normal text-slate-400">Danh sách và quản lý feedback từ khách hàng</p>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <!-- Alert Messages -->
-                                    <c:if test="${not empty sessionScope.alertMessage}">
-                                        <div class="alert alert-${sessionScope.alertType == 'success' ? 'success' : 'danger'} alert-dismissible fade show"
-                                            role="alert">
-                                            <i
-                                                class="fas fa-${sessionScope.alertType == 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
-                                            ${sessionScope.alertMessage}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <% session.removeAttribute("alertMessage"); %>
-                                            <% session.removeAttribute("alertType"); %>
-                                    </c:if>
-
-                                    <!-- Search Box and Filters -->
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="input-group">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-search"></i>
-                                                </span>
-                                                <input type="text" id="searchInput" class="form-control"
-                                                    placeholder="Tìm kiếm theo tên, email, nội dung...">
-                                                <button class="btn btn-outline-secondary" type="button"
-                                                    onclick="clearSearch()">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <select id="filterRating" class="form-select" onchange="filterTable()">
-                                                <option value="">Tất cả đánh giá</option>
-                                                <option value="5">★★★★★ (5 sao)</option>
-                                                <option value="4">★★★★☆ (4 sao)</option>
-                                                <option value="3">★★★☆☆ (3 sao)</option>
-                                                <option value="2">★★☆☆☆ (2 sao)</option>
-                                                <option value="1">★☆☆☆☆ (1 sao)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <select id="filterStatus" class="form-select" onchange="filterTable()">
-                                                <option value="">Tất cả trạng thái</option>
-                                                <option value="visible">Đang hiển thị</option>
-                                                <option value="hidden">Đang ẩn</option>
-                                                <option value="replied">Đã phản hồi</option>
-                                                <option value="not-replied">Chưa phản hồi</option>
-                                            </select>
-                                        </div>
+                                
+                                <!-- Alert Messages -->
+                                <c:if test="${not empty sessionScope.alertMessage}">
+                                    <div class="p-3 mb-4 text-sm rounded-lg ${sessionScope.alertType == 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}">
+                                        <div id="popup-message">${sessionScope.alertMessage}</div>
+                                        <script>
+                                            setTimeout(function () {
+                                                var popup = document.getElementById("popup-message");
+                                                if (popup) popup.style.display = "none";
+                                            }, 3000);
+                                        </script>
+                                        <c:remove var="alertMessage" scope="session"/>
+                                        <c:remove var="alertType" scope="session"/>
                                     </div>
-
-                                    <!-- Feedback Table -->
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover align-middle">
-                                            <thead class="table-light">
+                                </c:if>
+                                
+                                <!-- Search Form -->
+                                <div class="flex flex-wrap items-center mb-4 gap-4">
+                                    <form action="${pageContext.request.contextPath}/feedback-management" method="get" class="flex-grow max-w-md">
+                                        <div class="relative">
+                                            <input type="search" name="search" value="${param.search}" 
+                                                   class="w-full px-4 py-2 text-sm bg-white border border-solid border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" 
+                                                   placeholder="Tìm kiếm theo tên, email, nội dung...">
+                                            <input type="hidden" name="action" value="list">
+                                            <button type="submit" 
+                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                    
+                                    <a href="feedback-management?action=list" 
+                                       class="px-4 py-2 text-sm text-white bg-slate-600 rounded-lg hover:bg-slate-700">
+                                        Tất cả
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Filters -->
+                            <!-- Filters -->
+                            <div class="px-6 pb-4">
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <div class="flex-grow max-w-xs">
+                                        <select id="filterRating" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" onchange="filterTable()">
+                                            <option value="">Tất cả đánh giá</option>
+                                            <option value="5">★★★★★ (5 sao)</option>
+                                            <option value="4">★★★★☆ (4 sao)</option>
+                                            <option value="3">★★★☆☆ (3 sao)</option>
+                                            <option value="2">★★☆☆☆ (2 sao)</option>
+                                            <option value="1">★☆☆☆☆ (1 sao)</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-grow max-w-xs">
+                                        <select id="filterStatus" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" onchange="filterTable()">
+                                            <option value="">Tất cả trạng thái</option>
+                                            <option value="visible">Đang hiển thị</option>
+                                            <option value="hidden">Đang ẩn</option>
+                                            <option value="replied">Đã phản hồi</option>
+                                            <option value="not-replied">Chưa phản hồi</option>
+                                        </select>
+                                    </div>
+                                    <button class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-slate-600 dark:hover:bg-slate-700" onclick="clearSearch()">
+                                        <i class="fa fa-times me-1"></i> Xóa bộ lọc
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Table -->
+                            <div class="flex-auto px-0 pt-0 pb-2">
+                                <div class="p-0 overflow-x-auto">
+                                    <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
+                                        <thead class="align-bottom">
+                                            <tr>
+                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(0)">ID <i class="fas fa-sort ml-1"></i></th>
+                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(1)">Khách hàng <i class="fas fa-sort ml-1"></i></th>
+                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(2)">Nội dung <i class="fas fa-sort ml-1"></i></th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(3)">Đánh giá <i class="fas fa-sort ml-1"></i></th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(4)">Ngày gửi <i class="fas fa-sort ml-1"></i></th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(5)">Trạng thái <i class="fas fa-sort ml-1"></i></th>
+                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="feedback" items="${feedbacks}">
                                                 <tr>
-                                                    <th onclick="sortTable(0)">ID <i class="fas fa-sort"></i></th>
-                                                    <th onclick="sortTable(1)">Khách hàng <i class="fas fa-sort"></i>
-                                                    </th>
-                                                    <th onclick="sortTable(2)">Nội dung <i class="fas fa-sort"></i></th>
-                                                    <th onclick="sortTable(3)">Đánh giá <i class="fas fa-sort"></i></th>
-                                                    <th onclick="sortTable(4)">Ngày gửi <i class="fas fa-sort"></i></th>
-                                                    <th onclick="sortTable(5)">Trạng thái <i class="fas fa-sort"></i>
-                                                    </th>
-                                                    <th>Thao tác</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:if test="${empty feedbacks}">
-                                                    <tr>
-                                                        <td colspan="7" class="text-center">Không có dữ liệu feedback
-                                                        </td>
-                                                    </tr>
-                                                </c:if>
-                                                <c:forEach var="feedback" items="${feedbacks}">
-                                                    <tr>
-                                                        <td>${feedback.feedbackId}</td>
-                                                        <td>
-                                                            <div class="customer-info">
-                                                                <div class="customer-name">${feedback.userName}</div>
-                                                                <div class="customer-email">${feedback.userEmail}</div>
+                                                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <div class="flex px-2 py-1">
+                                                            <div class="flex flex-col justify-center">
+                                                                <h6 class="mb-0 text-sm leading-normal dark:text-white">#<c:out value="${feedback.feedbackId}"/></h6>
                                                             </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="preview-text">${feedback.feedbackText}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <div class="flex flex-col justify-center">
+                                                            <h6 class="mb-0 text-sm leading-normal dark:text-white customer-name"><c:out value="${feedback.userName}"/></h6>
+                                                            <p class="mb-0 text-xs leading-tight text-slate-400 customer-email"><c:out value="${feedback.userEmail}"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <div class="flex flex-col justify-center">
+                                                            <p class="mb-0 text-sm font-semibold leading-tight dark:text-white preview-text">
+                                                                <c:out value="${feedback.feedbackText}"/>
+                                                            </p>
                                                             <c:if test="${not empty feedback.replyText}">
-                                                                <span class="reply-preview">
+                                                                <p class="mb-0 text-xs leading-tight text-red-500 reply-preview">
                                                                     <i class="fas fa-reply me-1"></i>
-                                                                    ${feedback.replyText}
-                                                                </span>
+                                                                    <c:out value="${feedback.replyText}"/>
+                                                                </p>
                                                             </c:if>
-                                                        </td>
-                                                        <td class="rating text-center">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="rating">
-                                                                    <c:forEach begin="1" end="5" var="i">
-                                                                        <i
-                                                                            class="fa${i <= feedback.starRating ? 's' : 'r'} fa-star"></i>
-                                                                    </c:forEach>
-                                                                </div>
-                                                                <c:choose>
-                                                                    <c:when test="${not empty feedback.replyText}">
-                                                                        <span class="reply-status has-reply">
-                                                                            <i class="fas fa-check-circle me-1"></i>Đã
-                                                                            phản hồi
-                                                                        </span>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <span class="reply-status">
-                                                                            <i class="fas fa-clock me-1"></i>Chưa phản
-                                                                            hồi
-                                                                        </span>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="datetime">
-                                                                <fmt:formatDate value="${feedback.postTime}"
-                                                                    pattern="dd/MM/yyyy HH:mm" />
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <span
-                                                                class="status-badge ${feedback.visible ? 'status-visible' : 'status-hidden'}">
-                                                                ${feedback.visible ? 'Hiển thị' : 'Ẩn'}
-                                                            </span>
-                                                        </td>
-                                                        <td>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <div class="star-rating text-yellow-500">
+                                                            <c:forEach begin="1" end="5" var="i">
+                                                                <i class="fa${i <= feedback.starRating ? 's' : 'r'} fa-star"></i>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <span class="text-xs font-semibold leading-tight dark:text-white text-slate-400">
+                                                            <fmt:formatDate value="${feedback.postTime}" pattern="dd/MM/yyyy HH:mm" />
+                                                        </span>
+                                                    </td>
+                                                    </td>
+                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <c:choose>
+                                                            <c:when test="${feedback.visible}">
+                                                                <span class="bg-gradient-to-tl from-emerald-500 to-teal-400 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Hiển thị</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="bg-gradient-to-tl from-red-600 to-orange-600 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Ẩn</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <div class="flex items-center justify-center gap-2">
                                                             <a href="feedback-management?action=detail&id=${feedback.feedbackId}"
-                                                                class="btn btn-sm btn-info action-btn" title="Chi tiết">
-                                                                <i class="fas fa-eye"></i>
+                                                               class="inline-block px-3 py-2 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-orange-500 to-yellow-500 leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102"
+                                                               title="Chi tiết">
+                                                                <i class="fa fa-eye mr-1"></i> 
                                                             </a>
-                                                            <button
-                                                                onclick="toggleVisibility('${feedback.feedbackId}', '${!feedback.visible}')"
-                                                                class="btn btn-sm ${feedback.visible ? 'btn-warning' : 'btn-success'} action-btn"
-                                                                title="${feedback.visible ? 'Ẩn' : 'Hiển thị'}">
-                                                                <i
-                                                                    class="fas fa-${feedback.visible ? 'eye-slash' : 'eye'}"></i>
+                                                            <button onclick="toggleVisibility('${feedback.feedbackId}', '${!feedback.visible}')" 
+                                                                    class="inline-block px-3 py-2 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer ${feedback.visible ? 'bg-gradient-to-tl from-red-600 to-orange-600' : 'bg-gradient-to-tl from-emerald-500 to-teal-400'} leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102" 
+                                                                    title="${feedback.visible ? 'Ẩn' : 'Hiển thị'}">
+                                                                <i class="fa fa-${feedback.visible ? 'eye-slash' : 'eye'} mr-1"></i>
                                                             </button>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            <c:if test="${empty feedbacks}">
+                                                <tr>
+                                                    <td colspan="7" class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                        <span class="text-sm font-semibold leading-tight dark:text-white text-slate-400">Không có dữ liệu feedback.</span>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Pagination -->
+                <c:if test="${totalPages > 1}">
+                    <div class="flex flex-wrap -mx-3 mt-6">
+                        <div class="flex-none w-full max-w-full px-3">
+                            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                                <div class="p-6">
+                                    <div class="flex justify-center">
+                                        <nav aria-label="Feedback pagination">
+                                            <ul class="flex items-center space-x-1">
+                                                <!-- First Page -->
+                                                <c:if test="${currentPage > 1}">
+                                                    <li>
+                                                        <a href="feedback-management?action=list&page=1" 
+                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                           title="Trang đầu">
+                                                            <i class="fas fa-angle-double-left"></i>
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                                
+                                                <!-- Previous Page -->
+                                                <c:if test="${currentPage > 1}">
+                                                    <li>
+                                                        <a href="feedback-management?action=list&page=${currentPage - 1}" 
+                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                           title="Trang trước">
+                                                            <i class="fas fa-angle-left"></i>
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                                
+                                                <!-- Page Numbers -->
+                                                <c:forEach begin="${currentPage > 2 ? currentPage - 2 : 1}" 
+                                                          end="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" 
+                                                          var="pageNum">
+                                                    <li>
+                                                        <a href="feedback-management?action=list&page=${pageNum}"
+                                                           class="relative block px-3 py-2 text-sm leading-tight ${pageNum == currentPage ? 'text-white bg-blue-500 border-blue-500' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'} border dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700">
+                                                            ${pageNum}
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+                                                
+                                                <!-- Next Page -->
+                                                <c:if test="${currentPage < totalPages}">
+                                                    <li>
+                                                        <a href="feedback-management?action=list&page=${currentPage + 1}" 
+                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                           title="Trang sau">
+                                                            <i class="fas fa-angle-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                                
+                                                <!-- Last Page -->
+                                                <c:if test="${currentPage < totalPages}">
+                                                    <li>
+                                                        <a href="feedback-management?action=list&page=${totalPages}" 
+                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                           title="Trang cuối">
+                                                            <i class="fas fa-angle-double-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    
+                                    <!-- Pagination Info -->
+                                    <div class="text-center mt-3">
+                                        <span class="text-sm text-gray-500 dark:text-slate-400">
+                                            Trang ${currentPage} / ${totalPages} (${feedbacks.size()} feedback)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+        </main>
+        </div>
 
-                <!-- Bootstrap & jQuery -->
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script
-                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- JavaScript Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <!-- Admin Dashboard JS -->
+        <script src="${pageContext.request.contextPath}/Presentation/js/perfect-scrollbar.min.js"></script>
+        <script src="${pageContext.request.contextPath}/Presentation/js/smooth-scrollbar.min.js"></script>
+        <script src="${pageContext.request.contextPath}/Presentation/js/chartjs.min.js"></script>
+        <script src="${pageContext.request.contextPath}/Presentation/js/argon-dashboard-tailwind.js?v=1.0.1"></script>
 
-                <script>
-                    const searchInput = document.getElementById('searchInput');
-                    const filterRating = document.getElementById('filterRating');
-                    const filterStatus = document.getElementById('filterStatus');
-                    let timeoutId;
+        <script>
+            // Filter table function
+            function filterTable() {
+                const ratingFilter = document.getElementById('filterRating').value;
+                const statusFilter = document.getElementById('filterStatus').value;
+                const tbody = document.querySelector('table tbody');
+                const rows = tbody.getElementsByTagName('tr');
 
-                    // Debounce function
-                    function debounce(func, delay) {
-                        clearTimeout(timeoutId);
-                        timeoutId = setTimeout(func, delay);
+                for (let row of rows) {
+                    if (row.querySelector('td[colspan="7"]')) continue; // Skip no data row
+
+                    const ratingDiv = row.cells[3].querySelector('.star-rating');
+                    let ratingStars = 0;
+                    if (ratingDiv) {
+                        ratingStars = ratingDiv.querySelectorAll('.fa-star.fas').length;
                     }
+                    
+                    const hasReply = row.cells[2].querySelector('.reply-preview') !== null;
+                    const statusSpan = row.cells[5].querySelector('span');
+                    const isVisible = statusSpan && statusSpan.textContent.trim() === 'Hiển thị';
 
-                    // Search input event
-                    searchInput.addEventListener('input', () => {
-                        debounce(filterTable, 300);
-                    });
+                    // Rating filter
+                    const matchesRating = !ratingFilter || ratingStars == parseInt(ratingFilter);
 
-                    // Clear search and filters
-                    function clearSearch() {
-                        searchInput.value = '';
-                        filterRating.value = '';
-                        filterStatus.value = '';
-                        filterTable();
-                    }
-
-                    // Filter table function
-                    function filterTable() {
-                        const searchTerm = searchInput.value.toLowerCase();
-                        const ratingFilter = filterRating.value;
-                        const statusFilter = filterStatus.value;
-                        const tbody = document.querySelector('table tbody');
-                        const rows = tbody.getElementsByTagName('tr');
-
-                        for (let row of rows) {
-                            if (row.classList.contains('no-data')) continue;
-
-                            const customerCol = row.cells[1].textContent.toLowerCase();
-                            const contentCol = row.cells[2].textContent.toLowerCase();
-                            let ratingStars = 0;
-                            const ratingDiv = row.cells[3].querySelector('.rating');
-                            if (ratingDiv) {
-                                ratingStars = ratingDiv.querySelectorAll('.fa-star.fas').length;
-                            }
-                            const hasReply = row.cells[2].querySelector('.reply-preview') !== null;
-                            const statusBadge = row.cells[5].querySelector('.status-badge');
-                            const isVisible = statusBadge && statusBadge.classList.contains('status-visible');
-
-                            // Search filter
-                            const matchesSearch = !searchTerm ||
-                                customerCol.includes(searchTerm) ||
-                                contentCol.includes(searchTerm);
-
-                            // Rating filter
-                            const matchesRating = !ratingFilter || ratingStars == parseInt(ratingFilter);
-
-                            // Status filter
-                            let matchesStatus = true;
-                            if (statusFilter) {
-                                switch (statusFilter) {
-                                    case 'visible':
-                                        matchesStatus = isVisible;
-                                        break;
-                                    case 'hidden':
-                                        matchesStatus = !isVisible;
-                                        break;
-                                    case 'replied':
-                                        matchesStatus = hasReply;
-                                        break;
-                                    case 'not-replied':
-                                        matchesStatus = !hasReply;
-                                        break;
-                                }
-                            }
-
-                            row.style.display = (matchesSearch && matchesRating && matchesStatus) ? '' : 'none';
+                    // Status filter
+                    let matchesStatus = true;
+                    if (statusFilter) {
+                        switch (statusFilter) {
+                            case 'visible':
+                                matchesStatus = isVisible;
+                                break;
+                            case 'hidden':
+                                matchesStatus = !isVisible;
+                                break;
+                            case 'replied':
+                                matchesStatus = hasReply;
+                                break;
+                            case 'not-replied':
+                                matchesStatus = !hasReply;
+                                break;
                         }
                     }
 
-                    // Sort table function
-                    let sortDirection = 1;
-                    let lastSortedColumn = -1;
+                    row.style.display = (matchesRating && matchesStatus) ? '' : 'none';
+                }
+            }
 
-                    function sortTable(columnIndex) {
-                        const table = document.querySelector('table');
-                        const tbody = table.getElementsByTagName('tbody')[0];
-                        const rows = Array.from(tbody.getElementsByTagName('tr'));
+            // Clear search and filters
+            function clearSearch() {
+                document.getElementById('filterRating').value = '';
+                document.getElementById('filterStatus').value = '';
+                filterTable();
+            }
 
-                        // Reset sort direction if clicking on a new column
-                        if (lastSortedColumn !== columnIndex) {
-                            sortDirection = 1;
-                        } else {
-                            sortDirection = -sortDirection;
-                        }
-                        lastSortedColumn = columnIndex;
+            // Sort table function
+            let sortDirection = 1;
+            let lastSortedColumn = -1;
 
-                        // Remove existing sort indicators
-                        const headers = table.getElementsByTagName('th');
-                        for (let header of headers) {
-                            const icon = header.querySelector('i.fas');
-                            if (icon) icon.className = 'fas fa-sort';
-                        }
+            function sortTable(columnIndex) {
+                const table = document.querySelector('table');
+                const tbody = table.getElementsByTagName('tbody')[0];
+                const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => !row.querySelector('td[colspan="7"]'));
 
-                        // Sort the rows
-                        rows.sort((a, b) => {
-                            let aValue = a.cells[columnIndex].textContent.trim();
-                            let bValue = b.cells[columnIndex].textContent.trim();
+                if (lastSortedColumn !== columnIndex) {
+                    sortDirection = 1;
+                } else {
+                    sortDirection = -sortDirection;
+                }
+                lastSortedColumn = columnIndex;
 
-                            // Special handling for rating column
-                            if (columnIndex === 3) {
-                                aValue = a.cells[columnIndex].querySelector('.rating').querySelectorAll('.fa-star.fas').length;
-                                bValue = b.cells[columnIndex].querySelector('.rating').querySelectorAll('.fa-star.fas').length;
-                            }
-                            // Special handling for date column
-                            else if (columnIndex === 4) {
-                                aValue = new Date(aValue.split(' ').reverse().join(' ')).getTime();
-                                bValue = new Date(bValue.split(' ').reverse().join(' ')).getTime();
-                            }
+                const headers = table.getElementsByTagName('th');
+                for (let header of headers) {
+                    const icon = header.querySelector('i.fas');
+                    if (icon) icon.className = 'fas fa-sort ml-1';
+                }
 
-                            if (aValue < bValue) return -sortDirection;
-                            if (aValue > bValue) return sortDirection;
-                            return 0;
-                        });
+                const currentHeader = headers[columnIndex];
+                const currentIcon = currentHeader.querySelector('i.fas');
+                if (currentIcon) {
+                    currentIcon.className = sortDirection === 1 ? 'fas fa-sort-up ml-1' : 'fas fa-sort-down ml-1';
+                }
 
-                        // Reinsert the sorted rows
-                        rows.forEach(row => tbody.appendChild(row));
+                rows.sort((a, b) => {
+                    let aValue = a.cells[columnIndex].textContent.trim();
+                    let bValue = b.cells[columnIndex].textContent.trim();
+
+                    if (columnIndex === 3) { // Rating column
+                        aValue = a.cells[columnIndex].querySelector('.star-rating').querySelectorAll('.fa-star.fas').length;
+                        bValue = b.cells[columnIndex].querySelector('.star-rating').querySelectorAll('.fa-star.fas').length;
+                    } else if (columnIndex === 4) { // Date column
+                        aValue = new Date(aValue.split(' ').reverse().join(' ')).getTime();
+                        bValue = new Date(bValue.split(' ').reverse().join(' ')).getTime();
+                    } else if (columnIndex === 0) { // ID column
+                        aValue = parseInt(aValue.replace('#', ''));
+                        bValue = parseInt(bValue.replace('#', ''));
                     }
 
-                    // Toggle visibility function
-                    function toggleVisibility(feedbackId, visible) {
-                        if (!feedbackId || feedbackId === 'undefined') {
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: 'Không thể xác định ID của feedback',
-                                icon: 'error'
-                            });
-                            return;
-                        }
-                        // Chuyển visible thành true/false string cho backend
-                        const visibleStr = (visible === true || visible === 'true') ? 'true' : 'false';
+                    if (aValue < bValue) return -sortDirection;
+                    if (aValue > bValue) return sortDirection;
+                    return 0;
+                });
+
+                rows.forEach(row => tbody.appendChild(row));
+            }
+
+            // Toggle visibility function
+            function toggleVisibility(feedbackId, visible) {
+                if (!feedbackId || feedbackId === 'undefined') {
+                    Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể xác định ID của feedback',
+                    icon: 'error'
+                });
+                return;
+            }
+            
+            const visibleStr = (visible === true || visible === 'true') ? 'true' : 'false';
+            Swal.fire({
+                title: visibleStr === 'true' ? 'Hiển thị feedback?' : 'Ẩn feedback?',
+                text: visibleStr === 'true' ? 'Feedback này sẽ được hiển thị công khai.' : 'Feedback này sẽ bị ẩn khỏi trang web.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    try {
+                        window.location.href = 'feedback-management?action=toggle&id=' + feedbackId + '&visible=' + visibleStr;
+                    } catch (e) {
+                        console.error("Error navigating:", e);
                         Swal.fire({
-                            title: visibleStr === 'true' ? 'Hiển thị feedback?' : 'Ẩn feedback?',
-                            text: visibleStr === 'true' ? 'Feedback này sẽ được hiển thị công khai.' : 'Feedback này sẽ bị ẩn khỏi trang web.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Xác nhận',
-                            cancelButtonText: 'Hủy'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                try {
-                                    window.location.href = 'feedback-management?action=toggle&id=' + feedbackId + '&visible=' + visibleStr;
-                                } catch (e) {
-                                    console.error("Error navigating:", e);
-                                    Swal.fire({
-                                        title: 'Lỗi!',
-                                        text: 'Có lỗi xảy ra khi thực hiện thao tác này',
-                                        icon: 'error'
-                                    });
-                                }
-                            }
+                            title: 'Lỗi!',
+                            text: 'Có lỗi xảy ra khi thực hiện thao tác này',
+                            icon: 'error'
                         });
                     }
-                </script>
-            </body>
-
-            </html>
+                }
+            });
+        }
+    </script>
+</body>
+</html>

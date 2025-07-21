@@ -285,13 +285,20 @@
                                                         <!-- Actions -->
                                                         <td class="text-center">
                                                             <a href="ConfirmBooking?service=bookingDetail&bookingId=${b.bookingId}"
-                                                               class="text-blue-600 hover:text-blue-800"
+                                                               class="text-blue-600 hover:text-blue-800 me-2"
                                                                title="Xem chi tiết">
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
 
+                                                            <!-- View Invoice -->
+                                                            <a href="${pageContext.request.contextPath}/ViewInvoice?bookingId=${b.bookingId}"
+                                                               class="text-green-600 hover:text-green-800 me-2"
+                                                               title="Xem hóa đơn">
+                                                                <i class="fas fa-file-invoice"></i>
+                                                            </a>
+
                                                             <!-- Delete -->
-                                                            <form action="ConfirmBooking" method="get" style="display:inline;" 
+                                                            <form action="ConfirmBooking" method="post" style="display:inline;" 
                                                                   onsubmit="return confirm('Bạn có chắc chắn muốn xoá booking này không?');">
                                                                 <input type="hidden" name="service" value="deleteBooking"/>
                                                                 <input type="hidden" name="bookingId" value="${b.bookingId}"/>

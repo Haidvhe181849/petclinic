@@ -13,22 +13,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import DAO.AboutUsDAO;
 import Entity.AboutUs;
+import Entity.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.util.List;
-
-
 
 /**
  *
  * @author trung123
  */
-@WebServlet(name = "AboutUsServlet", urlPatterns = {"/AboutUsServlet"})
+@WebServlet(name = "AboutUsServlet", urlPatterns = {"/manage-about-us"})
 public class AboutUsServlet extends HttpServlet {
- AboutUsService service = new AboutUsService();
+
+    private AboutUsDAO dao = new AboutUsDAO();
+
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -43,7 +43,7 @@ public class AboutUsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AboutUsServlet</title>");            
+            out.println("<title>Servlet AboutUsServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AboutUsServlet at " + request.getContextPath() + "</h1>");
@@ -64,44 +64,89 @@ public class AboutUsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       request.setAttribute("list", service.getAll());
-        String role = request.getParameter("role"); // "admin" or "user"
-        if ("admin".equals(role)) {
-            request.getRequestDispatcher("/Presentation/ManageAboutUsAdmin.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("/Presentation/ViewAboutUs.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        UserAccount user = (UserAccount) session.getAttribute("user");
+        if (user == null || (user.getRoleId() != 1 && user.getRoleId() != 2)) {
+            response.sendRedirect("login");
+            return;
         }
-    }
+        String action = request.getParameter("action");
 
-    
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-           String action = request.getParameter("action");
-
-        int id = request.getParameter("id") != null && !request.getParameter("id").isEmpty()
-                ? Integer.parseInt(request.getParameter("id"))
-                : 0;
-
-        String address = request.getParameter("address");
-        String email = request.getParameter("email");
-        String hotline = request.getParameter("hotline");
-        String description = request.getParameter("description");
-
-        AboutUs about = new AboutUs(id, address, email, hotline, description);
-
-        if (action != null) {
-            switch (action) {
-                case "add" -> service.insert(about);
-                case "edit" -> service.update(about);
-                case "delete" -> service.delete(id);
+        if (action != null && action.equals("delete")) {
+            String about_id = request.getParameter("id");
+            if (about_id != null && !about_id.isEmpty()) {
+                dao.delete(about_id);
+                request.setAttribute("message", "About Us entry deleted successfully");
+                response.sendRedirect("manage-about-us");
+                return;
+            }
+        } else if (action != null && action.equals("edit")) {
+            String about_id = request.getParameter("id");
+            if (about_id != null && !about_id.isEmpty()) {
+                AboutUs aboutUs = dao.getById(about_id);
+                if (aboutUs != null) {
+                    request.setAttribute("aboutUs", aboutUs);
+                }
             }
         }
 
-        response.sendRedirect("AboutUsServlet?role=admin");
-    }
+        // Get all AboutUs entries for display
+        request.setAttribute("list", dao.getAll());
+        request.getRequestDispatcher("/Presentation/ManageAboutUsAdmin.jsp").forward(request, response);
     }
 
-    
-    
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
 
+        // Get form data
+        String about_id = request.getParameter("about_id");
+        String address = request.getParameter("address");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String description = request.getParameter("description");
+
+        AboutUs about = new AboutUs(about_id, address, email, phone, description);
+
+        String message = "";
+
+        if (action != null) {
+            switch (action) {
+                case "add" -> {
+                    dao.insert(about);
+                    message = "About Us information added successfully";
+                }
+                case "edit" -> {
+                    dao.update(about);
+                    message = "About Us information updated successfully";
+                }
+                case "delete" -> {
+                    dao.delete(about_id);
+                    message = "About Us information deleted successfully";
+                }
+            }
+        }
+
+        request.setAttribute("message", message);
+        response.sendRedirect("manage-about-us");
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+}

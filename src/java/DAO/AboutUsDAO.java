@@ -13,6 +13,7 @@ import Utility.DBContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class AboutUsDAO  {
@@ -31,10 +32,10 @@ public class AboutUsDAO  {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(new AboutUs(
-                    rs.getInt("id"),
+                    rs.getString("about_id"),
                     rs.getString("address"),
                     rs.getString("email"),
-                    rs.getString("hotline"),
+                    rs.getString("phone"),
                     rs.getString("description")
                 ));
             }
@@ -45,12 +46,17 @@ public class AboutUsDAO  {
     }
 
     public void insert(AboutUs about) {
-        String sql = "INSERT INTO AboutUs(address, email, hotline, description) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO AboutUs(about_id, address, email, phone, description) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, about.getAddress());
-            ps.setString(2, about.getEmail());
-            ps.setString(3, about.getHotline());
-            ps.setString(4, about.getDescription());
+            // Generate UUID if about_id is null or empty
+            if (about.getAbout_id() == null || about.getAbout_id().isEmpty()) {
+                about.setAbout_id("AU-" + UUID.randomUUID().toString().substring(0, 8));
+            }
+            ps.setString(1, about.getAbout_id());
+            ps.setString(2, about.getAddress());
+            ps.setString(3, about.getEmail());
+            ps.setString(4, about.getPhone());
+            ps.setString(5, about.getDescription());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,40 +64,40 @@ public class AboutUsDAO  {
     }
 
     public void update(AboutUs about) {
-        String sql = "UPDATE AboutUs SET address=?, email=?, hotline=?, description=? WHERE id=?";
+        String sql = "UPDATE AboutUs SET address=?, email=?, phone=?, description=? WHERE about_id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, about.getAddress());
             ps.setString(2, about.getEmail());
-            ps.setString(3, about.getHotline());
+            ps.setString(3, about.getPhone());
             ps.setString(4, about.getDescription());
-            ps.setInt(5, about.getId());
+            ps.setString(5, about.getAbout_id());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void delete(int id) {
-        String sql = "DELETE FROM AboutUs WHERE id=?";
+    public void delete(String about_id) {
+        String sql = "DELETE FROM AboutUs WHERE about_id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setString(1, about_id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public AboutUs getById(int id) {
-        String sql = "SELECT * FROM AboutUs WHERE id=?";
+    public AboutUs getById(String about_id) {
+        String sql = "SELECT * FROM AboutUs WHERE about_id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setString(1, about_id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new AboutUs(
-                    rs.getInt("id"),
+                    rs.getString("about_id"),
                     rs.getString("address"),
                     rs.getString("email"),
-                    rs.getString("hotline"),
+                    rs.getString("phone"),
                     rs.getString("description")
                 );
             }

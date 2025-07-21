@@ -9,26 +9,26 @@ package Entity;
  * @author LENOVO
  */
 public class AboutUs {
-    private int id;
+    private String about_id;
     private String address;
     private String email;
-    private String hotline;
+    private String phone;
     private String description;
 
     // Constructors
     public AboutUs() {}
 
-    public AboutUs(int id, String address, String email, String hotline, String description) {
-        this.id = id;
+    public AboutUs(String about_id, String address, String email, String phone, String description) {
+        this.about_id = about_id;
         this.address = address;
         this.email = email;
-        this.hotline = hotline;
+        this.phone = phone;
         this.description = description;
     }
 
     // Getters & Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public String getAbout_id() { return about_id; }
+    public void setAbout_id(String about_id) { this.about_id = about_id; }
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
@@ -36,8 +36,8 @@ public class AboutUs {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getHotline() { return hotline; }
-    public void setHotline(String hotline) { this.hotline = hotline; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

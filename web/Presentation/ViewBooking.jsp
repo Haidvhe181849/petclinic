@@ -198,10 +198,10 @@
                 <table class="table table-bordered table-hover align-middle">
                     <thead style="background-color: #ffe6e6;">
                         <tr>
-                            <th style="width: 100px;">Thú cưng</th>
-                            <th style="width: 200px;">Ngày / Giờ</th>
-                            <th style="width: 200px;">Dịch vụ</th>
                             <th style="width: 150px;">Bác sĩ</th>
+                            <th style="width: 100px;">Thú cưng</th>
+                            <th style="width: 200px;">Dịch vụ</th>
+                            <th style="width: 200px;">Ngày / Giờ</th>
                             <th style="width: 150px;">Ghi chú</th>
                             <th style="width: 120px;">Trạng thái</th>
                             <th style="width: 70px;">Tùy chỉnh</th>
@@ -210,15 +210,6 @@
                     <tbody>
                         <c:forEach var="b" items="${bookingList}">
                             <tr>
-                                <td><c:out value="${b.petName}" /></td>
-                                <td>
-                                    Ngày: <strong>${fn:substring(b.bookingTime, 0, 10)}</strong><br/>
-                                    Giờ: <strong>${fn:substring(b.bookingTime, 11, 16)}</strong>
-                                </td>
-                                <td>
-                                    <strong><c:out value="${b.serviceName}" /></strong><br/>
-                                    <span class="text-muted">${b.servicePrice} ₫</span>
-                                </td>
                                 <td>
                                     <c:choose>
                                         <c:when test="${not empty b.employeeName}">
@@ -229,6 +220,17 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
+
+
+                                <td><c:out value="${b.petName}" /></td>
+                                <td>
+                                    <strong><c:out value="${b.serviceName}" /></strong><br/>
+                                    <span class="text-muted">${b.servicePrice} ₫</span>
+                                </td>
+                                <td>
+                                    Ngày: <strong>${fn:substring(b.bookingTime, 0, 10)}</strong><br/>
+                                    Giờ: <strong>${fn:substring(b.bookingTime, 11, 16)}</strong>
+                                </td>
                                 <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     <c:out value="${b.note}" />
                                 </td>
@@ -238,7 +240,12 @@
                                     </span>
                                 </td>
                                 <td class="text-center">
-
+                                    <a href="ViewInvoice?bookingId=${b.bookingId}" 
+                                       class="btn btn-sm btn-outline-info me-1"
+                                       style="padding: 6px 10px; font-size: 12px;"
+                                       title="Xem hóa đơn">
+                                        <i class="fas fa-file-invoice"></i> Hóa đơn
+                                    </a>
                                     <!-- Nút hủy -->
                                     <c:if test="${b.status eq 'Pending'}">
                                         <form method="post"
@@ -255,6 +262,28 @@
                                         </form>
                                     </c:if>
 
+                                    <!-- Nút đánh giá -->
+                                    <c:if test="${b.status eq 'Confirmed'}">
+                                        <div class="d-flex flex-column gap-2">
+                                            <!-- Đánh giá dịch vụ -->
+                                            <a href="${pageContext.request.contextPath}/FeedbackServlet?action=create&bookingId=${b.bookingId}"
+                                               class="btn btn-xs btn-outline-primary"
+                                               style="background: #4B9DF8; padding: 8px 12px; font-size: 12px; color: white;"
+                                               title="Đánh giá dịch vụ">
+                                                <i class="fa fa-star"></i> Đánh giá dịch vụ
+                                            </a>
+                                            
+                                            <!-- Đánh giá bác sĩ -->
+                                            <c:if test="${not empty b.employeeName}">
+                                                <a href="${pageContext.request.contextPath}/RateDoctorServlet?action=create&bookingId=${b.bookingId}"
+                                                   class="btn btn-xs btn-outline-success"
+                                                   style="background: #28a745; padding: 8px 12px; font-size: 12px; color: white;"
+                                                   title="Đánh giá bác sĩ">
+                                                    <i class="fa fa-user-md"></i> Đánh giá bác sĩ
+                                                </a>
+                                            </c:if>
+                                        </div>
+                                    </c:if>
 
                                 </td>
                             </tr>

@@ -20,6 +20,50 @@ public class ServiceDAO extends DBContext {
         this.connection = connection;
     }
 
+    public List<Service> getAllServices() throws SQLException {
+        String sql = "SELECT * FROM Service";
+        List<Service> list = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Service s = new Service(
+//                        rs.getString("service_id"),
+//                        rs.getString("service_name"),
+//                        rs.getDouble("price"),
+//                        rs.getString("description")
+                );
+                s.setServiceId(rs.getString("service_id"));
+                s.setServiceName(rs.getString("service_name"));
+                s.setPrice(rs.getDouble("price"));
+                s.setDescription(rs.getString("description"));
+                list.add(s);
+            }
+        }
+        return list;
+    }
+    
+    public Service getServiceById(String serviceId) {
+        String sql = "SELECT * FROM Service WHERE service_id = ?";
+        try (PreparedStatement ptm = connection.prepareStatement(sql)) {
+            ptm.setString(1, serviceId);
+            try (ResultSet rs = ptm.executeQuery()) {
+                if (rs.next()) {
+                    Service s = new Service(
+                            rs.getString("service_id"),
+                            rs.getString("image"),
+                            rs.getString("service_name"),
+                            rs.getDouble("price"),
+                            rs.getString("description"),
+                            rs.getBoolean("status")
+                    );
+                    return s;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    
     public Vector<Service> getAllService(String sql) {
         Vector<Service> listService = new Vector<>();
         try (PreparedStatement ptm = connection.prepareStatement(sql); ResultSet rs = ptm.executeQuery()) {
@@ -172,4 +216,5 @@ public class ServiceDAO extends DBContext {
         return false;
     }
 
+    
 }

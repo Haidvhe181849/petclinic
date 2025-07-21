@@ -63,6 +63,20 @@ public class BookingDAO extends DBContext {
             return false;
         }
     }
+    
+    public int getTotalBookings() {
+        String sql = "SELECT COUNT(*) FROM Booking";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public boolean insertBookingDetail(String bookingId, UserAccount user) {
         String sql = "INSERT INTO BookingDetail (booking_id, name, phone, email, actual_checkin_time, is_cancelled, cancel_reason) "

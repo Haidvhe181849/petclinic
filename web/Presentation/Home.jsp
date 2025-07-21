@@ -80,7 +80,9 @@
                                             <li><a
                                                     href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                             </li>
-
+                                            <li><a
+                                                    href="${pageContext.request.contextPath}/about-us">AboutUs</a>
+                                            </li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -113,7 +115,7 @@
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li><a class="dropdown-item"
-                                                               href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">Managerment</a></li>
+                                                               href="${pageContext.request.contextPath}/dashboard">Managerment</a></li>
 
                                                     </c:if>
                                                 </ul>

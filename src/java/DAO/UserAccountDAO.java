@@ -45,6 +45,31 @@ public class UserAccountDAO extends DBContext {
 
         return accounts;
     }
+    
+    public int getTotalCustomers() {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM UserAccount WHERE role_id = 4";
+
+        try {
+            if (connection == null || connection.isClosed()) {
+                connection = getConnection();
+            }
+
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.err.println("Error counting customers: " + e.getMessage());
+        }
+
+        return count;
+    }
 
     public UserAccount getByUsername(String username) {
         String sql = "SELECT * FROM UserAccount WHERE username = ?";
@@ -231,4 +256,5 @@ public class UserAccountDAO extends DBContext {
 
         return filteredAccounts;
     }
+
 }

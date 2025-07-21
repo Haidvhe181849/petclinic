@@ -41,6 +41,7 @@
             .line-clamp-2 {
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
+                line-clamp: 2;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -56,6 +57,7 @@
             .line-clamp-1 {
                 display: -webkit-box;
                 -webkit-line-clamp: 1;
+                line-clamp: 1;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -200,7 +202,6 @@
 
                                         <!-- Nút All -->
                                         <form action="${pageContext.request.contextPath}/Employee" method="get">
-                                            <input type="hidden" name="service" value="listEmployee" />
                                             <button type="submit" class="btn btn-sm btn-outline-secondary">
                                                 All
                                             </button>
@@ -230,7 +231,7 @@
                                                 <th>Email</th>
                                                 <th>Role</th>
                                                 <th>Status</th>
-                                                <th style="width: 140px;">Actions</th>
+                                                <th style="width: 180px;">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -238,13 +239,35 @@
                                                 <tr>
                                                     <td><c:out value="${e.employeeId}"/></td>
                                                     <td>
-                                                        <img src="<c:out value='${e.image}'/>" alt="Employee Image"
-                                                             style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px;">
+                                                        <c:if test="${not empty e.image}">
+                                                            <img src="${pageContext.request.contextPath}/${e.image}" alt="Employee Image"
+                                                                 style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px;">
+                                                        </c:if>
+                                                        <c:if test="${empty e.image}">
+                                                            <div class="bg-secondary text-white text-center" style="width: 100px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 6px;">
+                                                                No Image
+                                                            </div>
+                                                        </c:if>
                                                     </td>
                                                     <td><c:out value="${e.name}"/></td>
                                                     <td><c:out value="${e.phone}"/></td>
                                                     <td><c:out value="${e.email}"/></td>
-                                                    <td><c:out value="${e.roleId}"/></td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${e.roleId == 1}">
+                                                                <span class="badge bg-danger">Admin</span>
+                                                            </c:when>
+                                                            <c:when test="${e.roleId == 2}">
+                                                                <span class="badge bg-info">Staff</span>
+                                                            </c:when>
+                                                            <c:when test="${e.roleId == 3}">
+                                                                <span class="badge bg-primary">Doctor</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="badge bg-secondary">${e.roleId}</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${e.status}">
@@ -268,9 +291,20 @@
                                                            data-experience="${e.experience}"
                                                            data-workinghours="${e.workingHours}"
                                                            data-status="${e.status ? 1 : 0}"
-                                                           data-image="${fn:substringAfter(e.image, '/Employee/')}">
+                                                           data-image="${e.image}">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
+
+                                                        <!-- View Feedback Button (only for doctors - role_id = 3) -->
+                                                        <c:if test="${e.roleId == 3}">
+                                                            <a href="#" class="btn btn-sm btn-outline-info me-1 feedback-btn"
+                                                               data-bs-toggle="modal" data-bs-target="#feedbackModal"
+                                                               data-employee-id="${e.employeeId}"
+                                                               data-employee-name="${e.name}"
+                                                               title="View Feedback">
+                                                                <i class="fas fa-comments"></i>
+                                                            </a>
+                                                        </c:if>
 
                                                         <a href="#" class="btn btn-sm btn-outline-primary me-2 update-btn"
                                                            data-bs-toggle="modal"
@@ -312,7 +346,7 @@
                                                 <c:forEach begin="1" end="${totalPages}" var="i">
                                                     <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                         <a class="page-link"
-                                                           href="Employee?service=listEmployee&page=${i}
+                                                           href="Employee?page=${i}
                                                            &name=${name}&email=${email}&phone=${phone}
                                                            &roleId=${roleId}&status=${status}">
                                                             ${i}
@@ -569,6 +603,31 @@
             </div>
 
 
+        <!-- Feedback Modal -->
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Doctor Feedback</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="feedbackContent">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Loading feedback...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -600,12 +659,47 @@
                         $("#viewExperience").text($(this).data("experience"));
                         $("#viewWorkingHours").text($(this).data("workinghours")); // ✅ chính xác
                         const imagePath = $(this).data("image");
-                        $("#viewImage").attr("src", "Presentation/img/images/Employee/" + imagePath); // ✅ đường dẫn đúng?
+                        $("#viewImage").attr("src", "${pageContext.request.contextPath}/" + imagePath); // ✅ đường dẫn đúng
 
                         const status = $(this).data("status");
                         const statusText = status == 1 ? "Active" : "Inactive";
                         const statusClass = status == 1 ? "bg-success" : "bg-danger";
                         $("#viewStatus").text(statusText).removeClass("bg-success bg-danger").addClass(statusClass);
+                    });
+
+                    // Handle feedback button click
+                    $(".feedback-btn").click(function () {
+                        const employeeId = $(this).data("employee-id");
+                        const employeeName = $(this).data("employee-name");
+                        
+                    // Update modal title
+                    $("#feedbackModal .modal-title").text("Feedback for " + employeeName);                        // Reset content to loading state
+                        $("#feedbackContent").html(`
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Loading feedback...</p>
+                            </div>
+                        `);
+                        
+                        // Load feedback via AJAX
+                        $.ajax({
+                            url: "${pageContext.request.contextPath}/EmployeeFeedback",
+                            method: "GET",
+                            data: { employeeId: employeeId },
+                            success: function(response) {
+                                $("#feedbackContent").html(response);
+                            },
+                            error: function(xhr, status, error) {
+                                $("#feedbackContent").html(`
+                                    <div class="alert alert-danger">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Error loading feedback: ` + error + `
+                                    </div>
+                                `);
+                            }
+                        });
                     });
 
         </script>

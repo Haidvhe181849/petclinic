@@ -78,7 +78,7 @@
                                     <li><a
                                             href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/Presentation/ViewAboutUs.jsp">About
+                                    <li><a href="${pageContext.request.contextPath}/about-us">About
                                             Us</a></li>
                                 </ul>
                             </nav>

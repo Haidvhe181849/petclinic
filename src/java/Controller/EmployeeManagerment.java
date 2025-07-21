@@ -67,11 +67,11 @@ public class EmployeeManagerment extends HttpServlet {
             } else {
                 request.getSession().setAttribute("message", "Employee ID not found!");
             }
-            response.sendRedirect("Employee?service=listEmployee");
+            response.sendRedirect("Employee");
             return;
         }
 
-        // Hiển thị danh sách nhân viên với filter
+        // Hiển thị danh sách nhân viên với filter (mặc định)
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String roleIdRaw = request.getParameter("roleId");
@@ -135,13 +135,13 @@ public class EmployeeManagerment extends HttpServlet {
 
                 if (dao.isEmailExists(email, employeeId == null ? "" : employeeId)) {
                     request.getSession().setAttribute("message", "❌ Email đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("Employee?service=listEmployee");
+                    response.sendRedirect("Employee");
                     return;
                 }
 
                 if (dao.isPhoneExists(phone, employeeId == null ? "" : employeeId)) {
                     request.getSession().setAttribute("message", "❌ Số điện thoại đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("Employee?service=listEmployee");
+                    response.sendRedirect("Employee");
                     return;
                 }
                 // Upload ảnh
@@ -173,13 +173,13 @@ public class EmployeeManagerment extends HttpServlet {
                 
                 if (dao.isEmailExists(email, employeeId)) {
                     request.getSession().setAttribute("message", "❌ Email đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("Employee?service=listEmployee");
+                    response.sendRedirect("Employee");
                     return;
                 }
 
                 if (dao.isPhoneExists(phone, employeeId)) {
                     request.getSession().setAttribute("message", "❌ Số điện thoại đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("Employee?service=listEmployee");
+                    response.sendRedirect("Employee");
                     return;
                 }
                 String imagePath = uploadImage(request);
@@ -199,7 +199,7 @@ public class EmployeeManagerment extends HttpServlet {
             }
         }
 
-        response.sendRedirect("Employee?service=listEmployee");
+        response.sendRedirect("Employee");
     }
 
     @Override

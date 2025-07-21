@@ -1,7 +1,6 @@
 package Controller;
 
 import DAO.FeedbackDAO;
-import Entity.Employee;
 import Entity.Feedback;
 import Entity.UserAccount;
 import java.io.IOException;
@@ -16,6 +15,8 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "FeedbackManagementServlet", urlPatterns = { "/feedback-management" })
 public class FeedbackManagementServlet extends HttpServlet {
 
+    private static final int FEEDBACKS_PER_PAGE = 6;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,9 +26,9 @@ public class FeedbackManagementServlet extends HttpServlet {
         try {
             // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-            Employee currentUser = (Employee) session.getAttribute("staff");
-            if (currentUser == null || (currentUser.getRoleId() != 1 && currentUser.getRoleId() != 2)) {
-                response.sendRedirect("login-employee");
+            UserAccount user = (UserAccount) session.getAttribute("user");
+            if (user == null || (user.getRoleId() != 1 && user.getRoleId() != 2)) {
+                response.sendRedirect("login");
                 return;
             }
 
@@ -42,10 +43,35 @@ public class FeedbackManagementServlet extends HttpServlet {
 
             switch (action) {
                 case "list":
-                    List<Feedback> feedbacks = dao.getAllFeedbacks();
+                    // Get pagination parameters
+                    int page = 1;
+                    String pageStr = request.getParameter("page");
+                    if (pageStr != null && !pageStr.isEmpty()) {
+                        try {
+                            page = Integer.parseInt(pageStr);
+                            if (page < 1) page = 1;
+                        } catch (NumberFormatException e) {
+                            page = 1;
+                        }
+                    }
+                    
+                    // Get total count of feedbacks
+                    int totalFeedbacks = dao.getTotalFeedbackCount();
+                    int totalPages = (int) Math.ceil((double) totalFeedbacks / FEEDBACKS_PER_PAGE);
+                    if (page > totalPages && totalPages > 0) {
+                        page = totalPages;
+                    }
+                    
+                    // Get paginated feedbacks
+                    List<Feedback> feedbacks = dao.getFeedbacksByPage(page, FEEDBACKS_PER_PAGE);
+                    
                     System.out.println("FeedbackManagementServlet: Retrieved "
                             + (feedbacks != null ? feedbacks.size() : "null") + " feedbacks");
+                    
                     request.setAttribute("feedbacks", feedbacks);
+                    request.setAttribute("currentPage", page);
+                    request.setAttribute("totalPages", totalPages);
+                    request.setAttribute("feedbacksPerPage", FEEDBACKS_PER_PAGE);
                     request.getRequestDispatcher("Presentation/feedback_list.jsp").forward(request, response);
                     break;
                 case "detail":

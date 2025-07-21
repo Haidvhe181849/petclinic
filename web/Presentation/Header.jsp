@@ -39,12 +39,12 @@
                                 <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 3}">
                                     <li><a href="#">Managerment</a>
                                         <ul class="submenu">
-                                            <li><a href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">Dashboard</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
                                             <li><a href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">Booking</a></li>
                                             <li><a href="${pageContext.request.contextPath}/Service?service=listService">Service</a></li>
                                             <li><a href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">Medicine</a></li>
                                             <li><a href="${pageContext.request.contextPath}/News?service=listNews">News</a></li>
-                                            <li><a href="${pageContext.request.contextPath}/Presentation/ManageAboutUsAdmin.jsp">About Us</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/about-us">About Us</a></li>
                                         </ul>
                                     </li>
                                 </c:if>
