@@ -45,7 +45,7 @@ public class EmployeeManagerment extends HttpServlet {
             dir.mkdirs();
         }
 
-        // Lưu ảnh
+       
         filePart.write(realPath + File.separator + fileName);
 
         return saveDir.substring(1) + "/" + fileName;  // Bỏ dấu "/" đầu
@@ -58,7 +58,7 @@ public class EmployeeManagerment extends HttpServlet {
         EmployeeDAO dao = getEmployeeDAO();
         String service = request.getParameter("service");
 
-        // Xử lý xóa nhân viên
+     
         if ("delete".equals(service)) {
             String id = request.getParameter("employeeId");
             if (id != null && !id.isEmpty()) {
@@ -67,11 +67,11 @@ public class EmployeeManagerment extends HttpServlet {
             } else {
                 request.getSession().setAttribute("message", "Employee ID not found!");
             }
-            response.sendRedirect("Employee");
+            response.sendRedirect("Employee?service=listEmployee");
             return;
         }
 
-        // Hiển thị danh sách nhân viên với filter (mặc định)
+       
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String roleIdRaw = request.getParameter("roleId");

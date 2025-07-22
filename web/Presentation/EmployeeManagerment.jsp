@@ -603,30 +603,30 @@
             </div>
 
 
-        <!-- Feedback Modal -->
-        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Doctor Feedback</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="feedbackContent">
-                            <div class="text-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+            <!-- Feedback Modal -->
+            <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Doctor Feedback</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="feedbackContent">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p>Loading feedback...</p>
                                 </div>
-                                <p>Loading feedback...</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -650,16 +650,35 @@
                     });
 
                     $(".view-btn").click(function () {
+                        const roleId = $(this).data("role");
+                        let roleName = "Unknown";
+
+                        switch (roleId) {
+                            case 1:
+                            case "1":
+                                roleName = "Admin";
+                                break;
+                            case 2:
+                            case "2":
+                                roleName = "Staff";
+                                break;
+                            case 3:
+                            case "3":
+                                roleName = "Doctor";
+                                break;
+                        }
+
                         $("#viewEmployeeId").text($(this).data("id"));
                         $("#viewName").text($(this).data("name"));
                         $("#viewPhone").text($(this).data("phone"));
                         $("#viewEmail").text($(this).data("email"));
                         $("#viewAddress").text($(this).data("address"));
-                        $("#viewRoleId").text($(this).data("role"));
+                        $("#viewRoleId").text(roleName); // ✅ Đã chuyển thành tên role
                         $("#viewExperience").text($(this).data("experience"));
-                        $("#viewWorkingHours").text($(this).data("workinghours")); // ✅ chính xác
+                        $("#viewWorkingHours").text($(this).data("workinghours"));
+
                         const imagePath = $(this).data("image");
-                        $("#viewImage").attr("src", "${pageContext.request.contextPath}/" + imagePath); // ✅ đường dẫn đúng
+                        $("#viewImage").attr("src", "Presentation/img/images/Employee/" + imagePath);
 
                         const status = $(this).data("status");
                         const statusText = status == 1 ? "Active" : "Inactive";
@@ -671,9 +690,9 @@
                     $(".feedback-btn").click(function () {
                         const employeeId = $(this).data("employee-id");
                         const employeeName = $(this).data("employee-name");
-                        
-                    // Update modal title
-                    $("#feedbackModal .modal-title").text("Feedback for " + employeeName);                        // Reset content to loading state
+
+                        // Update modal title
+                        $("#feedbackModal .modal-title").text("Feedback for " + employeeName);                        // Reset content to loading state
                         $("#feedbackContent").html(`
                             <div class="text-center">
                                 <div class="spinner-border" role="status">
@@ -682,16 +701,16 @@
                                 <p>Loading feedback...</p>
                             </div>
                         `);
-                        
+
                         // Load feedback via AJAX
                         $.ajax({
                             url: "${pageContext.request.contextPath}/EmployeeFeedback",
                             method: "GET",
-                            data: { employeeId: employeeId },
-                            success: function(response) {
+                            data: {employeeId: employeeId},
+                            success: function (response) {
                                 $("#feedbackContent").html(response);
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 $("#feedbackContent").html(`
                                     <div class="alert alert-danger">
                                         <i class="fas fa-exclamation-triangle"></i>
