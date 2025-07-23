@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import DAO.AboutUsDAO;
 import Entity.AboutUs;
+import Entity.Employee;
 import Entity.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -65,9 +66,9 @@ public class AboutUsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        UserAccount user = (UserAccount) session.getAttribute("user");
-        if (user == null || (user.getRoleId() != 1 && user.getRoleId() != 2)) {
-            response.sendRedirect("login");
+        Employee currentStaff = (Employee) session.getAttribute("staff");
+        if (currentStaff == null) {
+            response.sendRedirect("login-employee");
             return;
         }
         String action = request.getParameter("action");

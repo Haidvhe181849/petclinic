@@ -19,6 +19,7 @@
 <c:set var="animalTypeActive" value="${currentPage eq 'animal' ? 'font-bold text-blue-500' : ''}" />
 <c:set var="breedActive" value="${currentPage eq 'breed' ? 'font-bold text-blue-500' : ''}" />
 <c:set var="bookingActive" value="${currentPage eq 'booking' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
+<c:set var="scheduleActive" value="${currentPage eq 'schedule' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
 <c:set var="feedbackActive" value="${currentPage eq 'feedback' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
 <c:set var="timeActive" value="${currentPage eq 'time' ? 'bg-blue-500/13 font-semibold text-slate-700 rounded-lg' : ''}" />
 <a class="absolute w-full h-full top-0 left-0 dark:hidden min-h-75 overflow-hidden">
@@ -174,6 +175,15 @@
                             <i class="text-red-600 ni ni-calendar-grid-58"></i>
                         </div>
                         <span class="ml-1">Booking Managerment</span>
+                    </a>
+                </li>
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${scheduleActive}" 
+                       href="${pageContext.request.contextPath}/ScheduleManagement">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="text-red-600 ni ni-calendar-grid-58"></i>
+                        </div>
+                        <span class="ml-1">Schedule Managerment</span>
                     </a>
                 </li>
                 <li class="mt-0.5 w-full">

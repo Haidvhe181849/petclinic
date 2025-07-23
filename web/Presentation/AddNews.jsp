@@ -1,8 +1,9 @@
 <%-- 
-    Document   : UpdateNews
-    Created on : Jul 23, 2025, 2:16:42 AM
+    Document   : AddNews
+    Created on : Jul 23, 2025, 9:50:33 PM
     Author     : LENOVO
 --%>
+
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -145,7 +146,6 @@
                 overflow: hidden; /* nếu sidebar dùng fixed thì phần content có thể tự cuộn */
             }
         </style>
-
     </head>
 
     <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500"> 
@@ -169,67 +169,49 @@
 
             <!-- Header title on pink background -->
             <div class="w-full bg-pink-100 py-4 flex justify-center items-center">
-                <h2 class="text-2xl font-bold text-gray-700">News Update</h2>
+                <h2 class="text-2xl font-bold text-gray-700">Add News</h2>
             </div> 
 
             <div class="w-full px-6 py-6 mx-auto">
-                <!-- table 1 -->
-
                 <div class="flex flex-wrap -mx-3">
                     <div class="flex-none w-full max-w-full px-3">
                         <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                             <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                                 <div class="flex items-center justify-end">
                                     <div class="flex gap-2 items-center">
-
-
-
-
-
-
+                                        <!-- Có thể thêm nút ở đây nếu cần -->
                                     </div>
                                 </div>
                             </div>
                             <div class="flex-auto px-0 pt-0 pb-2">
                                 <div class="p-0 overflow-x-auto">
-                                    <form action="${pageContext.request.contextPath}/UpdateNews" method="post" enctype="multipart/form-data" class="p-4">
-                                        <div class="mb-3">
-                                            <label>ID</label>
-                                            <input name="newsId" type="text" class="form-control" value="${news.newsId}" readonly required>
-                                        </div>
-
-                                        <input type="hidden" name="oldImage" value="${news.imageUrl}">
+                                    <form action="${pageContext.request.contextPath}/AddNews" method="post" enctype="multipart/form-data" class="p-4">
 
                                         <div class="mb-3">
-                                            <label>Image URL</label>
-                                            <input type="file" name="imageFile" class="form-control" accept="image/*">
-                                            <c:if test="${not empty news.imageUrl}">
-                                                <img src="${pageContext.request.contextPath}/${news.imageUrl}" alt="Current Image" class="mt-2" style="max-height: 150px;">
-                                            </c:if>
+                                            <label>Image</label>
+                                            <input type="file" name="imageFile" class="form-control" accept="image/*" required>
                                         </div>
 
                                         <div class="mb-3">
                                             <label>Title</label>
-                                            <input type="text" name="nameNews" class="form-control" value="${news.nameNews}" required pattern="^(?!\s*$).{5,100}$"
+                                            <input type="text" name="nameNews" class="form-control" required pattern="^(?!\s*$).{5,100}$"
                                                    title="Tiêu đề không được để trống và từ 5 đến 100 ký tự">
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="description">Description</label>
-                                            <textarea name="description" id="editor"><c:out value="${news.description}" /></textarea>
+                                            <textarea name="description" id="editor" required></textarea>
                                         </div>
 
                                         <div class="mb-3">
                                             <label>Active</label><br>
-                                            <input type="radio" name="isActive" value="1" <c:if test="${news.isActive}">checked</c:if>> Active
-                                            <input type="radio" name="isActive" value="0" <c:if test="${!news.isActive}">checked</c:if>> Inactive
-                                            </div>
+                                            <input type="radio" name="isActive" value="1" checked> Active
+                                            <input type="radio" name="isActive" value="0"> Inactive
+                                        </div>
 
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                            <a href="${pageContext.request.contextPath}/News?service=listNews" class="btn btn-secondary">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Add News</button>
+                                        <a href="${pageContext.request.contextPath}/News?service=listNews" class="btn btn-secondary">Cancel</a>
                                     </form>
-
-
                                 </div>
                             </div>
                         </div>
@@ -267,7 +249,7 @@
 
 
         <script>
-                    CKEDITOR.replace('description', {
+                    CKEDITOR.replace('editor', {
                         filebrowserUploadUrl: '${pageContext.request.contextPath}/NewsImageUpload',
                         filebrowserUploadMethod: 'form'
                     });
@@ -280,3 +262,4 @@
 
 
 </html>
+

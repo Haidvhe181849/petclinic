@@ -20,16 +20,14 @@ import java.nio.file.Paths;
  *
  * @author LENOVO
  */
-
 @WebServlet(name = "NewsImageUpload", urlPatterns = {"/NewsImageUpload"})
-@MultipartConfig( 
-        fileSizeThreshold = 1024 * 1024 * 1,  // 1MB
-        maxFileSize = 1024 * 1024 * 10,       // 10MB
-        maxRequestSize = 1024 * 1024 * 50     // 50MB
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class NewsImageUpload extends HttpServlet {
 
-   
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -59,10 +57,10 @@ public class NewsImageUpload extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        Part filePart = request.getPart("upload");  
+        Part filePart = request.getPart("upload");
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
-        String uploadPath = request.getServletContext().getRealPath("/Presentation/img/uploads");
+        String uploadPath = request.getServletContext().getRealPath("/uploads");
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
@@ -70,11 +68,16 @@ public class NewsImageUpload extends HttpServlet {
 
         filePart.write(uploadPath + File.separator + fileName);
 
-        String fileUrl = request.getContextPath() + "/Presentation/img/uploads/" + fileName;
+        String fileUrl = request.getContextPath() + "/uploads/" + fileName;
 
         response.setContentType("application/json");
         try (PrintWriter out = response.getWriter()) {
-            out.print("{\"url\":\"" + fileUrl + "\"}");
+            out.print("{"
+                    + "\"uploaded\": 1,"
+                    + "\"fileName\": \"" + fileName + "\","
+                    + "\"url\": \"" + fileUrl + "\""
+                    + "}");
+
             out.flush();
         }
     }

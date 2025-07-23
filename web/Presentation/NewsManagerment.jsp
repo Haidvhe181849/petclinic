@@ -196,11 +196,12 @@
                                         </form>
 
                                         <!-- Nút Add News -->
-                                        <button class="btn btn-sm btn-outline-secondary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#addNewsModal">
-                                            Add News
-                                        </button>
+                                        <a href="${pageContext.request.contextPath}/AddNews">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                                Add News
+                                            </button>
+                                        </a>
+
                                     </div>
                                 </div>
 

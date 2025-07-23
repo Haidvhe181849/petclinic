@@ -121,40 +121,7 @@ public class NewsBL extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        NewsDAO nDAO = new NewsDAO();
-        String service = request.getParameter("service");
-
-        if ("addNews".equals(service)) {
-            String newsId = nDAO.generateNextNewsId();
-            String nameNews = request.getParameter("nameNews");
-            Part imagePart = request.getPart("imageFile");
-            String imagePath = saveFile(imagePart, "images/news", request);
-            String description = request.getParameter("description");
-            Boolean isActive = Boolean.valueOf(request.getParameter("isActive"));
-            Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
-            News news = new News(newsId, imagePath, nameNews, timestampNow, description, isActive);
-            nDAO.insertNews(news);
-
-            request.getSession().setAttribute("message", "Added successful!");
-            response.sendRedirect("News?service=listNews");
-        } else if ("updateNews".equals(service)) {
-            String newsId = request.getParameter("newsId");
-            String nameNews = request.getParameter("nameNews");
-            Timestamp postTime = new Timestamp(System.currentTimeMillis());
-            String description = request.getParameter("description");
-            Boolean isActive = "1".equals(request.getParameter("isActive"));
-            String oldImage = request.getParameter("oldImage");
-            Part imagePart = request.getPart("imageFile");
-            String imagePath = imagePart.getSize() > 0 ? saveFile(imagePart, "images/news", request) : oldImage;
-
-            News news = new News(newsId, imagePath, nameNews, postTime, description, isActive);
-            nDAO.updateNews(news);
-
-            request.getSession().setAttribute("message", "Update successful!");
-            response.sendRedirect("News?service=listNews");
-        }
+        
     }
 
     /**

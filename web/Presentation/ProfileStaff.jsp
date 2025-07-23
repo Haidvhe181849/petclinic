@@ -199,7 +199,7 @@
                 <div class="col-md-4">
                     <div class="profile-card text-center">
                         <img id="mainAvatar" 
-                             src="${pageContext.request.contextPath}/Presentation/img/images/avtEmp/${currentStaff.image}" 
+                             src="${pageContext.request.contextPath}/Presentation/img/avtEmp/${currentStaff.image}" 
                              alt="Avatar" 
                              class="rounded-circle d-block mx-auto mb-2" 
                              style="width: 120px; height: 120px; object-fit: cover;">
@@ -221,16 +221,6 @@
                     <div class="profile-card mt-4">
                         <h6>Chức năng</h6>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a href="${pageContext.request.contextPath}/DoctorManagerment?service=listDoctor" class="text-decoration-none text-dark">
-                                    <i class="bi bi-github me-2"></i> Quản lí Doctor
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking" class="text-decoration-none text-dark">
-                                    <i class="bi bi-calendar-check me-2"></i>Managerment Booking
-                                </a>
-                            </li>
                             <li class="list-group-item">
                                 <a href="${pageContext.request.contextPath}/change-password-employee" class="text-decoration-none text-dark">
                                     <i class="bi bi-key me-2"></i> Đổi mật khẩu
@@ -272,90 +262,6 @@
                             </tr>
                         </table>
                     </div>
-
-                    <div class="profile-card mt-4">
-                        <h5 class="mb-3">📅 Lịch Phân Công</h5>
-
-                        <!-- Dropdown chọn bác sĩ -->
-                        <form method="get" action="ProfileStaff" class="mb-3">
-                            <label class="form-label fw-semibold">Chọn bác sĩ:</label>
-                            <select name="doctorId" class="form-select w-100" onchange="this.form.submit()">
-                                <c:forEach var="doc" items="${doctorList}">
-                                    <option value="${doc.employeeId}" ${selectedDoctor.employeeId == doc.employeeId ? 'selected' : ''}>
-                                        ${doc.name}
-                                    </option>
-                                </c:forEach>
-                            </select>
-                        </form>
-
-                        <!-- Bảng lịch theo giờ và ngày -->
-                        <div class="table-responsive mt-3">
-                            <table class="table table-bordered text-center align-middle mt-3">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Khung giờ</th>
-                                            <c:forEach var="date" items="${dateList}">
-                                            <th><fmt:formatDate value="${date}" pattern="dd/MM/yyyy"/></th>
-                                            </c:forEach>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="hour" items="${allHourSlots}">
-                                        <tr>
-                                            <th>${hour}</th>
-                                                <c:forEach var="date" items="${dateList}">
-                                                    <c:set var="dateKey"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></c:set>
-                                                    <c:set var="hourSlots" value="${hourSlotMap[dateKey]}" />
-                                                    <c:choose>
-                                                        <c:when test="${hourSlots != null && hourSlots.contains(hour)}">
-                                                            <c:set var="key" value="${dateKey}_${hour}" />
-                                                        <td>
-                                                            <c:choose>
-                                                                <c:when test="${bookingMap[key] != null}">
-                                                                    <c:forEach var="b" items="${bookingMap[key]}">
-                                                                        <div class="schedule-entry">
-                                                                            <div title="${b.petName}">🐾${b.petName}</div>
-                                                                            <div title="${b.serviceName}">💠${b.serviceName}</div>
-                                                                            <div>
-                                                                                <span class="line-label">👤
-                                                                                    <c:choose>
-                                                                                        <c:when test="${b.employeeName != null}">
-                                                                                            ${b.employeeName}
-                                                                                        </c:when>
-                                                                                        <c:otherwise>
-                                                                                            <button class="btn btn-sm btn-outline-primary"
-                                                                                                    data-bs-toggle="modal"
-                                                                                                    data-bs-target="#assignModal"
-                                                                                                    data-booking-id="${b.bookingId}"
-                                                                                                    data-date="${b.formattedDate}"
-                                                                                                    data-hour="${b.formattedTime}">
-                                                                                                Chưa phân công
-                                                                                            </button>
-                                                                                        </c:otherwise>
-                                                                                    </c:choose>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </c:forEach>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <span class="text-muted">–</span>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <td class="bg-light text-muted">×</td>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -427,31 +333,8 @@
             </div>
         </div>
 
-        <!-- Assign Doctor Modal -->
-        <!-- Modal chọn bác sĩ -->
-        <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <form method="post" action="ProfileStaff">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Phân công bác sĩ</h5>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="bookingId" id="modalBookingId" />
-                            <div class="mb-3">
-                                <label for="doctorId" class="form-label">Chọn bác sĩ</label>
-                                <select name="doctorId" id="modalDoctorSelect" class="form-select" required>
-                                    <option>Đang tải danh sách...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Phân công</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+       
+        
 
 
 
@@ -475,87 +358,7 @@
 
 
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const assignModal = document.getElementById("assignModal");
-
-                assignModal.addEventListener("show.bs.modal", function (event) {
-                    const button = event.relatedTarget;
-                    const bookingId = button.getAttribute("data-booking-id");
-                    const formattedDate = button.getAttribute("data-date");
-                    const formattedTime = button.getAttribute("data-hour");
-                    const isoDateTime = formattedDate + 'T' + formattedTime;
-
-                    // Gán bookingId vào input ẩn
-                    document.getElementById("modalBookingId").value = bookingId;
-
-                    const select = document.getElementById("modalDoctorSelect");
-                    select.innerHTML = "<option>Đang tải danh sách bác sĩ...</option>";
-
-                    fetch('ProfileStaff?action=availableDoctors&datetime=' + encodeURIComponent(isoDateTime))
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log("📦 Dữ liệu nhận được:", data);
-
-                                if (!Array.isArray(data)) {
-                                    console.error("❌ Không phải mảng:", data);
-                                    select.innerHTML = "<option>Lỗi tải danh sách</option>";
-                                    return;
-                                }
-                                select.innerHTML = "";
-                                if (data.length === 0) {
-                                    const opt = document.createElement("option");
-                                    opt.text = "Không có bác sĩ nào rảnh";
-                                    opt.disabled = true;
-                                    select.appendChild(opt);
-                                } else {
-                                    data.forEach(doctor => {
-                                        const opt = document.createElement("option");
-                                        opt.value = doctor.employeeId;
-                                        opt.text = "Bác sĩ " + doctor.name;
-                                        select.appendChild(opt);
-                                    });
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Lỗi khi tải bác sĩ:", error);
-                                select.innerHTML = "<option>Lỗi tải danh sách</option>";
-                            });
-                });
-            });
-        </script>
-
-
-        <script>
-            function loadAvailableDoctors(formattedDate, formattedTime, bookingId) {
-                const isoDateTime = formattedDate + 'T' + formattedTime;
-                console.log("🧪 Gọi API với:", isoDateTime);
-                fetch('ProfileStaff?action=availableDoctors&datetime=' + encodeURIComponent(isoDateTime))
-                        .then(response => response.json())
-                        .then(data => {
-                            const select = document.getElementById('doctorSelect-' + bookingId);
-                            select.innerHTML = ""; // clear old
-
-                            if (data.length === 0) {
-                                const opt = document.createElement("option");
-                                opt.text = "Không có bác sĩ nào rảnh";
-                                select.add(opt);
-                                select.disabled = true;
-                            } else {
-                                select.disabled = false;
-                                data.forEach(doctor => {
-                                    const opt = document.createElement("option");
-                                    opt.value = doctor.employeeId;
-                                    opt.text = "Bác sĩ " + doctor.name;
-                                    select.add(opt);
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error loading doctors: ", error);
-                        });
-            }
-        </script>
+      
 
         <script>
             $(window).on('load', function () {
