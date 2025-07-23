@@ -248,7 +248,7 @@
                                                     <!-- DESCRIPTION -->
                                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 text-sm text-center text-black">
                                                         <div class="line-clamp-2">
-                                                            <c:out value="${news.description}" />
+                                                            ${news.description} />
                                                         </div>
                                                     </td>
 
@@ -265,21 +265,13 @@
                                                     </td>
 
                                                     <td class="text-center">
-                                                        <a href="#"
-                                                           class="btn btn-sm btn-outline-primary me-2 update-btn"
-                                                           style="background: #0000"
-                                                           data-bs-toggle="modal"
-                                                           data-bs-target="#editEmployeeModal"
-                                                           data-id="${news.newsId}"
-                                                           data-image="${news.imageUrl}"
-                                                           data-name="${news.nameNews}"
-                                                           data-date="${fn:escapeXml(news.postTime)}"
-                                                           data-describe="${fn:escapeXml(news.description)}"
-                                                           data-active="${news.isActive ? 1 : 0}"
-                                                           data-oldimage="${news.imageUrl}"
+                                                        <a href="${pageContext.request.contextPath}/UpdateNews?id=${news.newsId}" 
+                                                           class="btn btn-sm btn-outline-primary me-2"
                                                            title="Edit News">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+
+
                                                         <a href="News?service=deleteNews&nID=<c:out value='${news.newsId}'/>" 
                                                            onclick="return confirm('Bạn có chắc chắn muốn xóa tin này không?');" 
                                                            class="btn btn-sm btn-outline-danger" style="background: #0000;" title="Delete News">
@@ -290,22 +282,6 @@
                                             </c:forEach>
                                         </tbody>
                                     </table>
-
-                                    <!-- PHÂN TRANG -->
-                                    <c:if test="${totalPages > 1}">
-                                        <nav class="mt-3 d-flex justify-content-center">
-                                            <ul class="pagination pagination-sm">
-                                                <c:forEach begin="1" end="${totalPages}" var="i">
-                                                    <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                        <a class="page-link" href="${pageContext.request.contextPath}/News?service=nlist&page=${i}
-                                                           &name=${nameNews}&order=${order}&status=${status}&fromDate=${fromDate}&toDate=${toDate}">
-                                                            ${i}
-                                                        </a>
-                                                    </li>
-                                                </c:forEach>
-                                            </ul>
-                                        </nav>
-                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -356,8 +332,9 @@
             </div>
 
             <c:if test="${not empty sessionScope.message}">
-                <div id="popup-message">${sessionScope.message}</div>
-
+                <div id="popup-message" class="alert alert-success position-fixed top-0 end-0 m-4">
+                    ${sessionScope.message}
+                </div>
                 <script>
                     setTimeout(function () {
                         var popup = document.getElementById("popup-message");
@@ -368,58 +345,6 @@
 
                 <c:remove var="message" scope="session"/>
             </c:if>
-
-            <!-- Update News Modal -->
-            <div id="editEmployeeModal" class="modal fade" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/News" method="post" enctype="multipart/form-data">
-                            <div class="modal-header">						
-                                <h4 class="modal-title">Update News</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label>ID</label>
-                                    <input name="newsId" type="text" class="form-control" readonly required>
-                                </div>
-                                <div class="mb-3">
-                                    <input type="hidden" name="oldImage" class="form-control" readonly required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Image URL</label>
-                                    <input type="file" name="imageFile" class="form-control" accept="image/*">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Title</label>
-                                    <input type="text" name="nameNews" class="form-control" required pattern="^(?!\s*$).{5,100}$"
-                                           title="Tiêu đề không được để trống và từ 5 đến 100 ký tự">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Time</label>
-                                    <input type="text" name="postTime" class="form-control" readonly>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Description</label>
-                                    <textarea name="description" class="form-control" rows="10"
-                                              required minlength="20" maxlength="5000"
-                                              title="Mô tả từ 20 đến 5000 ký tự"></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Active</label><br>
-                                    <input type="radio" name="isActive" value="1"> Active
-                                    <input type="radio" name="isActive" value="0"> Inactive
-                                </div>                          					
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <input type="submit" name="submit" class="btn btn-info" value="Save">
-                                <input type="hidden" name="service" value="updateNews">                           
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
