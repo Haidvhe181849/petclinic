@@ -283,6 +283,10 @@ public class NewsDAO extends DBContext {
         return list;
     }
 
+    public static String stripHtml(String html) {
+        return html.replaceAll("<[^>]*>", ""); // Xoá tất cả thẻ HTML
+    }
+
     public static void main(String[] args) {
         String sql = "SELECT * FROM News";
         NewsDAO nDAO = new NewsDAO();

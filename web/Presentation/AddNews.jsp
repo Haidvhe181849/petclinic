@@ -201,6 +201,7 @@
                                         <div class="mb-3">
                                             <label for="description">Description</label>
                                             <textarea name="description" id="editor" required></textarea>
+                                            <small class="text-muted">Bắt buộc nhập nội dung, ít nhất 20 ký tự thực tế.</small>
                                         </div>
 
                                         <div class="mb-3">

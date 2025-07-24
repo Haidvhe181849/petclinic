@@ -98,7 +98,7 @@
                                                class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
                                                id="userDropdown" data-bs-toggle="dropdown"
                                                aria-expanded="false">
-                                                <img src="${pageContext.request.contextPath}/Presentation/img/images/avtEmp/${staff.image}"
+                                                <img src="${pageContext.request.contextPath}/${staff.image}"
                                                      alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end"

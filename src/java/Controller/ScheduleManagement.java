@@ -212,6 +212,7 @@ public class ScheduleManagement extends HttpServlet {
         request.setAttribute("doctorListJson", gson.toJson(doctorList));
 
         request.setAttribute("currentPage", "news");
+        request.setAttribute("currentPage", "schedule");
 
         request.getRequestDispatcher("/Presentation/ScheduleManagement.jsp").forward(request, response);
     }

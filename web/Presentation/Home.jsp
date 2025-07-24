@@ -2,6 +2,7 @@
 <%-- Document : Home Created on : May 25, 2025, 8:09:54 PM Author : LENOVO --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <!doctype html>
 <!doctype html>
@@ -29,6 +30,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Presentation/css/nice-select.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Presentation/css/style.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     </head>
 
 
@@ -399,9 +401,12 @@
                                     <p><fmt:formatDate value="${r.postTime}" pattern="MMM dd, yyyy"/></p>
                                 </div>
                                 <h4>${r.nameNews}</h4>
-                                <p class="flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                <p class="flex-grow-1"
+                                   style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+                                   overflow: hidden; text-overflow: ellipsis; max-height: 4.5em;">
                                     ${r.description}
                                 </p>
+
                                 <a href="newsdetail?id=${r.newsId}" class="read-more1 mt-auto">Read more</a>
                             </div>
                         </div>
@@ -618,6 +623,22 @@
     .header-btn.custom-auth-btn:hover {
         background-color: #e63e3e;
     }
+
+    .blogs-cap p {
+        position: relative;
+    }
+
+    .blogs-cap p::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1.5em;
+        background: linear-gradient(to bottom, transparent, white);
+    }
+
+
 </style>
 
 <% String changeSuccess=(String) session.getAttribute("changeSuccess"); if (changeSuccess !=null) {

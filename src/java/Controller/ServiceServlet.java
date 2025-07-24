@@ -33,9 +33,10 @@ public class ServiceServlet extends HttpServlet {
         Part filePart = request.getPart("image");
         if (filePart != null && filePart.getSize() > 0) {
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            fileName = fileName.replaceAll("[^a-zA-Z0-9.\\-_]", "_");
+           
 
-            String uploadDir = getServletContext().getRealPath("/uploads");
+            String uploadDir = "C:/PetClinicUploads";
+
             File uploadFolder = new File(uploadDir);
             if (!uploadFolder.exists()) {
                 uploadFolder.mkdirs();
@@ -43,7 +44,7 @@ public class ServiceServlet extends HttpServlet {
 
             String filePath = uploadDir + File.separator + fileName;
             filePart.write(filePath);
-
+    
             return "uploads/" + fileName;
         }
         return null;
@@ -109,7 +110,9 @@ public class ServiceServlet extends HttpServlet {
         if ("addService".equals(service)) {
             String service_id = sDAO.generateNextServiceId();
             String service_name = request.getParameter("service_name").trim();
-            Double price = Double.valueOf(request.getParameter("price"));
+            String priceStr = request.getParameter("price").replaceAll(",", ""); // ❗ xử lý dấu phẩy
+            Double price = Double.valueOf(priceStr);
+
             String description = request.getParameter("description");
             String imagePath = uploadImage(request);
 
@@ -128,7 +131,9 @@ public class ServiceServlet extends HttpServlet {
         } else if ("updateService".equals(service)) {
             String service_id = request.getParameter("service_id");
             String service_name = request.getParameter("service_name").trim();
-            Double price = Double.valueOf(request.getParameter("price"));
+            String priceStr = request.getParameter("price").replaceAll(",", ""); // ❗ xử lý dấu phẩy
+            Double price = Double.valueOf(priceStr);
+
             String description = request.getParameter("description");
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
@@ -143,6 +148,7 @@ public class ServiceServlet extends HttpServlet {
                 response.sendRedirect("Service?service=listService");
                 return;
             }
+
             sDAO.updateService(s);
 
             request.getSession().setAttribute("message", "Updated successfully!");

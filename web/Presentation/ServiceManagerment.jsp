@@ -289,7 +289,15 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required step="0.01" min="0" placeholder="Enter price">
+                                    <input type="text"
+                                           name="price"
+                                           id="price"
+                                           class="form-control"
+                                           required
+                                           placeholder="Enter price"
+                                           inputmode="numeric"
+                                           pattern="[\d,]+"
+                                           title="Nhập số hợp lệ, ví dụ: 1,000,000">
                                     <div class="text-danger small" id="addPriceError"></div>
                                 </div>
                                 <div class="mb-3">
@@ -346,9 +354,10 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>
-                                    <input type="text" name="price" class="form-control" required step="0.01" min="0" placeholder="Enter price">
+                                    <input type="text" name="price" id="updatePrice" class="form-control" required placeholder="Enter price">
                                     <div class="text-danger small" id="updatePriceError"></div>
                                 </div>
+
                                 <div class="mb-3">
                                     <label>Description</label>
                                     <textarea name="description" class="form-control" rows="10" required></textarea>
@@ -422,11 +431,6 @@
                                 const errorDiv = document.getElementById(errorId);
                                 const priceValue = priceInput.value.trim();
 
-                                if (!/^-?\d+(\.\d{1,2})?$/.test(priceValue)) {
-                                    errorDiv.innerText = "Giá phải là số, tối đa 2 chữ số thập phân và không chứa ký tự chữ";
-                                    priceInput.classList.add("is-invalid");
-                                    return false;
-                                }
 
                                 const price = parseFloat(priceValue);
 
@@ -498,6 +502,43 @@
                                 }
                             });
         </script>
+
+        <script>
+            function formatNumberWithCommas(value) {
+                value = value.replace(/[^\d]/g, ""); // Xóa hết ký tự không phải số
+                if (value === "")
+                    return "";
+                return Number(value).toLocaleString("en-US");
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const priceIds = ["price", "updatePrice"]; // Các ID cần xử lý
+                const inputs = priceIds.map(id => document.getElementById(id)).filter(el => el !== null);
+
+                inputs.forEach(input => {
+                    input.addEventListener("input", function () {
+                        const cursor = this.selectionStart;
+                        const originalLength = this.value.length;
+                        const formatted = formatNumberWithCommas(this.value);
+                        this.value = formatted;
+                        const newLength = this.value.length;
+                        this.selectionEnd = cursor + (newLength - originalLength);
+                    });
+                });
+
+                // Khi submit: bỏ dấu phẩy để gửi đúng về server
+                const form = document.querySelector("form");
+                if (form) {
+                    form.addEventListener("submit", function () {
+                        inputs.forEach(input => {
+                            input.value = input.value.replace(/,/g, "");
+                        });
+                    });
+                }
+            });
+        </script>
+
+
     </body>
 
 

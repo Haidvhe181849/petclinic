@@ -165,7 +165,7 @@
                                         <div class="dropdown">
                                             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
                                                id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img src="${pageContext.request.contextPath}/Presentation/img/images/avtEmp/${currentStaff.image}"
+                                                <img src="${pageContext.request.contextPath}/${currentStaff.image}"
                                                      alt="Avatar" class="rounded-circle"
                                                      style="width: 35px; height: 35px; object-fit: cover;">
                                             </a>
@@ -199,7 +199,7 @@
                 <div class="col-md-4">
                     <div class="profile-card text-center">
                         <img id="mainAvatar" 
-                             src="${pageContext.request.contextPath}/Presentation/img/avtEmp/${currentStaff.image}" 
+                             src="${pageContext.request.contextPath}/${currentStaff.image}" 
                              alt="Avatar" 
                              class="rounded-circle d-block mx-auto mb-2" 
                              style="width: 120px; height: 120px; object-fit: cover;">

@@ -159,7 +159,7 @@
                                             <a href="#">Services</a>
                                             <ul class="submenu">
                                                 <c:forEach var="sv" items="${slist}">
-                                                    <li><a href="#">${sv.serviceName}</a></li>
+                                                    <li><a href="BookingForm?serviceId=${sv.serviceId}">${sv.serviceName}</a></li>
                                                     </c:forEach>
                                             </ul>
                                         </li>

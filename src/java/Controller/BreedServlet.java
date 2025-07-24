@@ -35,20 +35,27 @@ public class BreedServlet extends HttpServlet {
         return new AnimalDAO(db.connection);
     }
 
-    private String saveFile(Part filePart, String folder, HttpServletRequest request) throws IOException {
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        if (fileName == null || fileName.isEmpty()) {
+    private String uploadImage(HttpServletRequest request) throws IOException, ServletException {
+        Part filePart = request.getPart("image");
+        if (filePart == null || filePart.getSize() == 0) {
             return null;
         }
 
-        String uploadPath = request.getServletContext().getRealPath("/Presentation/img/" + folder);
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+        // ✅ Đường dẫn tuyệt đối để lưu ảnh vào ổ đĩa ngoài project
+        String saveDirectory = "C:/PetClinicUploads/Breed";
+
+        File dir = new File(saveDirectory);
+        if (!dir.exists()) {
+            dir.mkdirs(); // tạo thư mục nếu chưa có
         }
 
-        filePart.write(uploadPath + File.separator + fileName);
-        return "Presentation/img/" + folder + "/" + fileName;
+        // ✅ Ghi file vào thư mục ngoài
+        filePart.write(saveDirectory + File.separator + fileName);
+
+        // ✅ Trả về đường dẫn để lưu vào DB (tương đối, dùng cho web hiển thị)
+        return "uploads/Breed/" + fileName;
     }
 
     @Override
@@ -116,7 +123,7 @@ public class BreedServlet extends HttpServlet {
                     return;
                 }
 
-                String imagePath = saveFile(imagePart, "images/breed", request);
+                String imagePath = uploadImage(request);
                 boolean success = dao.addBreed(new Breed(null, imagePath, name, typeId, active));
                 session.setAttribute("message", success ? "Thêm giống thành công!" : "Thêm giống thất bại!");
             } else if ("updateBreed".equals(service)) {
@@ -126,14 +133,14 @@ public class BreedServlet extends HttpServlet {
                 boolean active = Boolean.parseBoolean(request.getParameter("is_active"));
                 String oldImage = request.getParameter("oldImage");
                 Part imagePart = request.getPart("image");
-                
+
                 if (dao.isBreedNameExistsInType(name, typeId, id)) {
                     request.getSession().setAttribute("message", "❌ Tên giống đã tồn tại trong loài này!");
                     response.sendRedirect("Breed?service=listBreed");
                     return;
                 }
 
-                String imagePath = imagePart.getSize() > 0 ? saveFile(imagePart, "images/breed", request) : oldImage;
+                String imagePath = imagePart.getSize() > 0 ? uploadImage(request) : oldImage;
                 boolean success = dao.updateBreed(new Breed(id, imagePath, name, typeId, active));
                 session.setAttribute("message", success ? "Cập nhật thành công!" : "Cập nhật thất bại!");
             }

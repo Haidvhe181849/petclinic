@@ -39,14 +39,7 @@
                 min-height: 1000px; /* hoặc 800px nếu muốn cao hơn */
             }
 
-            .line-clamp-2 {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+
             a {
                 text-decoration: none !important;
             }
@@ -55,15 +48,7 @@
                 text-decoration: none !important;
             }
 
-            .line-clamp-1 {
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                line-clamp: 1;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: normal;
-            }
+
 
 
 
@@ -106,11 +91,17 @@
             }
 
             .schedule-entry {
-                display: flex;
-                gap: 10px;
-                flex-wrap: nowrap;
-                align-items: center;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                line-clamp: 4;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: normal;
+                word-break: break-word;
             }
+
+
             .schedule-entry > div {
                 white-space: nowrap;
                 overflow: hidden;
@@ -130,6 +121,13 @@
                 gap: 4px;                /* Khoảng cách giữa các dòng */
             }
 
+            .table td, .table th {
+                min-width: 180px;
+                white-space: normal !important;
+                overflow: visible !important;
+                text-overflow: unset !important;
+                vertical-align: top;
+            }
 
 
             html, body {
@@ -180,7 +178,7 @@
 
                     <!-- Bảng lịch theo giờ và ngày -->
                     <div class="table-responsive mt-3">
-                        <table class="table table-bordered text-center align-middle mt-3">
+                        <table class="table table-bordered text-center align-middle mt-3" style="table-layout: auto; width: 100%;">
                             <thead class="table-light">
                                 <tr>
                                     <th>Khung giờ</th>
@@ -204,28 +202,31 @@
                                                             <c:when test="${bookingMap[key] != null}">
                                                                 <c:forEach var="b" items="${bookingMap[key]}">
                                                                     <div class="schedule-entry">
-                                                                        <div title="${b.petName}">🐾${b.petName}</div>
-                                                                        <div title="${b.serviceName}">💠${b.serviceName}</div>
-                                                                        <div>
-                                                                            <span class="line-label">👤
-                                                                                <c:choose>
-                                                                                    <c:when test="${b.employeeName != null}">
-                                                                                        ${b.employeeName}
-                                                                                    </c:when>
-                                                                                    <c:otherwise>
-                                                                                        <button class="btn btn-sm btn-outline-primary"
-                                                                                                data-bs-toggle="modal"
-                                                                                                data-bs-target="#assignModal"
-                                                                                                data-booking-id="${b.bookingId}"
-                                                                                                data-date="${b.formattedDate}"
-                                                                                                data-hour="${b.formattedTime}">
-                                                                                            Chưa phân công
-                                                                                        </button>
-                                                                                    </c:otherwise>
-                                                                                </c:choose>
-                                                                            </span>
+                                                                        <div class="entry-content">
+                                                                            <div title="${b.petType}">🐾${b.petType}</div>
+                                                                            <div title="${b.serviceName}">💠${b.serviceName}</div>
+                                                                            <div>
+                                                                                <span class="line-label">👤
+                                                                                    <c:choose>
+                                                                                        <c:when test="${b.employeeName != null}">
+                                                                                            ${b.employeeName}
+                                                                                        </c:when>
+                                                                                        <c:otherwise>
+                                                                                            <button class="btn btn-sm btn-outline-primary"
+                                                                                                    data-bs-toggle="modal"
+                                                                                                    data-bs-target="#assignModal"
+                                                                                                    data-booking-id="${b.bookingId}"
+                                                                                                    data-date="${b.formattedDate}"
+                                                                                                    data-hour="${b.formattedTime}">
+                                                                                                Chưa phân công
+                                                                                            </button>
+                                                                                        </c:otherwise>
+                                                                                    </c:choose>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
+
                                                                 </c:forEach>
                                                             </c:when>
                                                             <c:otherwise>

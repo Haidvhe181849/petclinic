@@ -44,6 +44,7 @@ public class BookingFormServlet extends HttpServlet {
             PetDAO petDAO = new PetDAO(conn);
             EmployeeDAO eDAO = new EmployeeDAO(conn);
             ServiceDAO serviceDAO = new ServiceDAO(conn);
+
             String selectedServiceId = request.getParameter("serviceId");
             String selectedDoctorId = request.getParameter("doctorId");
             

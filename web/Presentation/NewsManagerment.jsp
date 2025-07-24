@@ -290,48 +290,6 @@
                 </div>
             </div>
 
-            <!-- Add News Modal -->
-            <div id="addNewsModal" class="modal fade" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/News" method="post" enctype="multipart/form-data">
-                            <div class="modal-header">						
-                                <h4 class="modal-title">Add News</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">	
-                                <div class="mb-3">
-                                    <label>Image URL</label>
-                                    <input type="file" name="imageFile" class="form-control" accept="image/*" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Title</label>
-                                    <input type="text" name="nameNews" class="form-control" required pattern="^(?!\s*$).{5,100}$"
-                                           title="Tiêu đề không được để trống và từ 5 đến 100 ký tự">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Description</label>
-                                    <textarea name="description" class="form-control" rows="10"
-                                              required minlength="20" maxlength="5000"
-                                              title="Mô tả từ 20 đến 5000 ký tự"></textarea>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Active</label><br>
-                                    <input type="radio" name="isActive" value="true" checked/> Active
-                                    <input type="radio" name="isActive" value="false" /> Inactive
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <input type="submit" name="submit" class="btn btn-success" value="Add">
-                                <input type="hidden" name="service" value="addNews">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
             <c:if test="${not empty sessionScope.message}">
                 <div id="popup-message" class="alert alert-success position-fixed top-0 end-0 m-4">
                     ${sessionScope.message}
@@ -350,66 +308,30 @@
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script>
-                    $(document).ready(function () {
-                        $(".update-btn").click(function () {
-                            // Lấy từ data-attributes
-                            var newsId = $(this).data("id");
-                            var imageUrl = $(this).data("image");
-                            var nameNews = $(this).data("name");
-                            var postTime = $(this).data("date");
-                            var description = $(this).data("describe");
-                            var isActive = $(this).data("active");
-                            var oldImage = $(this).data("oldimage");
 
-                            // Debug nhanh: kiểm tra console
-                            console.log("ID:", newsId,
-                                    "imageUrl:", imageUrl,
-                                    "oldImage:", oldImage,
-                                    "name:", nameNews,
-                                    "time:", postTime,
-                                    "desc:", description,
-                                    "active:", isActive);
-
-                            // Đổ giá trị vào các input trong modal
-                            $("#editEmployeeModal input[name='newsId']").val(newsId);
-                            $("#editEmployeeModal input[name='postTime']").val(postTime);
-                            $("#editEmployeeModal input[name='nameNews']").val(nameNews);
-                            $("#editEmployeeModal textarea[name='description']").val(description);
-                            $("#editEmployeeModal input[name='oldImage']").val(oldImage);
-
-                            // Set radio Active/Deactive
-                            if (isActive == 1 || isActive === "1" || isActive === true) {
-                                $("#editEmployeeModal input[name='isActive'][value='1']").prop("checked", true);
-                            } else {
-                                $("#editEmployeeModal input[name='isActive'][value='0']").prop("checked", true);
-                            }
-                        });
-                    });
-        </script>
 
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const sidebar = document.querySelector("aside");
-                const hamburger = document.querySelector("[sidenav-trigger]");
-                const closeBtn = document.querySelector("[sidenav-close]");
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const sidebar = document.querySelector("aside");
+                        const hamburger = document.querySelector("[sidenav-trigger]");
+                        const closeBtn = document.querySelector("[sidenav-close]");
 
-                if (hamburger) {
-                    hamburger.addEventListener("click", function () {
-                        const isOpen = sidebar.classList.contains("translate-x-0");
-                        sidebar.classList.toggle("-translate-x-full", isOpen);
-                        sidebar.classList.toggle("translate-x-0", !isOpen);
-                    });
-                }
+                        if (hamburger) {
+                            hamburger.addEventListener("click", function () {
+                                const isOpen = sidebar.classList.contains("translate-x-0");
+                                sidebar.classList.toggle("-translate-x-full", isOpen);
+                                sidebar.classList.toggle("translate-x-0", !isOpen);
+                            });
+                        }
 
-                if (closeBtn) {
-                    closeBtn.addEventListener("click", function () {
-                        sidebar.classList.add("-translate-x-full");
-                        sidebar.classList.remove("translate-x-0");
+                        if (closeBtn) {
+                            closeBtn.addEventListener("click", function () {
+                                sidebar.classList.add("-translate-x-full");
+                                sidebar.classList.remove("translate-x-0");
+                            });
+                        }
                     });
-                }
-            });
         </script>
     </body>
 

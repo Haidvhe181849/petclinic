@@ -610,7 +610,7 @@ public class BookingDAO extends DBContext {
         JOIN Pet p ON b.pet_id = p.pet_id
         JOIN Service s ON b.service_id = s.service_id
         WHERE b.user_id = ? 
-          AND b.status IN ('Pending', 'Confirmed')
+          AND b.status IN ('Pending')
         ORDER BY b.booking_time ASC
     """;
 
@@ -645,7 +645,7 @@ public class BookingDAO extends DBContext {
         JOIN Pet p ON b.pet_id = p.pet_id
         JOIN Service s ON b.service_id = s.service_id
         WHERE b.user_id = ? 
-          AND b.status = 'Completed'
+          AND b.status IN ('Cancelled', 'Confirmed')
         ORDER BY b.booking_time DESC
     """;
 
@@ -722,6 +722,7 @@ public class BookingDAO extends DBContext {
             return bookings;
         }
 
+        // Tạo placeholders cho IN clause
         StringBuilder placeholders = new StringBuilder();
         for (int i = 0; i < dateList.size(); i++) {
             placeholders.append("?");
@@ -730,20 +731,29 @@ public class BookingDAO extends DBContext {
             }
         }
 
-        String sql = "SELECT b.*, e.name AS employee_name, p.name AS pet_name, s.service_name "
+        // Câu query đã kết hợp JOIN với AnimalType
+        String sql = "SELECT b.*, "
+                + "e.name AS employee_name, "
+                + "p.name AS pet_name, "
+                + "a.type_name AS pet_type, "
+                + "s.service_name "
                 + "FROM Booking b "
                 + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
                 + "LEFT JOIN Pet p ON b.pet_id = p.pet_id "
+                + "LEFT JOIN AnimalType a ON p.pet_type_id = a.animal_type_id "
                 + "LEFT JOIN Service s ON b.service_id = s.service_id "
                 + "WHERE CAST(b.booking_time AS DATE) IN (" + placeholders + ") "
                 + "AND (b.employee_id IS NULL OR b.employee_id = ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Set giá trị cho các ngày
             int index = 1;
             for (Date date : dateList) {
                 ps.setDate(index++, new java.sql.Date(date.getTime()));
             }
-            ps.setString(index, doctorId); // last param: bác sĩ cụ thể hoặc lịch chưa phân công
+
+            // Set employee_id ở cuối
+            ps.setString(index, doctorId);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -756,9 +766,11 @@ public class BookingDAO extends DBContext {
                 booking.setNote(rs.getString("note"));
                 booking.setBookingTime(rs.getTimestamp("booking_time").toLocalDateTime());
                 booking.setStatus(rs.getString("status"));
-                booking.setEmployeeName(rs.getString("employee_name"));
-                booking.setPetName(rs.getString("pet_name"));
                 booking.setServiceName(rs.getString("service_name"));
+                booking.setPetName(rs.getString("pet_name"));
+                booking.setPetType(rs.getString("pet_type"));
+                booking.setEmployeeName(rs.getString("employee_name"));
+
                 bookings.add(booking);
             }
 
@@ -881,7 +893,7 @@ public class BookingDAO extends DBContext {
         String sql = "SELECT COUNT(*) FROM Bookings";
 
         try (
-             PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
             if (rs.next()) {
                 total = rs.getInt(1);  // Lấy cột COUNT(*) = tổng số dòng
             }

@@ -37,18 +37,20 @@ public class EmployeeManagerment extends HttpServlet {
         }
 
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        String saveDir = "/Presentation/img/images/Employee";
 
-        String realPath = request.getServletContext().getRealPath(saveDir);
-        File dir = new File(realPath);
+        // ✅ Đường dẫn tuyệt đối để lưu ảnh vào ổ đĩa ngoài project
+        String saveDirectory = "C:/PetClinicUploads/Doctor";
+
+        File dir = new File(saveDirectory);
         if (!dir.exists()) {
-            dir.mkdirs();
+            dir.mkdirs(); // tạo thư mục nếu chưa có
         }
 
-       
-        filePart.write(realPath + File.separator + fileName);
+        // ✅ Ghi file vào thư mục ngoài
+        filePart.write(saveDirectory + File.separator + fileName);
 
-        return saveDir.substring(1) + "/" + fileName;  // Bỏ dấu "/" đầu
+        // ✅ Trả về đường dẫn để lưu vào DB (tương đối, dùng cho web hiển thị)
+        return "uploads/Doctor/" + fileName;
     }
 
     @Override
@@ -58,7 +60,6 @@ public class EmployeeManagerment extends HttpServlet {
         EmployeeDAO dao = getEmployeeDAO();
         String service = request.getParameter("service");
 
-     
         if ("delete".equals(service)) {
             String id = request.getParameter("employeeId");
             if (id != null && !id.isEmpty()) {
@@ -71,7 +72,6 @@ public class EmployeeManagerment extends HttpServlet {
             return;
         }
 
-       
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String roleIdRaw = request.getParameter("roleId");
@@ -170,7 +170,7 @@ public class EmployeeManagerment extends HttpServlet {
                 String experience = request.getParameter("experience");
                 String workingHours = request.getParameter("workingHours");
                 boolean status = Boolean.parseBoolean(request.getParameter("status"));
-                
+
                 if (dao.isEmailExists(email, employeeId)) {
                     request.getSession().setAttribute("message", "❌ Email đã được sử dụng bởi nhân viên khác.");
                     response.sendRedirect("Employee");

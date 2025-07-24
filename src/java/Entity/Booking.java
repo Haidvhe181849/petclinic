@@ -29,8 +29,29 @@ public class Booking {
     private String formattedDate;
     private String formattedTime;
 
+    private String petType;
+
     public Booking() {
     }
+
+    public Booking(String bookingId, int userId, String employeeId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status, String employeeName, String petName, String serviceName, double servicePrice, String formattedDate, String formattedTime, String petType) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.employeeId = employeeId;
+        this.serviceId = serviceId;
+        this.petId = petId;
+        this.note = note;
+        this.bookingTime = bookingTime;
+        this.status = status;
+        this.employeeName = employeeName;
+        this.petName = petName;
+        this.serviceName = serviceName;
+        this.servicePrice = servicePrice;
+        this.formattedDate = formattedDate;
+        this.formattedTime = formattedTime;
+        this.petType = petType;
+    }
+    
 
     public Booking(String bookingId, int userId, String employeeId, String serviceId, String petId, String note, LocalDateTime bookingTime, String status) {
         this.bookingId = bookingId;
@@ -87,9 +108,7 @@ public class Booking {
         this.serviceName = serviceName;
         this.employeeName = employeeName;
     }
-    
-    
-    
+
     public String getBookingId() {
         return bookingId;
     }
@@ -200,6 +219,14 @@ public class Booking {
 
     public void setServicePrice(double servicePrice) {
         this.servicePrice = servicePrice;
+    }
+
+    public String getPetType() {
+        return petType;
+    }
+
+    public void setPetType(String petType) {
+        this.petType = petType;
     }
 
     @Override

@@ -45,18 +45,20 @@ public class DoctorManagerment extends HttpServlet {
         }
 
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        String saveDir = "/Presentation/img/images/Doctor";
 
-        String realPath = request.getServletContext().getRealPath(saveDir);
-        File dir = new File(realPath);
+        // ✅ Đường dẫn tuyệt đối để lưu ảnh vào ổ đĩa ngoài project
+        String saveDirectory = "C:/PetClinicUploads/Doctor";
+
+        File dir = new File(saveDirectory);
         if (!dir.exists()) {
-            dir.mkdirs();
+            dir.mkdirs(); // tạo thư mục nếu chưa có
         }
 
-        // Lưu ảnh
-        filePart.write(realPath + File.separator + fileName);
+        // ✅ Ghi file vào thư mục ngoài
+        filePart.write(saveDirectory + File.separator + fileName);
 
-        return saveDir.substring(1) + "/" + fileName;  // Bỏ dấu "/" đầu
+        // ✅ Trả về đường dẫn để lưu vào DB (tương đối, dùng cho web hiển thị)
+        return "uploads/Doctor/" + fileName;
     }
 
     @Override
@@ -65,7 +67,6 @@ public class DoctorManagerment extends HttpServlet {
 
         DoctorDAO doctorDAO = getDoctorDAO();
         String service = request.getParameter("service");
-
 
         // Hiển thị danh sách nhân viên với filter
         String name = request.getParameter("name");

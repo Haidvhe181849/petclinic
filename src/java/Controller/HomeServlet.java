@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.DoctorDAO;
 import DAO.NewsDAO;
+import static DAO.NewsDAO.stripHtml;
 import DAO.ServiceDAO;
 import Entity.Employee;
 import Entity.News;
@@ -21,7 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Vector;
-
 
 /**
  *
@@ -64,6 +64,9 @@ public class HomeServlet extends HttpServlet {
             Vector<Service> slist = sDAO.getAllService("SELECT * FROM Service WHERE status = 1");
             List<Employee> dlist = dDAO.getAllDoctors1();
             Vector<News> top3News = nDAO.getTop3News();
+            for (News r : top3News) {
+                r.setDescription(stripHtml(r.getDescription())); // Lưu bản cleaned
+            }
             // Gửi dữ liệu sang JSP
             request.setAttribute("slist", slist);
             request.setAttribute("dlist", dlist);
