@@ -111,7 +111,12 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h3 class="mb-0">Đánh giá bác sĩ</h3>
+                        <h3 class="mb-0">
+                            <c:choose>
+                                <c:when test="${isViewOnly}">Đánh giá đã gửi</c:when>
+                                <c:otherwise>Đánh giá bác sĩ</c:otherwise>
+                            </c:choose>
+                        </h3>
                     </div>
                     <div class="card-body p-4">
                         <!-- Booking Information -->
@@ -132,46 +137,101 @@
                         </div>
                         
                         <!-- Rating Form -->
-                        <form action="${pageContext.request.contextPath}/RateDoctorServlet" method="post">
-                            <input type="hidden" name="action" value="submit">
-                            <input type="hidden" name="bookingId" value="${booking.bookingId}">
-                            <input type="hidden" name="employeeId" value="${booking.employeeId}">
-                            
-                            <div class="mb-4">
-                                <h5 class="text-center mb-3">Đánh giá bác sĩ ${booking.employeeName}</h5>
-                                <div class="rating-container">
-                                    <input type="radio" id="star5" name="starRating" value="5" required>
-                                    <label for="star5" class="fas fa-star"></label>
-                                    
-                                    <input type="radio" id="star4" name="starRating" value="4">
-                                    <label for="star4" class="fas fa-star"></label>
-                                    
-                                    <input type="radio" id="star3" name="starRating" value="3">
-                                    <label for="star3" class="fas fa-star"></label>
-                                    
-                                    <input type="radio" id="star2" name="starRating" value="2">
-                                    <label for="star2" class="fas fa-star"></label>
-                                    
-                                    <input type="radio" id="star1" name="starRating" value="1">
-                                    <label for="star1" class="fas fa-star"></label>
+                        <c:choose>
+                            <c:when test="${isViewOnly}">
+                                <!-- View Only Mode - Show existing rating -->
+                                <div class="mb-4">
+                                    <h5 class="text-center mb-3">Đánh giá của bạn cho bác sĩ ${booking.employeeName}</h5>
+                                    <div class="text-center mb-3">
+                                        <div class="d-inline-block">
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <c:choose>
+                                                    <c:when test="${i <= existingRating.rating}">
+                                                        <span class="fas fa-star" style="color: #ffcc00; font-size: 30px; margin: 0 5px;"></span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="fas fa-star" style="color: #ccc; font-size: 30px; margin: 0 5px;"></span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </div>
+                                        <div class="mt-2">
+                                            <strong>${existingRating.rating}/5 sao</strong>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="commentText" class="form-label">Nhận xét của bạn (không bắt buộc)</label>
-                                <textarea class="form-control" id="commentText" name="commentText" rows="5" 
-                                          placeholder="Hãy chia sẻ trải nghiệm của bạn với bác sĩ..."></textarea>
-                            </div>
-                            
-                            <div class="text-center">
-                                <a href="${pageContext.request.contextPath}/ViewBooking" class="btn btn-cancel me-3">
-                                    <i class="fas fa-times me-2"></i>Hủy bỏ
-                                </a>
-                                <button type="submit" class="btn btn-submit text-white">
-                                    <i class="fas fa-paper-plane me-2"></i>Gửi đánh giá
-                                </button>
-                            </div>
-                        </form>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label"><strong>Nhận xét của bạn:</strong></label>
+                                    <div class="form-control" style="min-height: 120px; background-color: #f8f9fa;">
+                                        <c:choose>
+                                            <c:when test="${not empty existingRating.comment}">
+                                                ${existingRating.comment}
+                                            </c:when>
+                                            <c:otherwise>
+                                                <em style="color: #6c757d;">Không có nhận xét</em>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label"><strong>Thời gian đánh giá:</strong></label>
+                                    <div class="form-control" style="background-color: #f8f9fa;">
+                                        ${fn:substring(existingRating.rateTime, 0, 19)}
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <a href="${pageContext.request.contextPath}/ViewBooking" class="btn btn-submit text-white">
+                                        <i class="fas fa-arrow-left me-2"></i>Quay lại
+                                    </a>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- Edit Mode - Allow new rating -->
+                                <form action="${pageContext.request.contextPath}/RateDoctorServlet" method="post">
+                                    <input type="hidden" name="action" value="submit">
+                                    <input type="hidden" name="bookingId" value="${booking.bookingId}">
+                                    <input type="hidden" name="employeeId" value="${booking.employeeId}">
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="text-center mb-3">Đánh giá bác sĩ ${booking.employeeName}</h5>
+                                        <div class="rating-container">
+                                            <input type="radio" id="star5" name="starRating" value="5" required>
+                                            <label for="star5" class="fas fa-star"></label>
+                                            
+                                            <input type="radio" id="star4" name="starRating" value="4">
+                                            <label for="star4" class="fas fa-star"></label>
+                                            
+                                            <input type="radio" id="star3" name="starRating" value="3">
+                                            <label for="star3" class="fas fa-star"></label>
+                                            
+                                            <input type="radio" id="star2" name="starRating" value="2">
+                                            <label for="star2" class="fas fa-star"></label>
+                                            
+                                            <input type="radio" id="star1" name="starRating" value="1">
+                                            <label for="star1" class="fas fa-star"></label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="commentText" class="form-label">Nhận xét của bạn (không bắt buộc)</label>
+                                        <textarea class="form-control" id="commentText" name="commentText" rows="5" 
+                                                  placeholder="Hãy chia sẻ trải nghiệm của bạn với bác sĩ..."></textarea>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <a href="${pageContext.request.contextPath}/ViewBooking" class="btn btn-cancel me-3">
+                                            <i class="fas fa-times me-2"></i>Hủy bỏ
+                                        </a>
+                                        <button type="submit" class="btn btn-submit text-white">
+                                            <i class="fas fa-paper-plane me-2"></i>Gửi đánh giá
+                                        </button>
+                                    </div>
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

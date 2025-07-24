@@ -95,8 +95,12 @@ public class RateDoctorServlet extends HttpServlet {
             
             // Check if user has already rated this doctor for this booking
             if (rateDoctorDAO.hasUserRatedDoctor(user.getUserId(), booking.getEmployeeId(), bookingId)) {
-                session.setAttribute("message", "Bạn đã đánh giá bác sĩ này rồi.");
-                response.sendRedirect(request.getContextPath() + "/ViewBooking");
+                // Get existing rating and show in view-only mode
+                RateDoctor existingRating = rateDoctorDAO.getRatingByUserAndBooking(user.getUserId(), booking.getEmployeeId(), bookingId);
+                request.setAttribute("booking", booking);
+                request.setAttribute("existingRating", existingRating);
+                request.setAttribute("isViewOnly", true);
+                request.getRequestDispatcher("/Presentation/RateDoctorForm.jsp").forward(request, response);
                 return;
             }
             

@@ -36,6 +36,9 @@
                                 <li><a
                                         href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                 </li>
+                                <li><a
+                                        href="${pageContext.request.contextPath}/about-us">AboutUs</a>
+                                </li>
                                 <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 3}">
                                     <li><a href="#">Managerment</a>
                                         <ul class="submenu">

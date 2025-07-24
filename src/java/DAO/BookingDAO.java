@@ -890,7 +890,7 @@ public class BookingDAO extends DBContext {
 
     public int getTotalBookings() {
         int total = 0;
-        String sql = "SELECT COUNT(*) FROM Bookings";
+        String sql = "SELECT COUNT(*) FROM Booking";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {

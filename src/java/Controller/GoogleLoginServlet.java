@@ -1,5 +1,7 @@
 package Controller;
 
+import DAO.UserDAO;
+import Entity.UserAccount;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -23,7 +25,7 @@ public class GoogleLoginServlet extends HttpServlet {
     
     private static final String CLIENT_ID = "591468416411-bnfsuhr21g4vfth1pt534emgp5qenqvt.apps.googleusercontent.com";
     private static final String CLIENT_SECRET = "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";
-    private static final String REDIRECT_URI = "http://localhost:9998/PetHospital/google-login";
+    private static final String REDIRECT_URI = "http://localhost:8080/PetClinic/google-login";
     private static final String SCOPE = "profile email";
 
     @Override
@@ -60,13 +62,44 @@ public class GoogleLoginServlet extends HttpServlet {
                     String email = json.getString("email");
                     String name = json.getString("name");
 
-                    // TODO: Kiểm tra email trong DB và tạo user nếu chưa có
+                    UserDAO userDAO = new UserDAO();
+                    UserAccount user = userDAO.getUserByEmail(email);
+                    
+                    if (user == null) {
+                        // Tạo user mới nếu chưa có trong DB
+                        user = new UserAccount();
+                        user.setName(name);
+                        user.setEmail(email);
+                        user.setUsername(email); // Sử dụng email làm username
+                        user.setPassword(""); // Password rỗng cho Google login
+                        user.setPhone(""); // Phone rỗng, có thể cập nhật sau
+                        user.setAddress(""); // Address rỗng, có thể cập nhật sau
+                        user.setRoleId(4); // Role mặc định (ví dụ: 3 = customer)
+                        user.setStatus("Active"); // Status active
+                        
+                        boolean isRegistered = userDAO.register(user);
+                        if (isRegistered) {
+                            // Lấy lại user từ DB để có user_id
+                            user = userDAO.getUserByEmail(email);
+                        } else {
+                            response.getWriter().println("Lỗi tạo tài khoản người dùng");
+                            return;
+                        }
+                    }
+                    
+                    // Kiểm tra status của tài khoản
+                    if ("Inactive".equals(user.getStatus())) {
+                        response.getWriter().println("Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên!");
+                        return;
+                    }
 
+                    // Set session như LoginServlet
                     HttpSession session = request.getSession();
-                    session.setAttribute("userEmail", email);
-                    session.setAttribute("userName", name);
+                    session.setAttribute("user", user);
 
-                    response.sendRedirect(request.getContextPath() + "/Presentation/Home.jsp");
+                    response.sendRedirect("Home");
+
+//                    response.sendRedirect(request.getContextPath() + "/Presentation/Home.jsp");
                 } else {
                     response.getWriter().println("Lỗi xác thực Google: " + oauthResponse.getBody());
                 }

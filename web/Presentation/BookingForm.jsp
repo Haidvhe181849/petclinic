@@ -173,6 +173,9 @@
                                         <li><a
                                                 href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
                                         </li>
+                                        <li><a
+                                                href="${pageContext.request.contextPath}/about-us">AboutUs</a>
+                                        </li>
                                     </ul>
                                 </nav>
                             </div>
