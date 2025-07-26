@@ -6,6 +6,7 @@ public class RateDoctor {
     private int rateId;
     private int userId;
     private String employeeId;
+    private String bookingId;
     private int rating;
     private String comment;
     private Timestamp rateTime;
@@ -18,10 +19,11 @@ public class RateDoctor {
     public RateDoctor() {
     }
     
-    public RateDoctor(int rateId, int userId, String employeeId, int rating, String comment, Timestamp rateTime) {
+    public RateDoctor(int rateId, int userId, String employeeId, String bookingId, int rating, String comment, Timestamp rateTime) {
         this.rateId = rateId;
         this.userId = userId;
         this.employeeId = employeeId;
+        this.bookingId = bookingId;
         this.rating = rating;
         this.comment = comment;
         this.rateTime = rateTime;
@@ -49,6 +51,14 @@ public class RateDoctor {
 
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(String bookingId) {
+        this.bookingId = bookingId;
     }
 
     public int getRating() {
@@ -102,6 +112,6 @@ public class RateDoctor {
     @Override
     public String toString() {
         return "RateDoctor{" + "rateId=" + rateId + ", userId=" + userId + ", employeeId=" + employeeId + 
-               ", rating=" + rating + ", comment=" + comment + ", rateTime=" + rateTime + '}';
+               ", bookingId=" + bookingId + ", rating=" + rating + ", comment=" + comment + ", rateTime=" + rateTime + '}';
     }
 } 

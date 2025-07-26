@@ -143,10 +143,10 @@
                                     <select class="form-control" name="roleId" required>
                                         <option value="1" ${accountUser !=null && accountUser.roleId==1 ? 'selected'
                                             : '' }>Admin</option>
-                                        <option value="2" ${accountUser !=null && accountUser.roleId==2 ? 'selected'
+<!--                                        <option value="2" ${accountUser !=null && accountUser.roleId==2 ? 'selected'
                                             : '' }>Nhân viên</option>
                                         <option value="3" ${accountUser !=null && accountUser.roleId==3 ? 'selected'
-                                            : '' }>Bác sĩ</option>
+                                            : '' }>Bác sĩ</option>-->
                                         <option value="4" ${accountUser !=null && accountUser.roleId==4 ? 'selected'
                                             : '' }>Khách hàng</option>
                                     </select>

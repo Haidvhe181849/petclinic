@@ -151,11 +151,11 @@ public class AccountManagementServlet extends HttpServlet {
         try {
             // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-            Employee currentUser = (Employee) session.getAttribute("staff");
-            if (currentUser == null || (currentUser.getRoleId() != 1 && currentUser.getRoleId() != 2)) {
-                response.sendRedirect("login-employee");
-                return;
-            }
+//            Employee currentUser = (Employee) session.getAttribute("staff");
+//            if (currentUser == null || (currentUser.getRoleId() != 1 && currentUser.getRoleId() != 2)) {
+//                response.sendRedirect("login-employee");
+//                return;
+//            }
 
             String action = request.getParameter("action");
             if (action == null) {

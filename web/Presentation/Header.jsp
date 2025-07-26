@@ -46,8 +46,11 @@
                                     <c:if test="${sessionScope.staff.roleId == 3}">
                                     <li><a href="${pageContext.request.contextPath}/employee-booking">My Schedule</a></li>
                                     </c:if>
+                                    <c:if test="${sessionScope.staff.roleId == 3}">
+                                    <li><a href="${pageContext.request.contextPath}/doctor-rate-list">My Rate</a></li>
+                                    </c:if>
 
-                                <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 3}">
+                                <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 3 || sessionScope.staff.roleId == 2}">
                                     <li><a href="#">Managerment</a>
                                         <ul class="submenu">
                                             <li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>

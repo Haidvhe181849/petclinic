@@ -90,6 +90,9 @@
                                                 <c:if test="${sessionScope.staff.roleId == 3}">
                                                 <li><a href="${pageContext.request.contextPath}/employee-booking">My Schedule</a></li>
                                                 </c:if>
+                                                <c:if test="${sessionScope.staff.roleId == 3}">
+                                                <li><a href="${pageContext.request.contextPath}/doctor-rate-list">My Rate</a></li>
+                                                </c:if>
                                         </ul>
                                     </nav>
                                 </div>

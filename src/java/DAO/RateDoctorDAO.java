@@ -52,6 +52,7 @@ public class RateDoctorDAO extends DBContext {
                 r.setRateId(rs.getInt("rate_id"));
                 r.setUserId(rs.getInt("user_id"));
                 r.setEmployeeId(rs.getString("employee_id"));
+                r.setBookingId(rs.getString("booking_id"));
                 r.setRating(rs.getInt("rating"));
                 r.setComment(rs.getString("comment"));
                 r.setRateTime(rs.getTimestamp("rate_time"));
@@ -116,9 +117,8 @@ public class RateDoctorDAO extends DBContext {
      * @return true if rating exists, false otherwise
      */
     public boolean hasUserRatedDoctor(int userId, String employeeId, String bookingId) {
-        String query = "SELECT COUNT(*) FROM [dbo].[RateDoctor] r "
-                + "JOIN [dbo].[Booking] b ON r.employee_id = b.employee_id "
-                + "WHERE r.user_id = ? AND r.employee_id = ? AND b.booking_id = ?";
+        String query = "SELECT COUNT(*) FROM [dbo].[RateDoctor] "
+                + "WHERE user_id = ? AND employee_id = ? AND booking_id = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, userId);
@@ -144,15 +144,16 @@ public class RateDoctorDAO extends DBContext {
      * @return true if successful, false otherwise
      */
     public boolean addRating(RateDoctor rating) {
-        String query = "INSERT INTO [dbo].[RateDoctor] (user_id, employee_id, rating, comment, rate_time) "
-                + "VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO [dbo].[RateDoctor] (user_id, employee_id, booking_id, rating, comment, rate_time) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, rating.getUserId());
             ps.setString(2, rating.getEmployeeId());
-            ps.setInt(3, rating.getRating());
-            ps.setString(4, rating.getComment());
-            ps.setTimestamp(5, rating.getRateTime());
+            ps.setString(3, rating.getBookingId());
+            ps.setInt(4, rating.getRating());
+            ps.setString(5, rating.getComment());
+            ps.setTimestamp(6, rating.getRateTime());
             
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -213,6 +214,7 @@ public class RateDoctorDAO extends DBContext {
                 r.setRateId(rs.getInt("rate_id"));
                 r.setUserId(rs.getInt("user_id"));
                 r.setEmployeeId(rs.getString("employee_id"));
+                r.setBookingId(rs.getString("booking_id"));
                 r.setRating(rs.getInt("rating"));
                 r.setComment(rs.getString("comment"));
                 r.setRateTime(rs.getTimestamp("rate_time"));
@@ -229,13 +231,20 @@ public class RateDoctorDAO extends DBContext {
         }
         return list;
     }
+
+    /**
+     * Get rating by user, doctor and booking
+     * @param userId User ID
+     * @param employeeId Doctor ID
+     * @param bookingId Booking ID
+     * @return RateDoctor object or null if not found
+     */
     public RateDoctor getRatingByUserAndBooking(int userId, String employeeId, String bookingId) {
         String query = "SELECT r.*, u.email as user_email, u.name as user_name, e.name as doctor_name "
                 + "FROM [dbo].[RateDoctor] r "
                 + "LEFT JOIN [dbo].[UserAccount] u ON r.user_id = u.user_id "
                 + "LEFT JOIN [dbo].[Employee] e ON r.employee_id = e.employee_id "
-                + "JOIN [dbo].[Booking] b ON r.employee_id = b.employee_id "
-                + "WHERE r.user_id = ? AND r.employee_id = ? AND b.booking_id = ?";
+                + "WHERE r.user_id = ? AND r.employee_id = ? AND r.booking_id = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, userId);
@@ -248,6 +257,7 @@ public class RateDoctorDAO extends DBContext {
                 r.setRateId(rs.getInt("rate_id"));
                 r.setUserId(rs.getInt("user_id"));
                 r.setEmployeeId(rs.getString("employee_id"));
+                r.setBookingId(rs.getString("booking_id"));
                 r.setRating(rs.getInt("rating"));
                 r.setComment(rs.getString("comment"));
                 r.setRateTime(rs.getTimestamp("rate_time"));

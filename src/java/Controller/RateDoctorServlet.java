@@ -172,6 +172,7 @@ public class RateDoctorServlet extends HttpServlet {
             RateDoctor rating = new RateDoctor();
             rating.setUserId(user.getUserId());
             rating.setEmployeeId(employeeId);
+            rating.setBookingId(bookingId);
             rating.setRating(starRating);
             rating.setComment(commentText);
             rating.setRateTime(new Timestamp(new Date().getTime()));
