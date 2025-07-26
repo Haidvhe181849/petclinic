@@ -275,20 +275,22 @@
             </div>
 
             <!-- Add Modal -->
+            <!-- Add Modal -->
             <div class="modal fade" id="addBreedModal" tabindex="-1">
                 <div class="modal-dialog">
-                    <form class="modal-content" method="post" action="Breed" enctype="multipart/form-data">
+                    <form id="addBreedForm" class="modal-content" enctype="multipart/form-data">
                         <div class="modal-header">
                             <h5 class="modal-title">Add Breed</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" name="service" value="addBreed">
+                            <div class="alert alert-danger d-none" id="add-error"></div>
+
                             <div class="mb-3">
                                 <label>Name</label>
-                                <input name="breed_name" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
-                                       title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự.">
+                                <input name="breed_name" class="form-control" required />
                             </div>
+
                             <div class="mb-3">
                                 <label>Animal Type</label>
                                 <select name="animal_type_id" class="form-select" required>
@@ -297,11 +299,13 @@
                                     </c:forEach>
                                 </select>
                             </div>
+
                             <div class="mb-3">
                                 <label>Image</label>
-                                <input type="file" name="image" class="form-control" accept="image/*" required>
+                                <input type="file" name="image" class="form-control" accept="image/*" required />
                             </div>
-                            <input type="hidden" name="is_active" value="true">
+
+                            <input type="hidden" name="is_active" value="true" />
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Add</button>
@@ -309,6 +313,7 @@
                     </form>
                 </div>
             </div>
+
             <c:if test="${not empty sessionScope.message}">
                 <div id="popup-message">${sessionScope.message}</div>
                 <script>
@@ -323,20 +328,22 @@
             <!-- Edit Modal -->
             <div class="modal fade" id="editBreedModal" tabindex="-1">
                 <div class="modal-dialog">
-                    <form class="modal-content" method="post" action="Breed" enctype="multipart/form-data">
+                    <form id="editBreedForm" class="modal-content" enctype="multipart/form-data">
                         <div class="modal-header">
                             <h5 class="modal-title">Edit Breed</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" name="service" value="updateBreed">
-                            <input type="hidden" name="breed_id">
-                            <input type="hidden" name="oldImage">
+                            <div class="alert alert-danger d-none" id="edit-error"></div>
+
+                            <input type="hidden" name="breed_id" />
+                            <input type="hidden" name="oldImage" />
+
                             <div class="mb-3">
                                 <label>Name</label>
-                                <input name="breed_name" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
-                                       title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự.">
+                                <input name="breed_name" class="form-control" required />
                             </div>
+
                             <div class="mb-3">
                                 <label>Animal Type</label>
                                 <select name="animal_type_id" class="form-select" required>
@@ -345,10 +352,12 @@
                                     </c:forEach>
                                 </select>
                             </div>
+
                             <div class="mb-3">
                                 <label>Image</label>
-                                <input type="file" name="image" class="form-control">
+                                <input type="file" name="image" class="form-control" accept="image/*" />
                             </div>
+
                             <div class="mb-3">
                                 <label>Status</label>
                                 <select name="is_active" class="form-select">
@@ -364,6 +373,7 @@
                 </div>
             </div>
 
+
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
             <script>
                     document.querySelectorAll('.update-btn').forEach(btn => {
@@ -376,6 +386,72 @@
                             modal.querySelector("select[name='is_active']").value = btn.dataset.status;
                         });
                     });
-            </script>         
+            </script>    
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const addForm = document.getElementById("addBreedForm");
+                    const editForm = document.getElementById("editBreedForm");
+                    const addError = document.getElementById("add-error");
+                    const editError = document.getElementById("edit-error");
+
+                    function validateName(name) {
+                        return name.trim().length >= 2 && name.trim().length <= 100;
+                    }
+
+                    function handleBreedSubmit(form, errorBox, service) {
+                        form.addEventListener("submit", function (e) {
+                            e.preventDefault();
+                            const formData = new FormData(form);
+                            formData.append("service", service);
+
+                            const name = formData.get("breed_name");
+                            if (!validateName(name)) {
+                                showError(errorBox, "❌ Tên phải từ 2-100 ký tự và không toàn khoảng trắng.");
+                                return;
+                            }
+
+                            fetch("Breed", {
+                                method: "POST",
+                                body: formData,
+                            })
+                                    .then((res) => res.text())
+                                    .then((text) => {
+                                        try {
+                                            const json = JSON.parse(text);
+                                            showError(errorBox, json.message || "Có lỗi xảy ra!");
+                                        } catch {
+                                            location.href = "Breed?service=listBreed";
+                                        }
+                                    })
+                                    .catch(() => {
+                                        showError(errorBox, "❌ Lỗi mạng, thử lại sau.");
+                                    });
+                        });
+                    }
+
+                    function showError(errorBox, message) {
+                        errorBox.classList.remove("d-none");
+                        errorBox.innerText = message;
+                    }
+
+                    handleBreedSubmit(addForm, addError, "addBreed");
+                    handleBreedSubmit(editForm, editError, "updateBreed");
+
+                    // Đổ dữ liệu vào Edit Modal
+                    document.querySelectorAll(".update-btn").forEach((btn) => {
+                        btn.addEventListener("click", () => {
+                            const modal = document.querySelector("#editBreedModal");
+                            modal.querySelector("input[name='breed_id']").value = btn.dataset.id;
+                            modal.querySelector("input[name='breed_name']").value = btn.dataset.name;
+                            modal.querySelector("select[name='animal_type_id']").value = btn.dataset.type;
+                            modal.querySelector("input[name='oldImage']").value = btn.dataset.image;
+                            modal.querySelector("select[name='is_active']").value = btn.dataset.status;
+                            editError.classList.add("d-none");
+                        });
+                    });
+                });
+            </script>
+
     </body>
 </html>

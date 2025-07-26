@@ -117,9 +117,15 @@ public class BreedServlet extends HttpServlet {
                 boolean active = Boolean.parseBoolean(request.getParameter("is_active"));
                 Part imagePart = request.getPart("image");
 
-                if (dao.isBreedNameExistsInType(name, typeId, null)) {
-                    request.getSession().setAttribute("message", "❌ Giống này đã tồn tại trong loài đó!");
-                    response.sendRedirect("Breed?service=listBreed");
+                // Validate tên
+                if (name == null || name.trim().isEmpty() || name.trim().length() < 2 || name.trim().length() > 100) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên không hợp lệ: từ 2-100 ký tự và không toàn khoảng trắng.\"}");
+                    return;
+                }
+
+                Breed existing = dao.getByNameBreed(name.trim(), typeId);
+                if (existing != null) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên loài đã tồn tại.\"}");
                     return;
                 }
 
@@ -134,9 +140,18 @@ public class BreedServlet extends HttpServlet {
                 String oldImage = request.getParameter("oldImage");
                 Part imagePart = request.getPart("image");
 
-                if (dao.isBreedNameExistsInType(name, typeId, id)) {
-                    request.getSession().setAttribute("message", "❌ Tên giống đã tồn tại trong loài này!");
-                    response.sendRedirect("Breed?service=listBreed");
+                // Validate tên
+                if (name == null || name.trim().isEmpty() || name.trim().length() < 2 || name.trim().length() > 100) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên không hợp lệ: từ 2-100 ký tự và không toàn khoảng trắng.\"}");
+                    return;
+                }
+
+                Breed existing = dao.getByNameBreed(name, typeId);
+                if (existing != null && !existing.getBreedId().equals(id)) {
+                    // Trùng tên với loại khác → báo lỗi
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"Tên loài đã tồn tại.\"}");
                     return;
                 }
 

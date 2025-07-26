@@ -92,6 +92,26 @@ public class BreedDAO {
         }
         return list;
     }
+    
+    public Breed getByNameBreed(String name, String typeId) {
+        String sql = "SELECT * FROM Breed WHERE breed_name = ? and animal_type_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setString(2, typeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Breed(rs.getString("breed_id"),
+                            rs.getString("image"),
+                            rs.getString("breed_name"),
+                            rs.getString("animal_type_id"),
+                            rs.getBoolean("is_active"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     // Add a new breed
     public boolean addBreed(Breed breed) {

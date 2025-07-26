@@ -129,32 +129,75 @@ public class DoctorManagerment extends HttpServlet {
                 String experience = request.getParameter("experience");
                 String workingHours = request.getParameter("workingHours");
                 boolean status = Boolean.parseBoolean(request.getParameter("status"));
-
-                if (doctorDAO.isEmailExists(email, employeeId == null ? "" : employeeId)) {
-                    request.getSession().setAttribute("message", "❌ Email đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("DoctorManagerment?service=listDoctor");
-                    return;
-                }
-
-                if (doctorDAO.isPhoneExists(phone, employeeId == null ? "" : employeeId)) {
-                    request.getSession().setAttribute("message", "❌ Số điện thoại đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("DoctorManagerment?service=listDoctor");
-                    return;
-                }
                 // Upload ảnh
                 String imagePath = uploadImage(request);
 
+                // === VALIDATION ===
+                if (name == null || name.trim().isEmpty() || name.trim().length() < 2 || name.trim().length() > 100) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên không hợp lệ: từ 2-100 ký tự và không toàn khoảng trắng.\"}");
+                    return;
+                }
+
+                if (phone == null || !phone.matches("^0[0-9]{9}$")) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Số điện thoại không hợp lệ (phải bắt đầu bằng 0 và đủ 10 chữ số).\"}");
+                    return;
+                }
+
+                if (doctorDAO.isPhoneExists(phone, employeeId)) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Số điện thoại đã tồn tại trong hệ thống.\"}");
+                    return;
+                }
+
+                if (email == null || !email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Email không đúng định dạng.\"}");
+                    return;
+                }
+
+                if (doctorDAO.isEmailExists(email, employeeId)) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Email đã tồn tại trong hệ thống.\"}");
+                    return;
+                }
+
+                if (password == null || password.length() < 6 || password.length() > 50) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Mật khẩu phải từ 6 đến 50 ký tự.\"}");
+                    return;
+                }
+
+                if (address == null || address.trim().isEmpty() || address.trim().length() > 255) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Địa chỉ không hợp lệ (không được để trống và tối đa 255 ký tự).\"}");
+                    return;
+                }
+
+                if (experience == null || experience.trim().isEmpty() || experience.trim().length() > 255) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Mô tả kinh nghiệm không hợp lệ (không được để trống và tối đa 255 ký tự).\"}");
+                    return;
+                }
+
+                if (workingHours == null || !workingHours.matches("^[0-2]?[0-9]:[0-5][0-9]-[0-2]?[0-9]:[0-5][0-9]$")) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Giờ làm việc phải theo định dạng HH:mm-HH:mm (VD: 08:00-17:00).\"}");
+                    return;
+                }
+
                 Employee emp = new Employee(employeeId, name, imagePath, phone, email, password,
                         address, roleId, experience, workingHours, status);
-
                 doctorDAO.insertDoctor(emp);
-                request.getSession().setAttribute("message", "Doctor added successfully!");
+
+                // ✅ Trả về JSON thành công
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                PrintWriter out = response.getWriter();
+                out.print("{\"status\":\"success\",\"message\":\"✅ Thêm bác sĩ thành công!\"}");
+                out.flush();
 
             } catch (Exception e) {
                 e.printStackTrace();
-                request.getSession().setAttribute("message", "Error adding Doctor!");
-            }
 
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Lỗi hệ thống khi thêm nhân viên.\"}");
+            }
+            return;
         } else if (service.equals("update")) {
             try {
                 String employeeId = request.getParameter("employeeId").trim();
@@ -167,36 +210,76 @@ public class DoctorManagerment extends HttpServlet {
                 String experience = request.getParameter("experience");
                 String workingHours = request.getParameter("workingHours");
                 boolean status = Boolean.parseBoolean(request.getParameter("status"));
+                String imagePath = uploadImage(request);
+                if (imagePath == null || imagePath.isEmpty()) {
+                    imagePath = request.getParameter("old_image");
+                }
 
-                if (doctorDAO.isEmailExists(email, employeeId)) {
-                    request.getSession().setAttribute("message", "❌ Email đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("DoctorManagerment?service=listDoctor");
+                response.setContentType("application/json");
+
+                // ===== VALIDATION =====
+                if (name.length() < 2 || name.length() > 100) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên không hợp lệ: từ 2-100 ký tự.\"}");
+                    return;
+                }
+
+                if (!phone.matches("^0[0-9]{9}$")) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Số điện thoại không hợp lệ.\"}");
                     return;
                 }
 
                 if (doctorDAO.isPhoneExists(phone, employeeId)) {
-                    request.getSession().setAttribute("message", "❌ Số điện thoại đã được sử dụng bởi nhân viên khác.");
-                    response.sendRedirect("DoctorManagerment?service=listDoctor");
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Số điện thoại đã tồn tại.\"}");
                     return;
                 }
-                String imagePath = uploadImage(request);
-                if (imagePath == null || imagePath.isEmpty()) {
-                    imagePath = request.getParameter("old_image");
+
+                if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Email không hợp lệ.\"}");
+                    return;
+                }
+
+                if (doctorDAO.isEmailExists(email, employeeId)) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Email đã tồn tại.\"}");
+                    return;
+                }
+
+                if (password.length() < 6 || password.length() > 50) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Mật khẩu từ 6-50 ký tự.\"}");
+                    return;
+                }
+
+                if (address.isEmpty() || address.length() > 255) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Địa chỉ không hợp lệ.\"}");
+                    return;
+                }
+
+                if (experience.isEmpty() || experience.length() > 255) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Kinh nghiệm không hợp lệ.\"}");
+                    return;
+                }
+
+                if (!workingHours.matches("^[0-2]?[0-9]:[0-5][0-9]-[0-2]?[0-9]:[0-5][0-9]$")) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Giờ làm phải đúng định dạng HH:mm-HH:mm.\"}");
+                    return;
                 }
 
                 Employee emp = new Employee(employeeId, name, imagePath, phone, email, password,
                         address, roleId, experience, workingHours, status);
 
                 doctorDAO.updateDoctor(emp);
-                request.getSession().setAttribute("message", "Doctor updated successfully!");
+
+                request.getSession().setAttribute("message", "✅ Cập nhật bác sĩ thành công!");
+                response.sendRedirect("DoctorManagerment");
 
             } catch (Exception e) {
                 e.printStackTrace();
-                request.getSession().setAttribute("message", "Error updating Doctor!");
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Lỗi hệ thống.\"}");
             }
         }
 
-        response.sendRedirect("DoctorManagerment?service=listDoctor");
+        response.sendRedirect("DoctorManagerment");
     }
 
     @Override

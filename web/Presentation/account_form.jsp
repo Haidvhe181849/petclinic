@@ -82,7 +82,7 @@
 
                             <c:if test="${not empty alertMessage}">
                                 <script>
-Swal.fire({
+                                    Swal.fire({
                                         icon: '${alertType == "success" ? "success" : "error"}',
                                         title: '${alertType == "success" ? "Thành công" : "Lỗi"}',
                                         text: '${alertMessage}'
@@ -119,22 +119,7 @@ Swal.fire({
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                
-                                <div class="mb-3 password-container">
-                                    <label class="form-label">
-                                        <c:choose>
-                                            <c:when test="${accountUser != null}">Mật khẩu mới (để trống nếu không đổi)</c:when>
-<c:otherwise>Mật khẩu</c:otherwise>
-                                        </c:choose>
-                                    </label>
-                                    <input type="password" class="form-control" name="password"
-                                        id="passwordInput" ${accountUser == null ? 'required' : ''} autocomplete="new-password">
-                                    <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword"></i>
-                                    <c:if test="${accountUser != null}">
-                                        <small class="text-muted">Để trống nếu không muốn thay đổi mật khẩu</small>
-                                    </c:if>
-                                </div>
-                                
+                              
                                 <c:if test="${accountUser == null}">
                                     <div class="mb-3 password-container">
                                         <label class="form-label">Nhập lại mật khẩu</label>
@@ -161,7 +146,7 @@ Swal.fire({
 <!--                                        <option value="2" ${accountUser !=null && accountUser.roleId==2 ? 'selected'
                                             : '' }>Nhân viên</option>
                                         <option value="3" ${accountUser !=null && accountUser.roleId==3 ? 'selected'
-: '' }>Bác sĩ</option>-->
+                                            : '' }>Bác sĩ</option>-->
                                         <option value="4" ${accountUser !=null && accountUser.roleId==4 ? 'selected'
                                             : '' }>Khách hàng</option>
                                     </select>
@@ -205,7 +190,7 @@ Swal.fire({
                         Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Tên không được để trống!' });
                         e.preventDefault(); return false;
                     }
-if (!/^[\p{L} ]+$/u.test(name)) {
+                    if (!/^[\p{L} ]+$/u.test(name)) {
                         Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Tên chỉ được chứa chữ cái và khoảng trắng!' });
                         e.preventDefault(); return false;
                     }
@@ -235,21 +220,13 @@ if (!/^[\p{L} ]+$/u.test(name)) {
                             e.preventDefault(); return false;
                         }
                     }
-                    // Password: validate tùy theo trường hợp
-                    if (passwordInput) {
-                        // Khi tạo mới: password bắt buộc và >= 6 ký tự
-                        if (passwordInput.hasAttribute('required') && password.length < 6) {
-                            Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mật khẩu phải có ít nhất 6 ký tự!' });
-                            e.preventDefault(); return false;
-                        }
-                        // Khi edit: nếu có nhập password thì phải >= 6 ký tự
-                        if (!passwordInput.hasAttribute('required') && password && password.length < 6) {
-                            Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mật khẩu mới phải có ít nhất 6 ký tự!' });
-                            e.preventDefault(); return false;
-                        }
+                    // Password: nếu có, phải >= 6 ký tự
+                    if (passwordInput && passwordInput.hasAttribute('required') && password.length < 6) {
+                        Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mật khẩu phải có ít nhất 6 ký tự!' });
+                        e.preventDefault(); return false;
                     }
-                    // Confirm password: chỉ validate khi tạo mới
-if (confirmPasswordInput && password !== confirmPassword) {
+                    // Confirm password: nếu có, phải trùng
+                    if (confirmPasswordInput && password !== confirmPassword) {
                         Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mật khẩu và nhập lại mật khẩu không khớp!' });
                         e.preventDefault(); return false;
                     }
@@ -302,7 +279,7 @@ if (confirmPasswordInput && password !== confirmPassword) {
                             cpwInput.type = 'password';
                             cpwIcon.classList.remove('fa-eye');
                             cpwIcon.classList.add('fa-eye-slash');
-}
+                        }
                     });
                 }
             </script>

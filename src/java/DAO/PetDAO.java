@@ -50,17 +50,17 @@ public class PetDAO {
     public String generateNewPetId() {
         if (connection == null) {
             System.err.println("Connection is null. Cannot generate new pet ID.");
-            return "P001"; // fallback
+            return "PET001"; // fallback
         }
 
-        String sql = "SELECT TOP 1 pet_id FROM Pet WHERE pet_id LIKE 'P%' ORDER BY pet_id DESC";
+        String sql = "SELECT TOP 1 pet_id FROM Pet WHERE pet_id LIKE 'PET%' ORDER BY pet_id DESC";
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
                 String lastId = rs.getString("pet_id");
-                if (lastId != null && lastId.startsWith("P")) {
-                    int number = Integer.parseInt(lastId.substring(1)) + 1;
-                    return String.format("P%03d", number);
+                if (lastId != null && lastId.startsWith("PET")) {
+                    int number = Integer.parseInt(lastId.substring(3)) + 1; // bỏ "PET"
+                    return String.format("PET%03d", number);
                 }
             }
         } catch (SQLException e) {
@@ -68,7 +68,7 @@ public class PetDAO {
             e.printStackTrace();
         }
 
-        return "P001"; // Trả về ID mặc định nếu bảng trống
+        return "PET001"; // Trả về ID mặc định nếu bảng trống
     }
 
     public void addPet(Pet pet) {

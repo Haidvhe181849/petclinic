@@ -104,6 +104,26 @@ public class AnimalDAO {
         }
     }
 
+    public AnimalType getByName(String name) {
+        String sql = "SELECT * FROM AnimalType WHERE type_name = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new AnimalType(
+                            rs.getString("animal_type_id"),
+                            rs.getString("image"),
+                            rs.getString("type_name"),
+                            rs.getBoolean("status")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // ✅ Xoá
     public boolean deleteAnimalType(String id) throws SQLException {
         String sql = "DELETE FROM AnimalType WHERE animal_type_id = ?";
@@ -206,6 +226,7 @@ public class AnimalDAO {
 
         return list;
     }
+
 
     // ✅ Thêm giống
     public boolean addBreed(Breed breed) throws SQLException {

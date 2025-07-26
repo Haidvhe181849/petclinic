@@ -428,40 +428,58 @@
 
 
             <!-- Add Employee Modal -->
+            <!-- Add Employee Modal -->
             <div id="addEmployeeModal" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/Employee" method="post" enctype="multipart/form-data">
-                            <div class="modal-header">						
+                        <form id="addEmployeeForm" method="post" enctype="multipart/form-data">
+                            <div class="modal-header">
                                 <h4 class="modal-title">Add Employee</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
                             <div class="modal-body">
+                                <div id="add-error" class="text-danger fw-bold mt-2"></div>
+
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label>Name</label>
-                                        <input type="text" name="name" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
+                                        <input type="text" name="name" class="form-control" required 
+                                               pattern="^[^\s].{1,98}[^\s]$"
+                                               title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
                                     </div>
 
                                     <div class="col-md-6">
                                         <label>Phone</label>
-                                        <input type="text" name="phone" class="form-control" required pattern="^0\d{9}$" title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
+                                        <input type="text" name="phone" class="form-control" required 
+                                               pattern="^0\d{9}$"
+                                               title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
                                     </div>
 
                                     <div class="col-md-6">
                                         <label>Email</label>
-                                        <input type="email" name="email" class="form-control" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Email phải đúng định dạng">
+                                        <input type="email" name="email" class="form-control" required
+                                               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                               title="Email phải đúng định dạng">
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Password</label>
-                                        <input type="password" name="password" class="form-control" required minlength="6" title="Tối thiểu 6 ký tự">
+                                        <label for="password">Password</label>
+                                        <div class="input-group">
+                                            <input type="password" name="password" id="password" class="form-control"
+                                                   required minlength="6" maxlength="50"
+                                                   title="Tối thiểu 6 ký tự">
+                                            <span class="input-group-text" onclick="togglePasswordVisibility()" style="cursor: pointer;">
+                                                <i class="fa fa-eye" id="toggleIcon"></i>
+                                            </span>
+                                        </div>
                                     </div>
+
 
                                     <div class="col-md-6">
                                         <label>Address</label>
-                                        <input type="text" name="address" class="form-control" maxlength="255" title="Tối đa 255 ký tự" required>
+                                        <input type="text" name="address" class="form-control" maxlength="255" required
+                                               title="Tối đa 255 ký tự">
                                     </div>
 
                                     <div class="col-md-6">
@@ -476,12 +494,15 @@
 
                                     <div class="col-md-6">
                                         <label>Experience</label>
-                                        <input type="text" name="experience" class="form-control" maxlength="255" title="Tối đa 255 ký tự">
+                                        <input type="text" name="experience" class="form-control" maxlength="255"
+                                               title="Tối đa 255 ký tự">
                                     </div>
 
                                     <div class="col-md-6">
                                         <label>Working Hours</label>
-                                        <input type="text" name="workingHours" class="form-control" placeholder="e.g. 8:00-17:00" pattern="^\d{1,2}:\d{2}-\d{1,2}:\d{2}$" title="Định dạng hợp lệ: 8:00-17:00" required>
+                                        <input type="text" name="workingHours" class="form-control" placeholder="e.g. 8:00-17:00"
+                                               pattern="^\d{1,2}:\d{2}-\d{1,2}:\d{2}$"
+                                               title="Định dạng hợp lệ: 8:00-17:00" required>
                                     </div>
 
                                     <div class="col-md-6">
@@ -501,6 +522,7 @@
                                 <input type="hidden" name="service" value="addEmployee">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-success">Add</button>
+
                             </div>
                         </form>
                     </div>
@@ -525,82 +547,118 @@
             <!-- Update Employee Modal -->
             <!-- Update Employee Modal -->
             <div id="editEmployeeModal" class="modal fade" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <form action="${pageContext.request.contextPath}/Employee" method="post" enctype="multipart/form-data">
+                        <form id="editEmployeeForm" action="${pageContext.request.contextPath}/Employee" method="post" enctype="multipart/form-data">
                             <div class="modal-header">
-                                <h4 class="modal-title">Update Employee</h4>
+                                <h4 class="modal-title">Cập Nhật Nhân Viên</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+
                             <div class="modal-body">
+                                <!-- Thông báo lỗi / thành công -->
+                                <div id="edit-error" class="text-danger mb-2"></div>
+                                <div id="edit-success" class="text-success mb-2"></div>
+
                                 <!-- ID ẩn -->
-                                <input type="hidden" name="employeeId" class="form-control" required readonly>
-                                <input type="hidden" name="old_image" class="form-control" readonly>
+                                <input type="hidden" name="employeeId" required readonly>
+                                <input type="hidden" name="old_image" readonly>
 
-                                <div class="mb-3">
-                                    <label>Image</label>
-                                    <input type="file" name="imageFile" class="form-control" accept="image/*">
-                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label>Image</label>
+                                        <input type="file" name="imageFile" class="form-control" accept="image/*">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Name</label>
-                                    <input type="text" name="name" class="form-control" required pattern="^[^\s].{1,98}[^\s]$" title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Name</label>
+                                        <input type="text" name="name" class="form-control"
+                                               required pattern="^[^\s].{1,98}[^\s]$"
+                                               title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối đa 100 ký tự">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone" class="form-control" required pattern="^0\d{9}$" title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Phone</label>
+                                        <input type="text" name="phone" class="form-control"
+                                               required pattern="^0\d{9}$"
+                                               title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Email phải đúng định dạng">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control"
+                                               required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                               title="Email phải đúng định dạng">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Password</label>
-                                    <input type="password" name="password" class="form-control" required minlength="6" title="Tối thiểu 6 ký tự">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Mật khẩu</label>
+                                        <div class="input-group">
+                                            <input type="password" name="password" id="password" class="form-control"
+                                                   required minlength="6" maxlength="50"
+                                                   title="Tối thiểu 6 và tối đa 50 ký tự">
+                                            <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                                <i class="fa fa-eye" id="eyeIcon"></i>
+                                            </span>
+                                        </div>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Address</label>
-                                    <input type="text" name="address" class="form-control" maxlength="255" title="Tối đa 255 ký tự">
-                                </div>
 
-                                <div class="mb-3">
-                                    <label>Role</label>
-                                    <select name="roleId" class="form-select">
-                                        <option value="1">Admin</option>
-                                        <option value="2">Staff</option>
-                                        <option value="3">Doctor</option>
-                                    </select>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Address</label>
+                                        <input type="text" name="address" class="form-control"
+                                               maxlength="255"
+                                               title="Tối đa 255 ký tự">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Experience</label>
-                                    <textarea name="experience" class="form-control" maxlength="255" title="Tối đa 255 ký tự" rows="3"></textarea>
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Role</label>
+                                        <select name="roleId" class="form-select">
+                                            <option value="1">Admin</option>
+                                            <option value="2">Staff</option>
+                                            <option value="3">Doctor</option>
+                                        </select>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Working Hours</label>
-                                    <input type="text" name="workingHours" class="form-control" placeholder="e.g. 8:00-17:00" pattern="^\d{1,2}:\d{2}-\d{1,2}:\d{2}$" title="Định dạng hợp lệ: 8:00-17:00">
-                                </div>
+                                    <div class="col-md-6">
+                                        <label>Experience</label>
+                                        <textarea name="experience" class="form-control" maxlength="255"
+                                                  title="Tối đa 255 ký tự" rows="3"></textarea>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label>Status</label><br>
-                                    <input type="radio" name="status" value="true"> Active
-                                    <input type="radio" name="status" value="false"> Inactive
+                                    <div class="col-md-6">
+                                        <label>Working Hours</label>
+                                        <input type="text" name="workingHours" class="form-control"
+                                               placeholder="e.g. 08:00-17:00"
+                                               pattern="^[0-2]?[0-9]:[0-5][0-9]-[0-2]?[0-9]:[0-5][0-9]$"
+                                               title="Định dạng hợp lệ: 08:00-17:00">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label>Status</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status" value="true" id="statusActive">
+                                            <label class="form-check-label" for="statusActive">Active</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status" value="false" id="statusInactive">
+                                            <label class="form-check-label" for="statusInactive">Inactive</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="modal-footer">
+                                <input type="hidden" name="service" value="update">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <input type="submit" class="btn btn-info" value="Save">
-                                <input type="hidden" name="service" value="update">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
+
 
 
             <!-- Feedback Modal -->
@@ -631,69 +689,70 @@
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-                    $(".update-btn").click(function () {
-                        $("#editEmployeeModal input[name='employeeId']").val($(this).data("id"));
-                        $("#editEmployeeModal input[name='old_image']").val($(this).data("image"));
-                        $("#editEmployeeModal input[name='name']").val($(this).data("name"));
-                        $("#editEmployeeModal input[name='phone']").val($(this).data("phone"));
-                        $("#editEmployeeModal input[name='email']").val($(this).data("email"));
-                        $("#editEmployeeModal input[name='password']").val("123"); // hoặc bỏ trống nếu không sửa
-                        $("#editEmployeeModal input[name='address']").val($(this).data("address"));
-                        $("#editEmployeeModal select[name='roleId']").val($(this).data("role"));
-                        $("#editEmployeeModal textarea[name='experience']").val($(this).data("experience"));
-                        $("#editEmployeeModal input[name='workingHours']").val($(this).data("workinghours"));
+                                                $(".update-btn").click(function () {
+                                                    $("#editEmployeeModal input[name='employeeId']").val($(this).data("id"));
+                                                    $("#editEmployeeModal input[name='old_image']").val($(this).data("image"));
+                                                    $("#editEmployeeModal input[name='name']").val($(this).data("name"));
+                                                    $("#editEmployeeModal input[name='phone']").val($(this).data("phone"));
+                                                    $("#editEmployeeModal input[name='email']").val($(this).data("email"));
+                                                    $("#editEmployeeModal input[name='password']").val("123"); // hoặc bỏ trống nếu không sửa
+                                                    $("#editEmployeeModal input[name='address']").val($(this).data("address"));
+                                                    $("#editEmployeeModal select[name='roleId']").val($(this).data("role"));
+                                                    $("#editEmployeeModal textarea[name='experience']").val($(this).data("experience"));
+                                                    $("#editEmployeeModal input[name='workingHours']").val($(this).data("workinghours"));
 
-                        const status = $(this).data("status");
-                        $("#editEmployeeModal input[name='status'][value='true']").prop("checked", status == 1);
-                        $("#editEmployeeModal input[name='status'][value='false']").prop("checked", status == 0);
-                    });
+                                                    const status = $(this).data("status");
+                                                    $("#editEmployeeModal input[name='status'][value='true']").prop("checked", status == 1);
+                                                    $("#editEmployeeModal input[name='status'][value='false']").prop("checked", status == 0);
+                                                });
 
-                    $(".view-btn").click(function () {
-                        const roleId = $(this).data("role");
-                        let roleName = "Unknown";
+                                                $(".view-btn").click(function () {
+                                                    const roleId = $(this).data("role");
+                                                    let roleName = "Unknown";
 
-                        switch (roleId) {
-                            case 1:
-                            case "1":
-                                roleName = "Admin";
-                                break;
-                            case 2:
-                            case "2":
-                                roleName = "Staff";
-                                break;
-                            case 3:
-                            case "3":
-                                roleName = "Doctor";
-                                break;
-                        }
+                                                    switch (roleId) {
+                                                        case 1:
+                                                        case "1":
+                                                            roleName = "Admin";
+                                                            break;
+                                                        case 2:
+                                                        case "2":
+                                                            roleName = "Staff";
+                                                            break;
+                                                        case 3:
+                                                        case "3":
+                                                            roleName = "Doctor";
+                                                            break;
+                                                    }
 
-                        $("#viewEmployeeId").text($(this).data("id"));
-                        $("#viewName").text($(this).data("name"));
-                        $("#viewPhone").text($(this).data("phone"));
-                        $("#viewEmail").text($(this).data("email"));
-                        $("#viewAddress").text($(this).data("address"));
-                        $("#viewRoleId").text(roleName); // ✅ Đã chuyển thành tên role
-                        $("#viewExperience").text($(this).data("experience"));
-                        $("#viewWorkingHours").text($(this).data("workinghours"));
+                                                    $("#viewEmployeeId").text($(this).data("id"));
+                                                    $("#viewName").text($(this).data("name"));
+                                                    $("#viewPhone").text($(this).data("phone"));
+                                                    $("#viewEmail").text($(this).data("email"));
+                                                    $("#viewAddress").text($(this).data("address"));
+                                                    $("#viewRoleId").text(roleName); // ✅ Đã chuyển thành tên role
+                                                    $("#viewExperience").text($(this).data("experience"));
+                                                    $("#viewWorkingHours").text($(this).data("workinghours"));
 
-                        const imagePath = $(this).data("image");
-                        $("#viewImage").attr("src", "Presentation/img/images/Employee/" + imagePath);
+                                                    const imagePath = $(this).data("image");
+                                                    $("#viewImage").attr("src", "Presentation/img/images/Employee/" + imagePath);
 
-                        const status = $(this).data("status");
-                        const statusText = status == 1 ? "Active" : "Inactive";
-                        const statusClass = status == 1 ? "bg-success" : "bg-danger";
-                        $("#viewStatus").text(statusText).removeClass("bg-success bg-danger").addClass(statusClass);
-                    });
+                                                    const status = $(this).data("status");
+                                                    const statusText = status == 1 ? "Active" : "Inactive";
+                                                    const statusClass = status == 1 ? "bg-success" : "bg-danger";
+                                                    $("#viewStatus").text(statusText).removeClass("bg-success bg-danger").addClass(statusClass);
+                                                });
 
-                    // Handle feedback button click
-                    $(".feedback-btn").click(function () {
-                        const employeeId = $(this).data("employee-id");
-                        const employeeName = $(this).data("employee-name");
+                                                // Handle feedback button click
+                                                $(".feedback-btn").click(function () {
+                                                    const employeeId = $(this).data("employee-id");
+                                                    const employeeName = $(this).data("employee-name");
 
-                        // Update modal title
-                        $("#feedbackModal .modal-title").text("Feedback for " + employeeName);                        // Reset content to loading state
-                        $("#feedbackContent").html(`
+                                                    // Update modal title
+                                                    $("#feedbackModal .modal-title").text("Feedback for " + employeeName);                        // Reset content to loading state
+                                                    $("#feedbackContent").html(`
                             <div class="text-center">
                                 <div class="spinner-border" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -702,51 +761,144 @@
                             </div>
                         `);
 
-                        // Load feedback via AJAX
-                        $.ajax({
-                            url: "${pageContext.request.contextPath}/EmployeeFeedback",
-                            method: "GET",
-                            data: {employeeId: employeeId},
-                            success: function (response) {
-                                $("#feedbackContent").html(response);
-                            },
-                            error: function (xhr, status, error) {
-                                $("#feedbackContent").html(`
+                                                    // Load feedback via AJAX
+                                                    $.ajax({
+                                                        url: "${pageContext.request.contextPath}/EmployeeFeedback",
+                                                        method: "GET",
+                                                        data: {employeeId: employeeId},
+                                                        success: function (response) {
+                                                            $("#feedbackContent").html(response);
+                                                        },
+                                                        error: function (xhr, status, error) {
+                                                            $("#feedbackContent").html(`
                                     <div class="alert alert-danger">
                                         <i class="fas fa-exclamation-triangle"></i>
                                         Error loading feedback: ` + error + `
                                     </div>
                                 `);
-                            }
-                        });
-                    });
+                                                        }
+                                                    });
+                                                });
 
         </script>
 
         <script>
-            function isValidEmail(email) {
-                const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                return regex.test(email);
-            }
+            document.addEventListener("DOMContentLoaded", () => {
+                const form = document.getElementById("addEmployeeForm");
+                const errorDiv = document.getElementById("add-error");
 
-            // Validate Add Employee Form
-            document.querySelector("#addEmployeeModal form").addEventListener("submit", function (e) {
-                const email = this.email.value.trim();
-                if (!isValidEmail(email)) {
-                    e.preventDefault();
-                    alert("❌ Email không hợp lệ! Vui lòng kiểm tra lại.");
-                }
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault(); // Ngăn reload mặc định
+
+                    const formData = new FormData(form);
+
+                    fetch("Employee", {
+                        method: "POST",
+                        body: formData
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === "error") {
+                                    // Hiển thị lỗi trong modal
+                                    errorDiv.textContent = data.message;
+                                } else if (data.status === "success") {
+                                    // Reset form + ẩn modal + thông báo
+                                    errorDiv.textContent = "";
+                                    form.reset();
+                                    const modal = bootstrap.Modal.getInstance(document.getElementById("addEmployeeModal"));
+                                    modal.hide();
+
+                                    // Hiển thị toast/thông báo đơn giản
+                                    alert(data.message);
+
+                                    // Có thể reload bảng nhân viên (nếu có)
+                                    location.reload(); // nếu muốn reload danh sách
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Lỗi fetch:", err);
+                                errorDiv.textContent = "❌ Đã xảy ra lỗi hệ thống.";
+                            });
+                });
             });
+        </script>
 
-            // Validate Update Employee Form
-            document.querySelector("#editEmployeeModal form").addEventListener("submit", function (e) {
-                const email = this.email.value.trim();
-                if (!isValidEmail(email)) {
-                    e.preventDefault();
-                    alert("❌ Email không hợp lệ! Vui lòng kiểm tra lại.");
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const editForm = document.getElementById("editEmployeeForm");
+
+                if (editForm) {
+                    editForm.addEventListener("submit", async function (e) {
+                        e.preventDefault();
+
+                        const formData = new FormData(this);
+                        formData.append("service", "update");
+
+                        try {
+                            const response = await fetch("Employee", {
+                                method: "POST",
+                                body: formData
+                            });
+
+                            const contentType = response.headers.get("content-type");
+
+                            // Nếu là JSON, nghĩa là có lỗi -> hiển thị
+                            if (contentType && contentType.includes("application/json")) {
+                                const result = await response.json();
+
+                                if (result.status === "error") {
+                                    document.getElementById("edit-error").innerText = result.message;
+                                    return;
+                                }
+                            }
+
+                            // Nếu không phải JSON, coi như update thành công
+                            window.location.reload();
+
+                        } catch (error) {
+                            console.error("Lỗi khi gửi request:", error);
+                            document.getElementById("edit-error").innerText = "❌ Đã xảy ra lỗi hệ thống.";
+                        }
+                    });
                 }
             });
         </script>
+
+        <script>
+            function togglePassword() {
+                const pwd = document.getElementById("password");
+                const icon = document.getElementById("eyeIcon");
+                if (pwd.type === "password") {
+                    pwd.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    pwd.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+        </script>
+
+        <script>
+            function togglePasswordVisibility() {
+                const passwordInput = document.getElementById("password");
+                const icon = document.getElementById("toggleIcon");
+
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+        </script>
+
+
+
 
     </body>
 </html>

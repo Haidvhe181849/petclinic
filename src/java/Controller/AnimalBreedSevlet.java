@@ -113,9 +113,29 @@ public class AnimalBreedSevlet extends HttpServlet {
                 String name = request.getParameter("typeName");
                 boolean status = Boolean.parseBoolean(request.getParameter("status"));
                 Part imagePart = request.getPart("image");
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                // Validate tên
+                if (name == null || name.trim().isEmpty() || name.trim().length() < 2 || name.trim().length() > 100) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên không hợp lệ: từ 2-100 ký tự và không toàn khoảng trắng.\"}");
+                    return;
+                }
+
+                // Kiểm tra trùng tên
+                AnimalType existing = aDAO.getByName(name.trim());
+                if (existing != null) {
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"❌ Tên loài đã tồn tại.\"}");
+                    return;
+                }
+
+                // Lưu ảnh
                 String imagePath = saveFile(imagePart, "images/animal", request);
-                aDAO.addAnimalType(new AnimalType(null, imagePath, name, status));
-                request.getSession().setAttribute("message", "Add successfully!");
+                aDAO.addAnimalType(new AnimalType(null, imagePath, name.trim(), status));
+
+                response.getWriter().write("{\"status\":\"success\", \"message\":\"✅ Thêm thành công!\"}");
+                return;
             }
 
             if ("updateType".equals(service)) {
@@ -125,9 +145,34 @@ public class AnimalBreedSevlet extends HttpServlet {
                 String oldImage = request.getParameter("oldImage");
                 Part imagePart = request.getPart("image");
                 String imagePath = imagePart.getSize() > 0 ? saveFile(imagePart, "images/animal", request) : oldImage;
+
+                if (name == null || name.trim().isEmpty() || name.trim().length() < 2 || name.trim().length() > 100) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"Tên không hợp lệ: phải từ 2-100 ký tự và không toàn khoảng trắng.\"}");
+                    return;
+                }
+
+                // Check tên có bị trùng không (loại trừ chính nó)
+                AnimalType existing = aDAO.getByName(name);
+                if (existing != null && !existing.getAnimalTypeId().equals(id)) {
+                    // Trùng tên với loại khác → báo lỗi
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"Tên loài đã tồn tại.\"}");
+                    return;
+                }
+
+                // ✅ Nếu không trùng thì mới update
                 aDAO.updateAnimalType(new AnimalType(id, imagePath, name, status));
-                request.getSession().setAttribute("message", "Update successfully!");
+
+                // Trả về phản hồi thành công
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"status\":\"success\", \"message\":\"Cập nhật thành công!\"}");
+                return;
             }
+
             response.sendRedirect("Animal");
 
         } catch (Exception e) {

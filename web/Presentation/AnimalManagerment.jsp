@@ -223,15 +223,18 @@
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-sm btn-outline-primary me-2 update-type-btn" 
-                                                                style="background: #0000;" 
+                                                                type="button"
+                                                                style="background-color: transparent;" 
                                                                 data-bs-toggle="modal" 
                                                                 data-bs-target="#editTypeModal"
                                                                 data-id="${type.animalTypeId}" 
-                                                                data-name="${type.typeName}" 
+                                                                data-name="${type.typeName.replaceAll("\"", "&quot;")}" 
                                                                 data-image="${type.image}" 
                                                                 data-status="${type.status}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
+
+
                                                         <a href="Animal?service=deleteType&id=${type.animalTypeId}"
                                                            onclick="return confirm('Are you sure to delete this Animal?');"
                                                            class="btn btn-sm btn-outline-danger"
@@ -254,12 +257,25 @@
             <!-- Add Animal Type Modal -->
             <div class="modal fade" id="addTypeModal" tabindex="-1">
                 <div class="modal-dialog">
-                    <form class="modal-content" action="Animal" method="post" enctype="multipart/form-data">
-                        <div class="modal-header"><h5 class="modal-title">Add Animal Type</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                    <form id="addTypeForm" class="modal-content" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Animal Type</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
                         <div class="modal-body">
-                            <div class="mb-3"><label>Name</label><input name="typeName" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
-                                                                        title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự."></div>
-                            <div class="mb-3"><label>Image</label><input type="file" name="image" accept="image/*" class="form-control" required></div>
+                            <!-- Hiển thị lỗi -->
+                            <div id="typeAddError" class="text-danger mb-2 d-none"></div>
+
+                            <div class="mb-3">
+                                <label for="typeName">Name</label>
+                                <input name="typeName" id="typeName" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="image">Image</label>
+                                <input type="file" name="image" id="image" accept="image/*" class="form-control" required>
+                            </div>
+
                             <input type="hidden" name="status" value="true">
                             <input type="hidden" name="service" value="addType">
                         </div>
@@ -269,6 +285,7 @@
                     </form>
                 </div>
             </div>
+
 
             <c:if test="${not empty sessionScope.message}">
                 <div id="popup-message">${sessionScope.message}</div>
@@ -283,16 +300,28 @@
             </c:if>
 
 
-            <!-- Edit Animal Type Modal -->
+            <!-- Modal Sửa Animal Type -->
             <div class="modal fade" id="editTypeModal" tabindex="-1">
                 <div class="modal-dialog">
-                    <form class="modal-content" action="Animal" method="post" enctype="multipart/form-data">
-                        <div class="modal-header"><h5 class="modal-title">Edit Animal Type</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                    <form id="editTypeForm" class="modal-content" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Animal Type</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
                         <div class="modal-body">
+                            <div id="typeUpdateError" class="text-danger d-none mb-2"></div>
+
                             <input type="hidden" name="typeId">
-                            <div class="mb-3"><label>Name</label><input name="typeName" class="form-control" required pattern="^(?!\s*$).{2,100}$" 
-                                                                        title="Tên không được để trống hoặc chỉ chứa khoảng trắng. Tối thiểu 2 ký tự, tối đa 100 ký tự."></div>
-                            <div class="mb-3"><label>Image</label><input type="file" name="image" class="form-control"><input type="hidden" name="oldImage"></div>
+                            <input type="hidden" name="oldTypeName">
+                            <input type="hidden" name="oldImage">
+                            <div class="mb-3">
+                                <label>Name</label>
+                                <input name="typeName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label>Image</label>
+                                <input type="file" name="image" class="form-control">
+                            </div>
                             <div class="mb-3">
                                 <label>Status</label>
                                 <select name="status" class="form-select">
@@ -300,69 +329,110 @@
                                     <option value="false">Inactive</option>
                                 </select>
                             </div>
-                            <input type="hidden" name="service" value="updateType">
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
                 </div>
             </div>
+
+
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
         <script>
-                    document.querySelectorAll('.update-type-btn').forEach(btn => {
-                        btn.addEventListener('click', () => {
-                            const modal = document.querySelector('#editTypeModal');
-                            modal.querySelector("input[name='typeId']").value = btn.dataset.id;
-                            modal.querySelector("input[name='typeName']").value = btn.dataset.name;
-                            modal.querySelector("input[name='oldImage']").value = btn.dataset.image;
-                            modal.querySelector("select[name='status']").value = btn.dataset.status;
-                        });
+                    document.getElementById("addTypeForm").addEventListener("submit", async function (e) {
+                        e.preventDefault();
+                        const form = e.target;
+                        const formData = new FormData(form);
+                        formData.set("service", "addType");
+
+                        const errorBox = document.getElementById("typeAddError");
+                        errorBox.classList.add("d-none");
+
+                        try {
+                            const response = await fetch("Animal", {
+                                method: "POST",
+                                body: formData
+                            });
+
+                            const contentType = response.headers.get("content-type");
+                            const result = contentType.includes("application/json") ? await response.json() : null;
+
+                            if (result && result.status === "error") {
+                                errorBox.textContent = result.message || "❌ Có lỗi xảy ra.";
+                                errorBox.classList.remove("d-none");
+                            } else {
+                                const modal = bootstrap.Modal.getInstance(document.getElementById("addTypeModal"));
+                                modal.hide();
+                                location.reload();
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            errorBox.textContent = "❌ Lỗi gửi dữ liệu. Vui lòng thử lại.";
+                            errorBox.classList.remove("d-none");
+                        }
+                    });
+        </script>
+
+        <script>
+            // Khi người dùng bấm nút edit → đổ dữ liệu vào form modal
+            document.querySelectorAll(".update-type-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const modal = document.getElementById("editTypeModal");
+                    const form = modal.querySelector("form");
+
+                    form.typeId.value = btn.dataset.id;
+                    form.typeName.value = btn.dataset.name;
+                    form.oldTypeName.value = btn.dataset.name;
+                    form.oldImage.value = btn.dataset.image;
+                    form.status.value = btn.dataset.status;
+                });
+            });
+
+            // Gửi form bằng AJAX khi submit
+            document.getElementById("editTypeForm").addEventListener("submit", async function (e) {
+                e.preventDefault();
+
+                const form = e.target;
+                const formData = new FormData(form);
+                formData.append("service", "updateType");
+
+                try {
+                    const response = await fetch("Animal", {
+                        method: "POST",
+                        body: formData
                     });
 
-        </script>
-
-        <script>
-            function validateTypeNameUniqueness(input, existingNames) {
-                const name = input.value.trim().toLowerCase();
-                const found = existingNames.includes(name);
-                if (found) {
-                    input.classList.add("is-invalid");
-                    alert("❌ Tên loài đã tồn tại. Vui lòng chọn tên khác.");
-                    return false;
-                } else {
-                    input.classList.remove("is-invalid");
-                    return true;
-                }
-            }
-
-            // Giả định tên loài hiện có được inject từ server:
-            const existingAnimalTypeNames = ["dog", "cat", "hamster"];
-
-            document.querySelector("#addTypeModal form").addEventListener("submit", function (e) {
-                const nameInput = this.typeName;
-                if (!validateTypeNameUniqueness(nameInput, existingAnimalTypeNames)) {
-                    e.preventDefault();
-                }
-            });
-
-            document.querySelector("#editTypeModal form").addEventListener("submit", function (e) {
-                const nameInput = this.typeName;
-                const currentId = this.typeId.value;
-                const nameToCheck = nameInput.value.trim().toLowerCase();
-                const isDuplicate = existingAnimalTypeNames.includes(nameToCheck);
-                if (isDuplicate) {
-                    // Trường hợp đang sửa chính nó thì cho qua, ngược lại cản
-                    const selectedTypeName = document.querySelector(`.update-type-btn[data-id='${currentId}']`)?.dataset.name.toLowerCase();
-                    if (selectedTypeName !== nameToCheck) {
-                        nameInput.classList.add("is-invalid");
-                        alert("❌ Tên loài đã tồn tại.");
-                        e.preventDefault();
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        throw new Error("Phản hồi không phải JSON");
                     }
+
+                    const result = await response.json();
+                    const errorBox = document.getElementById("typeUpdateError");
+
+                    if (result.status === "error") {
+                        errorBox.textContent = result.message || "Lỗi không xác định";
+                        errorBox.classList.remove("d-none");
+                    } else {
+                        const modalEl = document.getElementById("editTypeModal");
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        modal.hide();
+                        location.reload();
+                    }
+                } catch (err) {
+                    const errorBox = document.getElementById("typeUpdateError");
+                    errorBox.textContent = "❌ Có lỗi xảy ra khi gửi dữ liệu.";
+                    errorBox.classList.remove("d-none");
+                    console.error(err);
                 }
             });
+
         </script>
+
+
     </body>
 </html>
