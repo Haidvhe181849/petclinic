@@ -41,10 +41,10 @@
 
     <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2" style="height: calc(100vh - 5rem);">
         <ul class="flex flex-col pl-0 mb-0">
-            <c:if test="${sessionScope.user.roleId == 1}">
+            <c:if test="${sessionScope.staff.roleId == 2 || sessionScope.user.roleId == 1}">
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${dashboardActive}" 
-                       href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">
+                       href="${pageContext.request.contextPath}/dashboard">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="text-blue-500 ni ni-tv-2"></i>
                         </div>
@@ -53,7 +53,7 @@
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${accountActive}" 
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${accountActive}" 
                        href="${pageContext.request.contextPath}/account-management">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="text-red-600 ni ni-circle-08"></i>
@@ -69,6 +69,23 @@
                             <i class="text-red-600 ni ni-single-02"></i>
                         </div>
                         <span class="ml-1">Employee Managerment</span>
+                    </a>
+                </li>
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
+                        </div>
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
+                    </a>
+                </li>
+
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                            <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
+                        </div>
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
                     </a>
                 </li>
 
@@ -101,6 +118,14 @@
                     </ul>
                 </li>
                 <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
+                        </a>
+                    </li>
+                <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${feedbackActive}" 
                        href="${pageContext.request.contextPath}/feedback-management">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -109,6 +134,23 @@
                         <span class="ml-1">Feedback Managerment</span>
                     </a>
                 </li>
+<!--                <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
+                        </a>
+                    </li>-->
+
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                            </div>
+                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
+                        </a>
+                    </li>
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${timeActive}" 
                        href="${pageContext.request.contextPath}/ClinicWorking">
@@ -120,8 +162,8 @@
                 </li>
             </c:if>
 
-            <c:if test="${sessionScope.staff.roleId == 2}">
-                <li class="mt-0.5 w-full">
+            <c:if test="${sessionScope.staff.roleId == 2 || sessionScope.user.roleId == 1}">
+<!--                <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${newsActive}" 
                        href="${pageContext.request.contextPath}/News?service=listNews">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -129,7 +171,7 @@
                         </div>
                         <span class="ml-1">News Managerment</span>
                     </a>
-                </li>
+                </li>-->
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/manage-about-us">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -139,7 +181,7 @@
                     </a>
                 </li>
 
-                <li class="mt-0.5 w-full">
+<!--                <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${serviceActive}" 
                        href="${pageContext.request.contextPath}/Service?service=listService">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -157,8 +199,8 @@
                         </div>
                         <span class="ml-1">Medicine Managerment</span>
                     </a>
-                </li>
-                <li class="mt-0.5 w-full">
+                </li>-->
+<!--                <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${doctorActive}" 
                        href="${pageContext.request.contextPath}/DoctorManagerment?service=listDoctor">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -176,7 +218,7 @@
                         </div>
                         <span class="ml-1">Booking Managerment</span>
                     </a>
-                </li>
+                </li>-->
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${scheduleActive}" 
                        href="${pageContext.request.contextPath}/ScheduleManagement">
@@ -186,7 +228,7 @@
                         <span class="ml-1">Schedule Managerment</span>
                     </a>
                 </li>
-                <li class="mt-0.5 w-full">
+<!--                <li class="mt-0.5 w-full">
                     <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${feedbackActive}" 
                        href="${pageContext.request.contextPath}/feedback-management">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -194,7 +236,7 @@
                         </div>
                         <span class="ml-1">Feedback Managerment</span>
                     </a>
-                </li>
+                </li>-->
 
             </c:if>
 
@@ -211,14 +253,14 @@
                     </a>
                 </li>
             </c:if>
-<!--            <li class="mt-0.5 w-full">
-                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="logout">
-                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                        <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
-                    </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
-                </a>
-            </li>-->
+            <!--            <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="logout">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
+                            </a>
+                        </li>-->
         </ul>
     </div>
 </aside>

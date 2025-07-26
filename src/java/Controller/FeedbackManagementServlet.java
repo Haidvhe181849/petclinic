@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "FeedbackManagementServlet", urlPatterns = { "/feedback-management" })
+@WebServlet(name = "FeedbackManagementServlet", urlPatterns = {"/feedback-management"})
 public class FeedbackManagementServlet extends HttpServlet {
 
     private static final int FEEDBACKS_PER_PAGE = 6;
@@ -25,15 +25,15 @@ public class FeedbackManagementServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         try {
-            // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-            Employee currentStaff = (Employee) session.getAttribute("staff");
-        if (currentStaff == null) {
-            session.setAttribute("message", "Bạn cần đăng nhập để sử dụng chức năng này.");
-            response.sendRedirect(request.getContextPath() + "/login-employee");
-            return;
-        }
+            UserAccount user = (UserAccount) session.getAttribute("user");
+            Employee staff = (Employee) session.getAttribute("staff");
 
+            // Chỉ cho phép truy cập nếu là user có roleId = 1 hoặc 2, hoặc đã đăng nhập là staff
+            if ((user == null || (user.getRoleId() != 1 && user.getRoleId() != 2)) && staff == null) {
+                response.sendRedirect("login");
+                return;
+            }
             String action = request.getParameter("action");
             if (action == null) {
                 action = "list";
@@ -51,25 +51,27 @@ public class FeedbackManagementServlet extends HttpServlet {
                     if (pageStr != null && !pageStr.isEmpty()) {
                         try {
                             page = Integer.parseInt(pageStr);
-                            if (page < 1) page = 1;
+                            if (page < 1) {
+                                page = 1;
+                            }
                         } catch (NumberFormatException e) {
                             page = 1;
                         }
                     }
-                    
+
                     // Get total count of feedbacks
                     int totalFeedbacks = dao.getTotalFeedbackCount();
                     int totalPages = (int) Math.ceil((double) totalFeedbacks / FEEDBACKS_PER_PAGE);
                     if (page > totalPages && totalPages > 0) {
                         page = totalPages;
                     }
-                    
+
                     // Get paginated feedbacks
                     List<Feedback> feedbacks = dao.getFeedbacksByPage(page, FEEDBACKS_PER_PAGE);
-                    
+
                     System.out.println("FeedbackManagementServlet: Retrieved "
                             + (feedbacks != null ? feedbacks.size() : "null") + " feedbacks");
-                    
+
                     request.setAttribute("feedbacks", feedbacks);
                     request.setAttribute("currentPage", page);
                     request.setAttribute("totalPages", totalPages);
@@ -150,15 +152,17 @@ public class FeedbackManagementServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         try {
+
             // Kiểm tra đăng nhập và phân quyền
             HttpSession session = request.getSession();
-             Employee currentStaff = (Employee) session.getAttribute("staff");
-        if (currentStaff == null) {
-            session.setAttribute("message", "Bạn cần đăng nhập để sử dụng chức năng này.");
-            response.sendRedirect(request.getContextPath() + "/login-employee");
-            return;
-        }
+            UserAccount user = (UserAccount) session.getAttribute("user");
+            Employee staff = (Employee) session.getAttribute("staff");
 
+            // Chỉ cho phép truy cập nếu là user có roleId = 1 hoặc 2, hoặc đã đăng nhập là staff
+            if ((user == null || (user.getRoleId() != 1 && user.getRoleId() != 2)) && staff == null) {
+                response.sendRedirect("login");
+                return;
+            }
             String action = request.getParameter("action");
             if (action == null) {
                 response.sendRedirect("feedback-management?action=list");

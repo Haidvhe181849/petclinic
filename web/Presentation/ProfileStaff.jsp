@@ -177,7 +177,7 @@
                                                         <hr class="dropdown-divider">
                                                     </li>
                                                     <li><a class="dropdown-item"
-                                                           href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">Managerment</a></li>
+                                                           href="${pageContext.request.contextPath}/dashboard">Managerment</a></li>
 
                                                 </c:if>
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password-employee">Đổi mật khẩu</a></li>

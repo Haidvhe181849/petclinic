@@ -80,7 +80,7 @@
                 right: 20px;
                 z-index: 1060;
             }
-            
+
             .toast {
                 background-color: #d1e7dd;
                 color: #0f5132;
@@ -123,17 +123,17 @@
                 border-bottom: 1px solid #e9ecef;
                 vertical-align: middle;
             }
-            
+
             .aboutus-table tr:hover {
                 background-color: #f8f9fa;
             }
-            
+
             .action-btns {
                 display: flex;
                 gap: 8px;
                 justify-content: flex-end;
             }
-            
+
             .btn-action {
                 padding: 6px 12px;
                 border-radius: 4px;
@@ -143,42 +143,42 @@
                 border: none;
                 transition: all 0.2s;
             }
-            
+
             .btn-edit {
                 background-color: #0d6efd;
             }
-            
+
             .btn-edit:hover {
                 background-color: #0b5ed7;
             }
-            
+
             .btn-delete {
                 background-color: #dc3545;
             }
-            
+
             .btn-delete:hover {
                 background-color: #bb2d3b;
             }
-            
+
             .btn-add {
                 background-color: #198754;
                 margin-bottom: 20px;
                 padding: 10px 16px;
             }
-            
+
             .btn-add:hover {
                 background-color: #157347;
             }
-            
+
             .modal-header {
                 background-color: #f8f9fa;
                 border-bottom: 1px solid #dee2e6;
             }
-            
+
             .modal-footer {
                 border-top: 1px solid #dee2e6;
             }
-            
+
             .description-cell {
                 max-width: 300px;
                 white-space: nowrap;
@@ -190,102 +190,247 @@
 
     <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
         <div class="absolute w-full bg-blue-500 dark:hidden min-h-75"></div>
-        
+
         <!-- sidenav  -->
         <aside class="fixed top-0 left-0 z-990 xl:ml-6 xl:left-0 xl:translate-x-0
                max-w-64 w-64 h-screen bg-white dark:bg-slate-850
                shadow-xl rounded-2xl transition-transform duration-200 transform -translate-x-full xl:relative flex flex-col"
                aria-expanded="false">
-            <div class="h-19">
-                <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden" sidenav-close></i>
-                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
-                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
-                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
 
+            <div class="h-19">
+                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home">
+                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" />
+                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" />
                 </a>
             </div>
 
             <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
-            <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2"
-                 style="height: calc(100vh - 5rem);">
 
+            <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2" style="height: calc(100vh - 5rem);">
                 <ul class="flex flex-col pl-0 mb-0">
+                    <c:if test="${sessionScope.staff.roleId == 2 || sessionScope.user.roleId == 1}">
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${dashboardActive}" 
+                               href="${pageContext.request.contextPath}/dashboard">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-blue-500 ni ni-tv-2"></i>
+                                </div>
+                                <span class="ml-1">Dashboard</span>
+                            </a>
+                        </li>
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/dashboard">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
-                        </a>
-                    </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${accountActive}" 
+                               href="${pageContext.request.contextPath}/account-management">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-circle-08"></i>
+                                </div>
+                                <span class="ml-1">Account Managerment</span>
+                            </a>
+                        </li>   
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/manage-about-us">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-world-2"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">About Us Management</span>
-                        </a>
-                    </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${employeeActive}" 
+                               href="${pageContext.request.contextPath}/Employee?service=listEmployee">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-single-02"></i>
+                                </div>
+                                <span class="ml-1">Employee Managerment</span>
+                            </a>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
+                            </a>
+                        </li>
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
-                        </a>
-                    </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
+                            </a>
+                        </li>
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
-                        </a>
-                    </li>
+                        <li class="mt-0.5 w-full">
+                            <a href="javascript:void(0);" onclick="toggleDropdown('animalDropdown')" 
+                               class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap px-4 transition-colors ${animalActive}">
+                                <div class="flex items-center">
+                                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                        <i class="text-red-600 ni ni-world-2"></i>
+                                    </div>
+                                    <span class="ml-1">Quản lý Animal</span>
+                                </div>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </a>
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
-                        </a>
-                    </li>
+                            <!-- dropdown items -->
+                            <ul id="animalDropdown" class="hidden ml-12 mt-1">
+                                <li class="mb-1">
+                                    <a href="${pageContext.request.contextPath}/Animal?service=listType"
+                                       class="block px-2 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-slate-700 ${animalTypeActive}">
+                                        Animal Type
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/Breed?service=listBreed"
+                                       class="block px-2 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-slate-700 ${breedActive}">
+                                        Breed
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
+                            </a>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${feedbackActive}" 
+                               href="${pageContext.request.contextPath}/feedback-management">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-chat-round"></i>
+                                </div>
+                                <span class="ml-1">Feedback Managerment</span>
+                            </a>
+                        </li>
+                        <!--                <li class="mt-0.5 w-full">
+                                                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
+                                                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                        <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
+                                                    </div>
+                                                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
+                                                </a>
+                                            </li>-->
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
-                        </a>
-                    </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
+                            </a>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${timeActive}" 
+                               href="${pageContext.request.contextPath}/ClinicWorking">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-chat-round"></i>
+                                </div>
+                                <span class="ml-1">Working Time</span>
+                            </a>
+                        </li>
+                    </c:if>
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
-                        </a>
-                    </li>
+                    <c:if test="${sessionScope.staff.roleId == 2 || sessionScope.user.roleId == 1}">
+                        <!--                <li class="mt-0.5 w-full">
+                                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${newsActive}" 
+                                               href="${pageContext.request.contextPath}/News?service=listNews">
+                                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                    <i class="text-orange-500 ni ni-bullet-list-67"></i>
+                                                </div>
+                                                <span class="ml-1">News Managerment</span>
+                                            </a>
+                                        </li>-->
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/manage-about-us">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-world-2"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">About Us Management</span>
+                            </a>
+                        </li>
 
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/feedback-management">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-chat-round"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Management</span>
-                        </a>
+                        <!--                <li class="mt-0.5 w-full">
+                                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${serviceActive}" 
+                                               href="${pageContext.request.contextPath}/Service?service=listService">
+                                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                    <i class="text-emerald-500 ni ni-delivery-fast"></i>
+                                                </div>
+                                                <span class="ml-1">Service Managerment</span>
+                                            </a>
+                                        </li>
+                        
+                                        <li class="mt-0.5 w-full">
+                                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${medicineActive}" 
+                                               href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
+                                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                    <i class="text-cyan-500 ni ni-caps-small"></i>
+                                                </div>
+                                                <span class="ml-1">Medicine Managerment</span>
+                                            </a>
+                                        </li>-->
+                        <!--                <li class="mt-0.5 w-full">
+                                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${doctorActive}" 
+                                               href="${pageContext.request.contextPath}/DoctorManagerment?service=listDoctor">
+                                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                    <i class="text-red-600 ni ni-single-02"></i>
+                                                </div>
+                                                <span class="ml-1">Doctor Managerment</span>
+                                            </a>
+                                        </li>
+                        
+                                        <li class="mt-0.5 w-full">
+                                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${bookingActive}" 
+                                               href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                    <i class="text-red-600 ni ni-calendar-grid-58"></i>
+                                                </div>
+                                                <span class="ml-1">Booking Managerment</span>
+                                            </a>
+                                        </li>-->
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${scheduleActive}" 
+                               href="${pageContext.request.contextPath}/ScheduleManagement">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-calendar-grid-58"></i>
+                                </div>
+                                <span class="ml-1">Schedule Managerment</span>
+                            </a>
+                        </li>
+                        <!--                <li class="mt-0.5 w-full">
+                                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${feedbackActive}" 
+                                               href="${pageContext.request.contextPath}/feedback-management">
+                                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                    <i class="text-red-600 ni ni-chat-round"></i>
+                                                </div>
+                                                <span class="ml-1">Feedback Managerment</span>
+                                            </a>
+                                        </li>-->
+
+                    </c:if>
+
+                    <li class="w-full mt-4">
+                        <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
                     </li>
+                    <c:if test="${sessionScope.staff.roleId == 2}">
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="ProfileStaff">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
+                            </a>
+                        </li>
+                    </c:if>
+                    <!--            <li class="mt-0.5 w-full">
+                                    <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="logout">
+                                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                            <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
+                                        </div>
+                                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
+                                    </a>
+                                </li>-->
                 </ul>
-            </div>           
+            </div>
         </aside>
-
         <!-- end sidenav -->
 
         <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
@@ -327,12 +472,12 @@
                                 <p class="mb-4 text-sm leading-normal">
                                     Manage your company information that will be displayed to users
                                 </p>
-                                
+
                                 <!-- Add New Button -->
                                 <button type="button" class="btn-action btn-add" data-bs-toggle="modal" data-bs-target="#addModal">
                                     <i class="fas fa-plus mr-1"></i> Add New Information
                                 </button>
-                                
+
                                 <!-- Table Section -->
                                 <div class="table-responsive">
                                     <table class="aboutus-table">
@@ -403,7 +548,7 @@
                 </footer>
             </div>
         </main>
-        
+
         <!-- Add Modal -->
         <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -415,22 +560,22 @@
                     <form action="${pageContext.request.contextPath}/manage-about-us" method="post" id="addForm">
                         <div class="modal-body">
                             <input type="hidden" name="action" value="add">
-                            
+
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address</label>
                                 <input type="text" class="form-control" id="address" name="address" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
                                 <input type="text" class="form-control" id="phone" name="phone" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
@@ -444,7 +589,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Edit Modal -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -457,22 +602,22 @@
                         <div class="modal-body">
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" id="edit_about_id" name="about_id">
-                            
+
                             <div class="mb-3">
                                 <label for="edit_address" class="form-label">Address</label>
                                 <input type="text" class="form-control" id="edit_address" name="address" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="edit_phone" class="form-label">Phone</label>
                                 <input type="text" class="form-control" id="edit_phone" name="phone" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="edit_email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="edit_email" name="email" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="edit_description" class="form-label">Description</label>
                                 <textarea class="form-control" id="edit_description" name="description" rows="4" required></textarea>
@@ -486,7 +631,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Delete Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -499,7 +644,7 @@
                         <div class="modal-body">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" id="delete_about_id" name="about_id">
-                            
+
                             <p>Are you sure you want to delete this information? This action cannot be undone.</p>
                         </div>
                         <div class="modal-footer">
@@ -510,59 +655,59 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- JavaScript Includes -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/Presentation/js/plugins/perfect-scrollbar.min.js"></script>
         <script src="${pageContext.request.contextPath}/Presentation/js/argon-dashboard-tailwind.js?v=1.0.1"></script>
-        
+
         <script>
-            // Auto-hide toasts after 3 seconds
-            document.addEventListener('DOMContentLoaded', function() {
-                const toasts = document.querySelectorAll('.toast');
-                toasts.forEach(toast => {
-                    setTimeout(() => {
-                        toast.style.opacity = '0';
-                        toast.style.transition = 'opacity 0.5s';
-                        setTimeout(() => {
-                            toast.remove();
-                        }, 500);
-                    }, 3000);
-                });
-                
-                // Edit modal data population
-                const editModal = document.getElementById('editModal');
-                if (editModal) {
-                    editModal.addEventListener('show.bs.modal', function(event) {
-                        const button = event.relatedTarget;
-                        
-                        const aboutId = button.getAttribute('data-about-id');
-                        const address = button.getAttribute('data-address');
-                        const phone = button.getAttribute('data-phone');
-                        const email = button.getAttribute('data-email');
-                        const description = button.getAttribute('data-description');
-                        
-                        const modal = this;
-                        modal.querySelector('#edit_about_id').value = aboutId;
-                        modal.querySelector('#edit_address').value = address;
-                        modal.querySelector('#edit_phone').value = phone;
-                        modal.querySelector('#edit_email').value = email;
-                        modal.querySelector('#edit_description').value = description;
-                    });
-                }
-                
-                // Delete modal data population
-                const deleteModal = document.getElementById('deleteModal');
-                if (deleteModal) {
-                    deleteModal.addEventListener('show.bs.modal', function(event) {
-                        const button = event.relatedTarget;
-                        const aboutId = button.getAttribute('data-about-id');
-                        
-                        const modal = this;
-                        modal.querySelector('#delete_about_id').value = aboutId;
-                    });
-                }
-            });
+                                        // Auto-hide toasts after 3 seconds
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const toasts = document.querySelectorAll('.toast');
+                                            toasts.forEach(toast => {
+                                                setTimeout(() => {
+                                                    toast.style.opacity = '0';
+                                                    toast.style.transition = 'opacity 0.5s';
+                                                    setTimeout(() => {
+                                                        toast.remove();
+                                                    }, 500);
+                                                }, 3000);
+                                            });
+
+                                            // Edit modal data population
+                                            const editModal = document.getElementById('editModal');
+                                            if (editModal) {
+                                                editModal.addEventListener('show.bs.modal', function (event) {
+                                                    const button = event.relatedTarget;
+
+                                                    const aboutId = button.getAttribute('data-about-id');
+                                                    const address = button.getAttribute('data-address');
+                                                    const phone = button.getAttribute('data-phone');
+                                                    const email = button.getAttribute('data-email');
+                                                    const description = button.getAttribute('data-description');
+
+                                                    const modal = this;
+                                                    modal.querySelector('#edit_about_id').value = aboutId;
+                                                    modal.querySelector('#edit_address').value = address;
+                                                    modal.querySelector('#edit_phone').value = phone;
+                                                    modal.querySelector('#edit_email').value = email;
+                                                    modal.querySelector('#edit_description').value = description;
+                                                });
+                                            }
+
+                                            // Delete modal data population
+                                            const deleteModal = document.getElementById('deleteModal');
+                                            if (deleteModal) {
+                                                deleteModal.addEventListener('show.bs.modal', function (event) {
+                                                    const button = event.relatedTarget;
+                                                    const aboutId = button.getAttribute('data-about-id');
+
+                                                    const modal = this;
+                                                    modal.querySelector('#delete_about_id').value = aboutId;
+                                                });
+                                            }
+                                        });
         </script>
     </body>
 </html>

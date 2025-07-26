@@ -27,7 +27,7 @@
 
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             .line-clamp-2 {
@@ -134,18 +134,18 @@
                 #sidebar {
                     display: none;
                 }
-                
+
                 .main-content {
                     margin-left: 0 !important;
                 }
             }
-            
+
             @media (min-width: 1280px) {
                 #sidebar {
                     display: flex !important;
                     position: relative;
                 }
-                
+
                 .main-content {
                     margin-left: 0;
                 }
@@ -172,401 +172,428 @@
 
     <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
         <div class="flex">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 h-screen bg-white dark:bg-slate-850 shadow-xl rounded-2xl flex flex-col"
-               aria-expanded="false">
-            <div class="h-19">
-                <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
-                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
-                    <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
-                </a>
-            </div>
-
-            <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
-            <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2"
-                 style="height: calc(100vh - 5rem);">
-
-                <ul class="flex flex-col pl-0 mb-0">
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/dashboard">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class=" relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
-                        </a>
-                    </li>
-                    
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="${pageContext.request.contextPath}/feedback-management">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-purple-500 ni ni-chat-round"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Feedback Management</span>
-                        </a>
-                    </li>
-
-                    <li class="w-full mt-4">
-                        <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/profile.html">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/sign-in.html">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-single-copy-04"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign In</span>
-                        </a>
-                    </li>
-
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="../pages/sign-up.html">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
-                            </div>
-                            <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>           
-        </aside>
-        
-        <!-- Content Wrapper -->
-        <main class="flex-1 min-h-screen p-6 main-content">
-            <!-- Navbar -->
-            <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
-                 navbar-main navbar-scroll="false">
-                <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
-                    <nav>
-                        <h6 class="mb-0 font-bold text-slate-700 dark:text-white">Feedback Management</h6>
-                    </nav>
-
-                    <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-                        <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
-                            <!-- Mobile menu removed for laptop-only design -->
-                        </ul>
-                    </div>
+            <!-- Sidebar -->
+            <aside id="sidebar" class="w-64 h-screen bg-white dark:bg-slate-850 shadow-xl rounded-2xl flex flex-col"
+                   aria-expanded="false">
+                <div class="h-19">
+                    <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" href="${pageContext.request.contextPath}/Home" >
+                        <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
+                        <img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8" alt="main_logo" />
+                    </a>
                 </div>
-            </nav>
 
-            <!-- Content -->
-            <div class="w-full mx-auto">
-                <!-- Search and Actions -->
-                <div class="flex flex-wrap -mx-3">
-                    <div class="flex-none w-full max-w-full px-3">
-                        <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                            <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                                <div class="flex flex-wrap items-center mb-4">
-                                    <div class="flex-grow">
-                                        <h6 class="mb-2 text-slate-700 dark:text-white">Quản lý Feedback</h6>
-                                        <p class="mb-0 text-sm leading-normal text-slate-400">Danh sách và quản lý feedback từ khách hàng</p>
-                                    </div>
+                <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
+                <div id="sidebar-scroll" class="flex flex-col overflow-y-auto px-2"
+                     style="height: calc(100vh - 5rem);">
+
+                    <ul class="flex flex-col pl-0 mb-0">
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${dashboardActive}" 
+                               href="${pageContext.request.contextPath}/dashboard">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-blue-500 ni ni-tv-2"></i>
                                 </div>
-                                
-                                <!-- Alert Messages -->
-                                <c:if test="${not empty sessionScope.alertMessage}">
-                                    <div class="p-3 mb-4 text-sm rounded-lg ${sessionScope.alertType == 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}">
-                                        <div id="popup-message">${sessionScope.alertMessage}</div>
-                                        <script>
-                                            setTimeout(function () {
-                                                var popup = document.getElementById("popup-message");
-                                                if (popup) popup.style.display = "none";
-                                            }, 3000);
-                                        </script>
-                                        <c:remove var="alertMessage" scope="session"/>
-                                        <c:remove var="alertType" scope="session"/>
+                                <span class="ml-1">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${accountActive}" 
+                               href="${pageContext.request.contextPath}/account-management">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-circle-08"></i>
+                                </div>
+                                <span class="ml-1">Account Managerment</span>
+                            </a>
+                        </li>   
+
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${employeeActive}" 
+                               href="${pageContext.request.contextPath}/Employee?service=listEmployee">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-single-02"></i>
+                                </div>
+                                <span class="ml-1">Employee Managerment</span>
+                            </a>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/News?service=listNews">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-bullet-list-67"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">News Management</span>
+                            </a>
+                        </li>
+
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Service?service=listService">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-delivery-fast"></i>
+                                </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Service Management</span>
+                            </a>
+                        </li>
+
+                        <li class="mt-0.5 w-full">
+                            <a href="javascript:void(0);" onclick="toggleDropdown('animalDropdown')" 
+                               class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap px-4 transition-colors ${animalActive}">
+                                <div class="flex items-center">
+                                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                        <i class="text-red-600 ni ni-world-2"></i>
                                     </div>
-                                </c:if>
-                                
-                                <!-- Search Form -->
-                                <div class="flex flex-wrap items-center mb-4 gap-4">
-                                    <form action="${pageContext.request.contextPath}/feedback-management" method="get" class="flex-grow max-w-md">
-                                        <div class="relative">
-                                            <input type="search" name="search" value="${param.search}" 
-                                                   class="w-full px-4 py-2 text-sm bg-white border border-solid border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" 
-                                                   placeholder="Tìm kiếm theo tên, email, nội dung...">
-                                            <input type="hidden" name="action" value="list">
-                                            <button type="submit" 
-                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </form>
-                                    
-                                    <a href="feedback-management?action=list" 
-                                       class="px-4 py-2 text-sm text-white bg-slate-600 rounded-lg hover:bg-slate-700">
-                                        Tất cả
+                                    <span class="ml-1">Quản lý Animal</span>
+                                </div>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </a>
+
+                            <!-- dropdown items -->
+                            <ul id="animalDropdown" class="hidden ml-12 mt-1">
+                                <li class="mb-1">
+                                    <a href="${pageContext.request.contextPath}/Animal?service=listType"
+                                       class="block px-2 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-slate-700 ${animalTypeActive}">
+                                        Animal Type
                                     </a>
+                                </li>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/Breed?service=listBreed"
+                                       class="block px-2 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-slate-700 ${breedActive}">
+                                        Breed
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/Medicine?service=getAllMedicines">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-caps-small"></i>
                                 </div>
-                            </div>
-                            
-                            <!-- Filters -->
-                            <!-- Filters -->
-                            <div class="px-6 pb-4">
-                                <div class="flex flex-wrap gap-4 mb-4">
-                                    <div class="flex-grow max-w-xs">
-                                        <select id="filterRating" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" onchange="filterTable()">
-                                            <option value="">Tất cả đánh giá</option>
-                                            <option value="5">★★★★★ (5 sao)</option>
-                                            <option value="4">★★★★☆ (4 sao)</option>
-                                            <option value="3">★★★☆☆ (3 sao)</option>
-                                            <option value="2">★★☆☆☆ (2 sao)</option>
-                                            <option value="1">★☆☆☆☆ (1 sao)</option>
-                                        </select>
-                                    </div>
-                                    <div class="flex-grow max-w-xs">
-                                        <select id="filterStatus" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" onchange="filterTable()">
-                                            <option value="">Tất cả trạng thái</option>
-                                            <option value="visible">Đang hiển thị</option>
-                                            <option value="hidden">Đang ẩn</option>
-                                            <option value="replied">Đã phản hồi</option>
-                                            <option value="not-replied">Chưa phản hồi</option>
-                                        </select>
-                                    </div>
-                                    <button class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-slate-600 dark:hover:bg-slate-700" onclick="clearSearch()">
-                                        <i class="fa fa-times me-1"></i> Xóa bộ lọc
-                                    </button>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Medicine Management</span>
+                            </a>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${feedbackActive}" 
+                               href="${pageContext.request.contextPath}/feedback-management">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-chat-round"></i>
                                 </div>
-                            </div>
-                            
-                            <!-- Table -->
-                            <div class="flex-auto px-0 pt-0 pb-2">
-                                <div class="p-0 overflow-x-auto">
-                                    <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-                                        <thead class="align-bottom">
-                                            <tr>
-                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(0)">ID <i class="fas fa-sort ml-1"></i></th>
-                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(1)">Khách hàng <i class="fas fa-sort ml-1"></i></th>
-                                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(2)">Nội dung <i class="fas fa-sort ml-1"></i></th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(3)">Đánh giá <i class="fas fa-sort ml-1"></i></th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(4)">Ngày gửi <i class="fas fa-sort ml-1"></i></th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(5)">Trạng thái <i class="fas fa-sort ml-1"></i></th>
-                                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="feedback" items="${feedbacks}">
-                                                <tr>
-                                                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <div class="flex px-2 py-1">
-                                                            <div class="flex flex-col justify-center">
-                                                                <h6 class="mb-0 text-sm leading-normal dark:text-white">#<c:out value="${feedback.feedbackId}"/></h6>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <div class="flex flex-col justify-center">
-                                                            <h6 class="mb-0 text-sm leading-normal dark:text-white customer-name"><c:out value="${feedback.userName}"/></h6>
-                                                            <p class="mb-0 text-xs leading-tight text-slate-400 customer-email"><c:out value="${feedback.userEmail}"/></p>
-                                                        </div>
-                                                    </td>
-                                                    <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <div class="flex flex-col justify-center">
-                                                            <p class="mb-0 text-sm font-semibold leading-tight dark:text-white preview-text">
-                                                                <c:out value="${feedback.feedbackText}"/>
-                                                            </p>
-                                                            <c:if test="${not empty feedback.replyText}">
-                                                                <p class="mb-0 text-xs leading-tight text-red-500 reply-preview">
-                                                                    <i class="fas fa-reply me-1"></i>
-                                                                    <c:out value="${feedback.replyText}"/>
-                                                                </p>
-                                                            </c:if>
-                                                        </div>
-                                                    </td>
-                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <div class="star-rating text-yellow-500">
-                                                            <c:forEach begin="1" end="5" var="i">
-                                                                <i class="fa${i <= feedback.starRating ? 's' : 'r'} fa-star"></i>
-                                                            </c:forEach>
-                                                        </div>
-                                                    </td>
-                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <span class="text-xs font-semibold leading-tight dark:text-white text-slate-400">
-                                                            <fmt:formatDate value="${feedback.postTime}" pattern="dd/MM/yyyy HH:mm" />
-                                                        </span>
-                                                    </td>
-                                                    </td>
-                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <c:choose>
-                                                            <c:when test="${feedback.visible}">
-                                                                <span class="bg-gradient-to-tl from-emerald-500 to-teal-400 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Hiển thị</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="bg-gradient-to-tl from-red-600 to-orange-600 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Ẩn</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <div class="flex items-center justify-center gap-2">
-                                                            <a href="feedback-management?action=detail&id=${feedback.feedbackId}"
-                                                               class="inline-block px-3 py-2 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-orange-500 to-yellow-500 leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102"
-                                                               title="Chi tiết">
-                                                                <i class="fa fa-eye mr-1"></i> 
-                                                            </a>
-                                                            <button onclick="toggleVisibility('${feedback.feedbackId}', '${!feedback.visible}')" 
-                                                                    class="inline-block px-3 py-2 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer ${feedback.visible ? 'bg-gradient-to-tl from-red-600 to-orange-600' : 'bg-gradient-to-tl from-emerald-500 to-teal-400'} leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102" 
-                                                                    title="${feedback.visible ? 'Ẩn' : 'Hiển thị'}">
-                                                                <i class="fa fa-${feedback.visible ? 'eye-slash' : 'eye'} mr-1"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                            <c:if test="${empty feedbacks}">
-                                                <tr>
-                                                    <td colspan="7" class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                        <span class="text-sm font-semibold leading-tight dark:text-white text-slate-400">Không có dữ liệu feedback.</span>
-                                                    </td>
-                                                </tr>
-                                            </c:if>
-                                        </tbody>
-                                    </table>
+                                <span class="ml-1">Feedback Managerment</span>
+                            </a>
+                        </li>
+                        <!--                <li class="mt-0.5 w-full">
+                                                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/account-management">
+                                                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                                        <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-circle-08"></i>
+                                                    </div>
+                                                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Account Management</span>
+                                                </a>
+                                            </li>-->
+
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors dark:text-white dark:opacity-80" href="${pageContext.request.contextPath}/ConfirmBooking?service=listBooking">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-calendar-grid-58"></i>
                                 </div>
-                            </div>
+                                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Booking Management</span>
+                            </a>
+                        </li>
+                        <li class="mt-0.5 w-full">
+                            <a class="py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors ${timeActive}" 
+                               href="${pageContext.request.contextPath}/ClinicWorking">
+                                <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                    <i class="text-red-600 ni ni-chat-round"></i>
+                                </div>
+                                <span class="ml-1">Working Time</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>           
+            </aside>
+
+            <!-- Content Wrapper -->
+            <main class="flex-1 min-h-screen p-6 main-content">
+                <!-- Navbar -->
+                <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+                     navbar-main navbar-scroll="false">
+                    <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
+                        <nav>
+                            <h6 class="mb-0 font-bold text-slate-700 dark:text-white">Feedback Management</h6>
+                        </nav>
+
+                        <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
+                            <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
+                                <!-- Mobile menu removed for laptop-only design -->
+                            </ul>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Pagination -->
-                <c:if test="${totalPages > 1}">
-                    <div class="flex flex-wrap -mx-3 mt-6">
+                </nav>
+
+                <!-- Content -->
+                <div class="w-full mx-auto">
+                    <!-- Search and Actions -->
+                    <div class="flex flex-wrap -mx-3">
                         <div class="flex-none w-full max-w-full px-3">
                             <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                                <div class="p-6">
-                                    <div class="flex justify-center">
-                                        <nav aria-label="Feedback pagination">
-                                            <ul class="flex items-center space-x-1">
-                                                <!-- First Page -->
-                                                <c:if test="${currentPage > 1}">
-                                                    <li>
-                                                        <a href="feedback-management?action=list&page=1" 
-                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
-                                                           title="Trang đầu">
-                                                            <i class="fas fa-angle-double-left"></i>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                                
-                                                <!-- Previous Page -->
-                                                <c:if test="${currentPage > 1}">
-                                                    <li>
-                                                        <a href="feedback-management?action=list&page=${currentPage - 1}" 
-                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
-                                                           title="Trang trước">
-                                                            <i class="fas fa-angle-left"></i>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                                
-                                                <!-- Page Numbers -->
-                                                <c:forEach begin="${currentPage > 2 ? currentPage - 2 : 1}" 
-                                                          end="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" 
-                                                          var="pageNum">
-                                                    <li>
-                                                        <a href="feedback-management?action=list&page=${pageNum}"
-                                                           class="relative block px-3 py-2 text-sm leading-tight ${pageNum == currentPage ? 'text-white bg-blue-500 border-blue-500' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'} border dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700">
-                                                            ${pageNum}
-                                                        </a>
-                                                    </li>
-                                                </c:forEach>
-                                                
-                                                <!-- Next Page -->
-                                                <c:if test="${currentPage < totalPages}">
-                                                    <li>
-                                                        <a href="feedback-management?action=list&page=${currentPage + 1}" 
-                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
-                                                           title="Trang sau">
-                                                            <i class="fas fa-angle-right"></i>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                                
-                                                <!-- Last Page -->
-                                                <c:if test="${currentPage < totalPages}">
-                                                    <li>
-                                                        <a href="feedback-management?action=list&page=${totalPages}" 
-                                                           class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
-                                                           title="Trang cuối">
-                                                            <i class="fas fa-angle-double-right"></i>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                            </ul>
-                                        </nav>
+                                <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
+                                    <div class="flex flex-wrap items-center mb-4">
+                                        <div class="flex-grow">
+                                            <h6 class="mb-2 text-slate-700 dark:text-white">Quản lý Feedback</h6>
+                                            <p class="mb-0 text-sm leading-normal text-slate-400">Danh sách và quản lý feedback từ khách hàng</p>
+                                        </div>
                                     </div>
-                                    
-                                    <!-- Pagination Info -->
-                                    <div class="text-center mt-3">
-                                        <span class="text-sm text-gray-500 dark:text-slate-400">
-                                            Trang ${currentPage} / ${totalPages} (${feedbacks.size()} feedback)
-                                        </span>
+
+                                    <!-- Alert Messages -->
+                                    <c:if test="${not empty sessionScope.alertMessage}">
+                                        <div class="p-3 mb-4 text-sm rounded-lg ${sessionScope.alertType == 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}">
+                                            <div id="popup-message">${sessionScope.alertMessage}</div>
+                                            <script>
+                                                setTimeout(function () {
+                                                    var popup = document.getElementById("popup-message");
+                                                    if (popup)
+                                                        popup.style.display = "none";
+                                                }, 3000);
+                                            </script>
+                                            <c:remove var="alertMessage" scope="session"/>
+                                            <c:remove var="alertType" scope="session"/>
+                                        </div>
+                                    </c:if>
+
+                                    <!-- Search Form -->
+                                    <div class="flex flex-wrap items-center mb-4 gap-4">
+                                        <form action="${pageContext.request.contextPath}/feedback-management" method="get" class="flex-grow max-w-md">
+                                            <div class="relative">
+                                                <input type="search" name="search" value="${param.search}" 
+                                                       class="w-full px-4 py-2 text-sm bg-white border border-solid border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" 
+                                                       placeholder="Tìm kiếm theo tên, email, nội dung...">
+                                                <input type="hidden" name="action" value="list">
+                                                <button type="submit" 
+                                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                        <a href="feedback-management?action=list" 
+                                           class="px-4 py-2 text-sm text-white bg-slate-600 rounded-lg hover:bg-slate-700">
+                                            Tất cả
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Filters -->
+                                <!-- Filters -->
+                                <div class="px-6 pb-4">
+                                    <div class="flex flex-wrap gap-4 mb-4">
+                                        <div class="flex-grow max-w-xs">
+                                            <select id="filterRating" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" onchange="filterTable()">
+                                                <option value="">Tất cả đánh giá</option>
+                                                <option value="5">★★★★★ (5 sao)</option>
+                                                <option value="4">★★★★☆ (4 sao)</option>
+                                                <option value="3">★★★☆☆ (3 sao)</option>
+                                                <option value="2">★★☆☆☆ (2 sao)</option>
+                                                <option value="1">★☆☆☆☆ (1 sao)</option>
+                                            </select>
+                                        </div>
+                                        <div class="flex-grow max-w-xs">
+                                            <select id="filterStatus" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-slate-850 dark:border-slate-600 dark:text-white" onchange="filterTable()">
+                                                <option value="">Tất cả trạng thái</option>
+                                                <option value="visible">Đang hiển thị</option>
+                                                <option value="hidden">Đang ẩn</option>
+                                                <option value="replied">Đã phản hồi</option>
+                                                <option value="not-replied">Chưa phản hồi</option>
+                                            </select>
+                                        </div>
+                                        <button class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-slate-600 dark:hover:bg-slate-700" onclick="clearSearch()">
+                                            <i class="fa fa-times me-1"></i> Xóa bộ lọc
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Table -->
+                                <div class="flex-auto px-0 pt-0 pb-2">
+                                    <div class="p-0 overflow-x-auto">
+                                        <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
+                                            <thead class="align-bottom">
+                                                <tr>
+                                                    <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(0)">ID <i class="fas fa-sort ml-1"></i></th>
+                                                    <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(1)">Khách hàng <i class="fas fa-sort ml-1"></i></th>
+                                                    <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(2)">Nội dung <i class="fas fa-sort ml-1"></i></th>
+                                                    <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(3)">Đánh giá <i class="fas fa-sort ml-1"></i></th>
+                                                    <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(4)">Ngày gửi <i class="fas fa-sort ml-1"></i></th>
+                                                    <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" onclick="sortTable(5)">Trạng thái <i class="fas fa-sort ml-1"></i></th>
+                                                    <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="feedback" items="${feedbacks}">
+                                                    <tr>
+                                                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <div class="flex px-2 py-1">
+                                                                <div class="flex flex-col justify-center">
+                                                                    <h6 class="mb-0 text-sm leading-normal dark:text-white">#<c:out value="${feedback.feedbackId}"/></h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <div class="flex flex-col justify-center">
+                                                                <h6 class="mb-0 text-sm leading-normal dark:text-white customer-name"><c:out value="${feedback.userName}"/></h6>
+                                                                <p class="mb-0 text-xs leading-tight text-slate-400 customer-email"><c:out value="${feedback.userEmail}"/></p>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <div class="flex flex-col justify-center">
+                                                                <p class="mb-0 text-sm font-semibold leading-tight dark:text-white preview-text">
+                                                                    <c:out value="${feedback.feedbackText}"/>
+                                                                </p>
+                                                                <c:if test="${not empty feedback.replyText}">
+                                                                    <p class="mb-0 text-xs leading-tight text-red-500 reply-preview">
+                                                                        <i class="fas fa-reply me-1"></i>
+                                                                        <c:out value="${feedback.replyText}"/>
+                                                                    </p>
+                                                                </c:if>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <div class="star-rating text-yellow-500">
+                                                                <c:forEach begin="1" end="5" var="i">
+                                                                    <i class="fa${i <= feedback.starRating ? 's' : 'r'} fa-star"></i>
+                                                                </c:forEach>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <span class="text-xs font-semibold leading-tight dark:text-white text-slate-400">
+                                                                <fmt:formatDate value="${feedback.postTime}" pattern="dd/MM/yyyy HH:mm" />
+                                                            </span>
+                                                        </td>
+                                                        </td>
+                                                        <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <c:choose>
+                                                                <c:when test="${feedback.visible}">
+                                                                    <span class="bg-gradient-to-tl from-emerald-500 to-teal-400 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Hiển thị</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="bg-gradient-to-tl from-red-600 to-orange-600 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Ẩn</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <div class="flex items-center justify-center gap-2">
+                                                                <a href="feedback-management?action=detail&id=${feedback.feedbackId}"
+                                                                   class="inline-block px-3 py-2 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-orange-500 to-yellow-500 leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102"
+                                                                   title="Chi tiết">
+                                                                    <i class="fa fa-eye mr-1"></i> 
+                                                                </a>
+                                                                <button onclick="toggleVisibility('${feedback.feedbackId}', '${!feedback.visible}')" 
+                                                                        class="inline-block px-3 py-2 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer ${feedback.visible ? 'bg-gradient-to-tl from-red-600 to-orange-600' : 'bg-gradient-to-tl from-emerald-500 to-teal-400'} leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102" 
+                                                                        title="${feedback.visible ? 'Ẩn' : 'Hiển thị'}">
+                                                                    <i class="fa fa-${feedback.visible ? 'eye-slash' : 'eye'} mr-1"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                                <c:if test="${empty feedbacks}">
+                                                    <tr>
+                                                        <td colspan="7" class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                                            <span class="text-sm font-semibold leading-tight dark:text-white text-slate-400">Không có dữ liệu feedback.</span>
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </c:if>
-            </div>
-        </main>
+
+                    <!-- Pagination -->
+                    <c:if test="${totalPages > 1}">
+                        <div class="flex flex-wrap -mx-3 mt-6">
+                            <div class="flex-none w-full max-w-full px-3">
+                                <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                                    <div class="p-6">
+                                        <div class="flex justify-center">
+                                            <nav aria-label="Feedback pagination">
+                                                <ul class="flex items-center space-x-1">
+                                                    <!-- First Page -->
+                                                    <c:if test="${currentPage > 1}">
+                                                        <li>
+                                                            <a href="feedback-management?action=list&page=1" 
+                                                               class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                               title="Trang đầu">
+                                                                <i class="fas fa-angle-double-left"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                    <!-- Previous Page -->
+                                                    <c:if test="${currentPage > 1}">
+                                                        <li>
+                                                            <a href="feedback-management?action=list&page=${currentPage - 1}" 
+                                                               class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                               title="Trang trước">
+                                                                <i class="fas fa-angle-left"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                    <!-- Page Numbers -->
+                                                    <c:forEach begin="${currentPage > 2 ? currentPage - 2 : 1}" 
+                                                               end="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" 
+                                                               var="pageNum">
+                                                        <li>
+                                                            <a href="feedback-management?action=list&page=${pageNum}"
+                                                               class="relative block px-3 py-2 text-sm leading-tight ${pageNum == currentPage ? 'text-white bg-blue-500 border-blue-500' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'} border dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700">
+                                                                ${pageNum}
+                                                            </a>
+                                                        </li>
+                                                    </c:forEach>
+
+                                                    <!-- Next Page -->
+                                                    <c:if test="${currentPage < totalPages}">
+                                                        <li>
+                                                            <a href="feedback-management?action=list&page=${currentPage + 1}" 
+                                                               class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                               title="Trang sau">
+                                                                <i class="fas fa-angle-right"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                    <!-- Last Page -->
+                                                    <c:if test="${currentPage < totalPages}">
+                                                        <li>
+                                                            <a href="feedback-management?action=list&page=${totalPages}" 
+                                                               class="relative block px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                                                               title="Trang cuối">
+                                                                <i class="fas fa-angle-double-right"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+                                                </ul>
+                                            </nav>
+                                        </div>
+
+                                        <!-- Pagination Info -->
+                                        <div class="text-center mt-3">
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">
+                                                Trang ${currentPage} / ${totalPages} (${feedbacks.size()} feedback)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
+            </main>
         </div>
 
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        
+
         <!-- Admin Dashboard JS -->
         <script src="${pageContext.request.contextPath}/Presentation/js/perfect-scrollbar.min.js"></script>
         <script src="${pageContext.request.contextPath}/Presentation/js/smooth-scrollbar.min.js"></script>
@@ -574,146 +601,150 @@
         <script src="${pageContext.request.contextPath}/Presentation/js/argon-dashboard-tailwind.js?v=1.0.1"></script>
 
         <script>
-            // Filter table function
-            function filterTable() {
-                const ratingFilter = document.getElementById('filterRating').value;
-                const statusFilter = document.getElementById('filterStatus').value;
-                const tbody = document.querySelector('table tbody');
-                const rows = tbody.getElementsByTagName('tr');
+                                                                // Filter table function
+                                                                function filterTable() {
+                                                                    const ratingFilter = document.getElementById('filterRating').value;
+                                                                    const statusFilter = document.getElementById('filterStatus').value;
+                                                                    const tbody = document.querySelector('table tbody');
+                                                                    const rows = tbody.getElementsByTagName('tr');
 
-                for (let row of rows) {
-                    if (row.querySelector('td[colspan="7"]')) continue; // Skip no data row
+                                                                    for (let row of rows) {
+                                                                        if (row.querySelector('td[colspan="7"]'))
+                                                                            continue; // Skip no data row
 
-                    const ratingDiv = row.cells[3].querySelector('.star-rating');
-                    let ratingStars = 0;
-                    if (ratingDiv) {
-                        ratingStars = ratingDiv.querySelectorAll('.fa-star.fas').length;
-                    }
-                    
-                    const hasReply = row.cells[2].querySelector('.reply-preview') !== null;
-                    const statusSpan = row.cells[5].querySelector('span');
-                    const isVisible = statusSpan && statusSpan.textContent.trim() === 'Hiển thị';
+                                                                        const ratingDiv = row.cells[3].querySelector('.star-rating');
+                                                                        let ratingStars = 0;
+                                                                        if (ratingDiv) {
+                                                                            ratingStars = ratingDiv.querySelectorAll('.fa-star.fas').length;
+                                                                        }
 
-                    // Rating filter
-                    const matchesRating = !ratingFilter || ratingStars == parseInt(ratingFilter);
+                                                                        const hasReply = row.cells[2].querySelector('.reply-preview') !== null;
+                                                                        const statusSpan = row.cells[5].querySelector('span');
+                                                                        const isVisible = statusSpan && statusSpan.textContent.trim() === 'Hiển thị';
 
-                    // Status filter
-                    let matchesStatus = true;
-                    if (statusFilter) {
-                        switch (statusFilter) {
-                            case 'visible':
-                                matchesStatus = isVisible;
-                                break;
-                            case 'hidden':
-                                matchesStatus = !isVisible;
-                                break;
-                            case 'replied':
-                                matchesStatus = hasReply;
-                                break;
-                            case 'not-replied':
-                                matchesStatus = !hasReply;
-                                break;
-                        }
-                    }
+                                                                        // Rating filter
+                                                                        const matchesRating = !ratingFilter || ratingStars == parseInt(ratingFilter);
 
-                    row.style.display = (matchesRating && matchesStatus) ? '' : 'none';
-                }
-            }
+                                                                        // Status filter
+                                                                        let matchesStatus = true;
+                                                                        if (statusFilter) {
+                                                                            switch (statusFilter) {
+                                                                                case 'visible':
+                                                                                    matchesStatus = isVisible;
+                                                                                    break;
+                                                                                case 'hidden':
+                                                                                    matchesStatus = !isVisible;
+                                                                                    break;
+                                                                                case 'replied':
+                                                                                    matchesStatus = hasReply;
+                                                                                    break;
+                                                                                case 'not-replied':
+                                                                                    matchesStatus = !hasReply;
+                                                                                    break;
+                                                                            }
+                                                                        }
 
-            // Clear search and filters
-            function clearSearch() {
-                document.getElementById('filterRating').value = '';
-                document.getElementById('filterStatus').value = '';
-                filterTable();
-            }
+                                                                        row.style.display = (matchesRating && matchesStatus) ? '' : 'none';
+                                                                    }
+                                                                }
 
-            // Sort table function
-            let sortDirection = 1;
-            let lastSortedColumn = -1;
+                                                                // Clear search and filters
+                                                                function clearSearch() {
+                                                                    document.getElementById('filterRating').value = '';
+                                                                    document.getElementById('filterStatus').value = '';
+                                                                    filterTable();
+                                                                }
 
-            function sortTable(columnIndex) {
-                const table = document.querySelector('table');
-                const tbody = table.getElementsByTagName('tbody')[0];
-                const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => !row.querySelector('td[colspan="7"]'));
+                                                                // Sort table function
+                                                                let sortDirection = 1;
+                                                                let lastSortedColumn = -1;
 
-                if (lastSortedColumn !== columnIndex) {
-                    sortDirection = 1;
-                } else {
-                    sortDirection = -sortDirection;
-                }
-                lastSortedColumn = columnIndex;
+                                                                function sortTable(columnIndex) {
+                                                                    const table = document.querySelector('table');
+                                                                    const tbody = table.getElementsByTagName('tbody')[0];
+                                                                    const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => !row.querySelector('td[colspan="7"]'));
 
-                const headers = table.getElementsByTagName('th');
-                for (let header of headers) {
-                    const icon = header.querySelector('i.fas');
-                    if (icon) icon.className = 'fas fa-sort ml-1';
-                }
+                                                                    if (lastSortedColumn !== columnIndex) {
+                                                                        sortDirection = 1;
+                                                                    } else {
+                                                                        sortDirection = -sortDirection;
+                                                                    }
+                                                                    lastSortedColumn = columnIndex;
 
-                const currentHeader = headers[columnIndex];
-                const currentIcon = currentHeader.querySelector('i.fas');
-                if (currentIcon) {
-                    currentIcon.className = sortDirection === 1 ? 'fas fa-sort-up ml-1' : 'fas fa-sort-down ml-1';
-                }
+                                                                    const headers = table.getElementsByTagName('th');
+                                                                    for (let header of headers) {
+                                                                        const icon = header.querySelector('i.fas');
+                                                                        if (icon)
+                                                                            icon.className = 'fas fa-sort ml-1';
+                                                                    }
 
-                rows.sort((a, b) => {
-                    let aValue = a.cells[columnIndex].textContent.trim();
-                    let bValue = b.cells[columnIndex].textContent.trim();
+                                                                    const currentHeader = headers[columnIndex];
+                                                                    const currentIcon = currentHeader.querySelector('i.fas');
+                                                                    if (currentIcon) {
+                                                                        currentIcon.className = sortDirection === 1 ? 'fas fa-sort-up ml-1' : 'fas fa-sort-down ml-1';
+                                                                    }
 
-                    if (columnIndex === 3) { // Rating column
-                        aValue = a.cells[columnIndex].querySelector('.star-rating').querySelectorAll('.fa-star.fas').length;
-                        bValue = b.cells[columnIndex].querySelector('.star-rating').querySelectorAll('.fa-star.fas').length;
-                    } else if (columnIndex === 4) { // Date column
-                        aValue = new Date(aValue.split(' ').reverse().join(' ')).getTime();
-                        bValue = new Date(bValue.split(' ').reverse().join(' ')).getTime();
-                    } else if (columnIndex === 0) { // ID column
-                        aValue = parseInt(aValue.replace('#', ''));
-                        bValue = parseInt(bValue.replace('#', ''));
-                    }
+                                                                    rows.sort((a, b) => {
+                                                                        let aValue = a.cells[columnIndex].textContent.trim();
+                                                                        let bValue = b.cells[columnIndex].textContent.trim();
 
-                    if (aValue < bValue) return -sortDirection;
-                    if (aValue > bValue) return sortDirection;
-                    return 0;
-                });
+                                                                        if (columnIndex === 3) { // Rating column
+                                                                            aValue = a.cells[columnIndex].querySelector('.star-rating').querySelectorAll('.fa-star.fas').length;
+                                                                            bValue = b.cells[columnIndex].querySelector('.star-rating').querySelectorAll('.fa-star.fas').length;
+                                                                        } else if (columnIndex === 4) { // Date column
+                                                                            aValue = new Date(aValue.split(' ').reverse().join(' ')).getTime();
+                                                                            bValue = new Date(bValue.split(' ').reverse().join(' ')).getTime();
+                                                                        } else if (columnIndex === 0) { // ID column
+                                                                            aValue = parseInt(aValue.replace('#', ''));
+                                                                            bValue = parseInt(bValue.replace('#', ''));
+                                                                        }
 
-                rows.forEach(row => tbody.appendChild(row));
-            }
+                                                                        if (aValue < bValue)
+                                                                            return -sortDirection;
+                                                                        if (aValue > bValue)
+                                                                            return sortDirection;
+                                                                        return 0;
+                                                                    });
 
-            // Toggle visibility function
-            function toggleVisibility(feedbackId, visible) {
-                if (!feedbackId || feedbackId === 'undefined') {
-                    Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Không thể xác định ID của feedback',
-                    icon: 'error'
-                });
-                return;
-            }
-            
-            const visibleStr = (visible === true || visible === 'true') ? 'true' : 'false';
-            Swal.fire({
-                title: visibleStr === 'true' ? 'Hiển thị feedback?' : 'Ẩn feedback?',
-                text: visibleStr === 'true' ? 'Feedback này sẽ được hiển thị công khai.' : 'Feedback này sẽ bị ẩn khỏi trang web.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    try {
-                        window.location.href = 'feedback-management?action=toggle&id=' + feedbackId + '&visible=' + visibleStr;
-                    } catch (e) {
-                        console.error("Error navigating:", e);
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: 'Có lỗi xảy ra khi thực hiện thao tác này',
-                            icon: 'error'
-                        });
-                    }
-                }
-            });
-        }
-    </script>
-</body>
+                                                                    rows.forEach(row => tbody.appendChild(row));
+                                                                }
+
+                                                                // Toggle visibility function
+                                                                function toggleVisibility(feedbackId, visible) {
+                                                                    if (!feedbackId || feedbackId === 'undefined') {
+                                                                        Swal.fire({
+                                                                            title: 'Lỗi!',
+                                                                            text: 'Không thể xác định ID của feedback',
+                                                                            icon: 'error'
+                                                                        });
+                                                                        return;
+                                                                    }
+
+                                                                    const visibleStr = (visible === true || visible === 'true') ? 'true' : 'false';
+                                                                    Swal.fire({
+                                                                        title: visibleStr === 'true' ? 'Hiển thị feedback?' : 'Ẩn feedback?',
+                                                                        text: visibleStr === 'true' ? 'Feedback này sẽ được hiển thị công khai.' : 'Feedback này sẽ bị ẩn khỏi trang web.',
+                                                                        icon: 'warning',
+                                                                        showCancelButton: true,
+                                                                        confirmButtonColor: '#3085d6',
+                                                                        cancelButtonColor: '#d33',
+                                                                        confirmButtonText: 'Xác nhận',
+                                                                        cancelButtonText: 'Hủy'
+                                                                    }).then((result) => {
+                                                                        if (result.isConfirmed) {
+                                                                            try {
+                                                                                window.location.href = 'feedback-management?action=toggle&id=' + feedbackId + '&visible=' + visibleStr;
+                                                                            } catch (e) {
+                                                                                console.error("Error navigating:", e);
+                                                                                Swal.fire({
+                                                                                    title: 'Lỗi!',
+                                                                                    text: 'Có lỗi xảy ra khi thực hiện thao tác này',
+                                                                                    icon: 'error'
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+        </script>
+    </body>
 </html>

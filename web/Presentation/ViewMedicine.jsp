@@ -201,7 +201,7 @@
                                     </div>
                                 </div>
                             </c:when>
-                            <c:when test="${not empty sessionScope.userName}">
+                            <c:when test="${not empty sessionScope.userName or not empty sessionScope.staff}">
                                 <div class="header-user-info">
                                     <span>Xin chào, ${sessionScope.userEmail}</span>
                                     <a href="${pageContext.request.contextPath}/logout"

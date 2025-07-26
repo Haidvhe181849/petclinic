@@ -8,6 +8,7 @@ import DAO.BookingDAO;
 import Entity.BookingDetail;
 import Utility.DBContext;
 import Entity.BookingEx;
+import Entity.Employee;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Timestamp; // Dùng class này để xử lý thời gian trong SQL
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -106,6 +108,8 @@ public class ConfirmBooking extends HttpServlet {
 
         try {
             if ("updateStatus".equals(service)) {
+                HttpSession session = request.getSession();
+                Employee employee = (Employee) session.getAttribute("staff");
                 String bookingId = request.getParameter("bookingId");
                 String newStatus = request.getParameter("status");
 
@@ -123,7 +127,11 @@ public class ConfirmBooking extends HttpServlet {
 
                 bDAO.updateBookingStatus(bookingId, newStatus, cancelReason);
                 request.getSession().setAttribute("message", "Cập nhật trạng thái thành công!");
+                if(employee != null && employee.getRoleId() == 3) {
+                    response.sendRedirect("employee-booking");
+                } else{
                 response.sendRedirect("ConfirmBooking?service=listBooking");
+                }
 
             } else if ("requestCancel".equals(service)) {
                 // Khách hàng yêu cầu hủy

@@ -21,6 +21,12 @@ public class LoginEmployeeServlet extends HttpServlet {
         Connection conn = new DBContext().connection;
         return new EmployeeDAO(conn);
     }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Redirect to employee login page
+        response.sendRedirect(request.getContextPath() + "/Presentation/LoginEmployee.jsp");
+    }
 
     
 
@@ -37,19 +43,21 @@ public class LoginEmployeeServlet extends HttpServlet {
         if (employee != null) {
             HttpSession session = request.getSession();
             session.setAttribute("staff", employee);
-       
+            System.out.println(employee.getRoleId());
 
             int role = employee.getRoleId();
             switch (role) {
                 case 1: // Admin
-                    response.sendRedirect("http://localhost:9998/PetClinic/Presentation/Dashbroard.jsp");
+                    response.sendRedirect("dashboard");
                     break;
                 case 2: // Staff
                     response.sendRedirect("ProfileStaff");
                     break;
                 case 3: // Doctor
-                    session.setAttribute("doctor", employee);
-                    response.sendRedirect("ProfileDoctor");
+//                    session.setAttribute("doctor", employee);
+                    session.setAttribute("employee", employee);
+                    session.setAttribute("userName", employee.getNameEmployee());
+                    response.sendRedirect("employee-booking");
                     break;
                 default:
                     request.setAttribute("error", "Bạn không có quyền truy cập.");

@@ -65,12 +65,12 @@ public class AboutUsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Employee currentStaff = (Employee) session.getAttribute("staff");
-        if (currentStaff == null) {
-            response.sendRedirect("login-employee");
-            return;
-        }
+//        HttpSession session = request.getSession();
+//        Employee currentStaff = (Employee) session.getAttribute("staff");
+//        if (currentStaff == null) {
+//            response.sendRedirect("login-employee");
+//            return;
+//        }
         String action = request.getParameter("action");
 
         if (action != null && action.equals("delete")) {

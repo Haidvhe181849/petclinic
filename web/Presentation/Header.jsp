@@ -39,6 +39,14 @@
                                 <li><a
                                         href="${pageContext.request.contextPath}/about-us">AboutUs</a>
                                 </li>
+
+                                <c:if test="${sessionScope.user.roleId == 3}">
+                                    <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
+                                    </c:if>
+                                    <c:if test="${sessionScope.staff.roleId == 3}">
+                                    <li><a href="${pageContext.request.contextPath}/employee-booking">My Schedule</a></li>
+                                    </c:if>
+
                                 <c:if test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2 || sessionScope.user.roleId == 3}">
                                     <li><a href="#">Managerment</a>
                                         <ul class="submenu">
@@ -78,7 +86,7 @@
                                 </div>
                             </div>
                         </c:when>
-                        <c:when test="${not empty sessionScope.userName}">
+                        <c:when test="${not empty sessionScope.userName or not empty sessionScope.staff}">
                             <div class="header-user-info">
                                 <span>Xin chào, ${sessionScope.userEmail}</span>
                                 <a href="${pageContext.request.contextPath}/logout"

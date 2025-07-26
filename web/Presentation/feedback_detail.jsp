@@ -339,7 +339,8 @@
                                             </div>
                                             <div class="flex gap-2">
                                                 <button type="submit" 
-                                                        class="inline-block px-6 py-3 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-600 to-cyan-600 leading-normal shadow-md bg-150 bg-x-25 hover:shadow-xs active:opacity-85 hover:scale-102">
+                                                        class="inline-block px-6 py-3 text-xs font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-blue-700 leading-normal shadow-lg bg-150 bg-x-25 hover:shadow-xl active:opacity-85 hover:scale-102 border-0"
+                                                        style="background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3) !important;">
                                                     <i class="fas fa-paper-plane mr-2"></i>
                                                     <c:choose>
                                                         <c:when test="${not empty feedback.replyText}">

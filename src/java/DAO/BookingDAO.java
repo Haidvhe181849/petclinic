@@ -902,5 +902,86 @@ public class BookingDAO extends DBContext {
         }
         return total;
     }
+    public List<BookingEx> getFilteredBookings(String keyword, String status, String order, Timestamp from, Timestamp to, String employeeId) {
+        List<BookingEx> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT b.booking_id, "
+                + "ua.name AS customer_name, "
+                + "p.name AS pet_name, "
+                + "at.type_name AS pet_type, "
+                + "s.service_name, "
+                + "e.name AS employee_name, "
+                + "b.booking_time, "
+                + "b.status "
+                + "FROM Booking b "
+                + "JOIN UserAccount ua ON b.user_id = ua.user_id "
+                + "JOIN Pet p ON b.pet_id = p.pet_id "
+                + "JOIN AnimalType at ON p.pet_type_id = at.animal_type_id "
+                + "JOIN Service s ON b.service_id = s.service_id "
+                + "LEFT JOIN Employee e ON b.employee_id = e.employee_id "
+                + "WHERE 1=1 "
+        );
 
+        List<Object> params = new ArrayList<>();
+
+        // Add employeeId filter
+        if (employeeId != null && !employeeId.isEmpty()) {
+            sql.append("AND b.employee_id = ? ");
+            params.add(employeeId);
+        }
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append("AND (b.booking_id LIKE ? OR e.name LIKE ?) ");
+            String likeKeyword = "%" + keyword.trim().replaceAll("\\s+", "%") + "%";
+            params.add(likeKeyword);
+            params.add(likeKeyword);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append("AND b.status = ? ");
+            params.add(status);
+        }
+
+        if (from != null) {
+            sql.append("AND b.booking_time >= ? ");
+            params.add(from);
+        }
+
+        if (to != null) {
+            sql.append("AND b.booking_time <= ? ");
+            params.add(to);
+        }
+
+        if ("asc".equalsIgnoreCase(order)) {
+            sql.append("ORDER BY b.booking_time ASC ");
+        } else {
+            sql.append("ORDER BY b.booking_time DESC ");
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingEx b = new BookingEx(
+                        rs.getString("booking_id"),
+                        rs.getString("customer_name"),
+                        rs.getString("pet_name"),
+                        rs.getString("pet_type"),
+                        rs.getString("service_name"),
+                        rs.getString("employee_name"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("status")
+                );
+                list.add(b);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }

@@ -43,100 +43,114 @@
         <link href="Presentation/css/style_1.css" rel="stylesheet">
     </head>
     <!-- Navbar Start -->
-    <div class="header-area header-transparent">
-        <div class="main-header header-sticky">
-            <div class="container-fluid">
-                <div class="row align-items-center" style="min-height: 80px;">
-                    <!-- Logo -->
-                    <div class="col-xl-2 col-lg-2 col-md-2 d-flex align-items-center">
-                        <div class="logo">
-                            <a href="${pageContext.request.contextPath}/Home"><img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" alt=""></a>
+    <header>
+        <!--? Header Start -->
+        <div class="header-area header-transparent">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center" style="min-height: 80px;">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2 col-md-2 d-flex align-items-center">
+                            <div class="logo">
+                                <a href="${pageContext.request.contextPath}/Home"><img src="${pageContext.request.contextPath}/Presentation/img/logo/logo.png" alt=""></a>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Menu -->
-                    <div class="col-xl-7 col-lg-7 col-md-7">
-                        <div class="main-menu f-right d-none d-lg-block">
-                            <nav>
-                                <ul id="navigation">
-                                    <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
-                                    <li>
-                                        <a href="#">Services</a>
-                                        <ul class="submenu">
-                                            <c:forEach var="sv" items="${slist}">
-                                                <li><a href="BookingForm?serviceId=${sv.serviceId}">${sv.serviceName}</a></li>
-                                                </c:forEach>
-                                        </ul>
-                                    </li>
-                                    <li><a
-                                            href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
-                                    </li>
-                                    <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
-                                        <c:if test="${sessionScope.user.roleId == 3}">
-                                        <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
-                                        </c:if>
-                                    <li><a
-                                            href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                    <!-- User info -->
-                    <div class="col-xl-3 col-lg-3 col-md-3 d-flex align-items-center justify-content-end">
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.user}">
-                                <div class="header-user-info">
-                                    <span>Xin chào, ${sessionScope.user.email}</span>
-                                    <div class="dropdown">
-                                        <a href="#"
-                                           class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
-                                           id="userDropdown" data-bs-toggle="dropdown"
-                                           aria-expanded="false">
-                                            <img src="${pageContext.request.contextPath}/Presentation/img/images/avata/${user.image}"
-                                                 alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end"
-                                            aria-labelledby="userDropdown">
-                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ProfileCustomer">Trang cá nhân</a></li>
-                                            <li><a class="dropdown-item"
-                                                   href="${pageContext.request.contextPath}/ViewBooking">Xem lịch khám
-                                                </a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a></li>
-                                            <li><a class="dropdown-item text-danger fw-bold" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
-
-                                            <c:if
-                                                test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2}">
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item"
-                                                       href="${pageContext.request.contextPath}/Presentation/Dashbroard.jsp">Managerment</a></li>
-
+                        <!-- Menu -->
+                        <div class="col-xl-7 col-lg-7 col-md-7">
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                                        <li>
+                                            <a href="#">Services</a>
+                                            <ul class="submenu">
+                                                <c:forEach var="sv" items="${slist}">
+                                                    <li><a href="BookingForm?serviceId=${sv.serviceId}">${sv.serviceName}</a></li>
+                                                    </c:forEach>
+                                            </ul>
+                                        </li>
+                                        <li><a
+                                                href="${pageContext.request.contextPath}/Presentation/ViewMedicine.jsp">Medicine</a>
+                                        </li>
+                                        <c:if test="${sessionScope.user.roleId == 4}">
+                                            <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
                                             </c:if>
-                                        </ul>
+                                        <li><a
+                                                href="${pageContext.request.contextPath}/viewNews?service=listNews">News</a>
+                                        </li>
+                                        <li><a
+                                                href="${pageContext.request.contextPath}/about-us">AboutUs</a>
+                                        </li>
+                                        <c:if test="${sessionScope.user.roleId == 3}">
+                                            <li><a href="${pageContext.request.contextPath}/BookingForm">Booking</a></li>
+                                            </c:if>
+                                            <c:if test="${sessionScope.staff.roleId == 3}">
+                                            <li><a href="${pageContext.request.contextPath}/employee-booking">My Schedule</a></li>
+                                            </c:if>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- User info -->
+                        <div
+                            class="col-xl-3 col-lg-3 col-md-3 d-flex align-items-center justify-content-end">
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.user or not empty sessionScope.staff}">
+                                    <div class="header-user-info">
+                                        <span>Xin chào, ${sessionScope.user.email}</span>
+                                        <div class="dropdown">
+                                            <a href="#"
+                                               class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
+                                               id="userDropdown" data-bs-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <img src="${pageContext.request.contextPath}/Presentation/img/images/avata/${user.image}"
+                                                     alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end"
+                                                aria-labelledby="userDropdown">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ProfileCustomer">Trang cá nhân</a></li>
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a></li>
+                                                <li><a class="dropdown-item text-danger fw-bold" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+
+                                                <c:if
+                                                    test="${sessionScope.user.roleId == 1 || sessionScope.user.roleId == 2}">
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li><a class="dropdown-item"
+                                                           href="${pageContext.request.contextPath}/dashboard">Managerment</a></li>
+
+                                                </c:if>
+                                            </ul>
+
+
+
+                                        </div>
+
                                     </div>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="header-user-info">
-                                    <a href="${pageContext.request.contextPath}/login"
-                                       class="header-btn custom-auth-btn">Đăng nhập</a>
-                                    <a href="${pageContext.request.contextPath}/register"
-                                       class="header-btn custom-auth-btn">Đăng ký</a>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="header-user-info">
+                                        <a href="${pageContext.request.contextPath}/login"
+                                           class="header-btn custom-auth-btn">Đăng nhập</a>
+                                        <a href="${pageContext.request.contextPath}/register"
+                                           class="header-btn custom-auth-btn">Đăng ký</a>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
+
                 </div>
             </div>
+            <!-- Mobile Menu -->
+            <div class="col-12">
+                <div class="mobile_menu d-block d-lg-none"></div>
+            </div>
         </div>
-        <!-- Mobile Menu -->
-        <div class="col-12">
-            <div class="mobile_menu d-block d-lg-none"></div>
-        </div>
-    </div>
+        <!-- Header End -->
+    </header>
 
 
     <div class="slider-area2 slider-height2 d-flex align-items-center">

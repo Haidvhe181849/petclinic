@@ -188,6 +188,11 @@
                                     <i class="fas fa-arrow-left"></i> Quay lại
                                 </a>
                             </c:when> 
+                            <c:when test="${sessionScope.user.roleId == 3 || sessionScope.staff.roleId == 3}">
+                                <a href="employee-booking" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Quay lại
+                                </a>
+                            </c:when>
                             <c:otherwise>
                                 <a href="ViewBooking" class="btn btn-secondary">
                                     <i class="fas fa-arrow-left"></i> Quay lại

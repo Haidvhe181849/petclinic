@@ -10,6 +10,7 @@ import DAO.EmployeeDAO;
 import Entity.Booking;
 import Entity.BookingEx;
 import Entity.Employee;
+import Entity.UserAccount;
 import Utility.DBContext;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -112,13 +113,20 @@ public class ScheduleManagement extends HttpServlet {
         BookingDAO bookingDAO = getBookingDAO();
         ClinicWorkingDAO workingDAO = getClinicWorkingDAO();
 
-        HttpSession session = request.getSession();
-        Employee currentStaff = (Employee) session.getAttribute("staff");
-        if (currentStaff == null) {
-            response.sendRedirect("login-employee");
-            return;
-        }
-        request.setAttribute("currentStaff", currentStaff);
+//        HttpSession session = request.getSession();
+//        Employee currentStaff = (Employee) session.getAttribute("staff");
+//        UserAccount acc = (UserAccount) session.getAttribute("user");
+//
+//// Phải kiểm tra null trước khi gọi acc.getRoleId()
+//        if (acc == null || acc.getRoleId() != 1 || currentStaff == null) {
+//            response.sendRedirect("login-employee");
+//            return;
+//        }
+//
+//        System.out.println(acc.getRoleId()); // in ra sau khi đã đảm bảo acc != null
+//
+//        request.setAttribute("currentStaff", currentStaff);
+//        request.setAttribute("currentAccount", acc); // tránh trùng tên
 
         String action = request.getParameter("action");
         if ("availableDoctors".equals(action)) {
